@@ -5,6 +5,8 @@ info:
 paths:
   /auth:
     post:
+      tags: 
+        - "Auth and Valid"
       summary: "Authentication"
       description: "Create token and get it"
       requestBody:
@@ -34,6 +36,8 @@ paths:
           
   /validate/{token}:
     get:
+      tags: 
+        - "Auth and Valid"
       summary: "Validation"
       description: "Send token and check it"
       parameters:
@@ -42,7 +46,8 @@ paths:
         description: "User token"
         required: true
         schema:
-          type: "string"
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: "OK"
