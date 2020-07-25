@@ -1,0 +1,49 @@
+openapi: 3.0.2
+info:
+  title: Swagger Auth, validate and user permission
+  version: 1.0.0
+paths:
+  /auth:
+    post:
+      summary: Authentication
+      description: Create token and get it
+      operationId: doAuth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+            example:
+              login: "a1pha1337@gmail.com"
+              password: "rhokef3"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                token: dfsaFDKSJGFN
+        400:
+          description: Incorrect login/pass
+          content: {}
+  /validate:
+    get:
+      summary: Validation
+      description: Send token and check it
+      operationId: doValidation
+      parameters:
+        - name: token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
