@@ -161,3 +161,38 @@ paths:
                 Name: "Solo_228"
         404:
           description: "Non-existing token"
+          
+  /GetUserPublicInfo/{login}:
+    get:
+      tags: 
+      - "User Info"
+      summary: "Get user public info"
+      description: ""
+      parameters: 
+      - name: "login"
+        in: "path"
+        description: "User login"
+        schema:
+          type: "string"
+        required: true
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  UserID:
+                    type: "integer"
+                    format: "int64"
+                  Login:
+                    type: "string"
+                  Name:
+                    type: "string"
+              example:
+                UserID: "0"
+                Login: "alpha13371@mail.ru"
+                Name: "Solo_228"
+        404:
+          description: "Non-existing token"
