@@ -27,10 +27,11 @@ paths:
             application/json:
               schema:
                 type: "string"
-              example: f57ebe597a3741b688269209fa29b053
-        400:
+              example: "dfsaFDKSJGFN"
+        401:
           description: "Incorrect login/pass"
           content: {}
+          
   /validate/{token}:
     get:
       summary: "Validation"
@@ -46,3 +47,5 @@ paths:
       responses:
         200:
           description: "OK"
+        404:
+          description: "Non-existing token"
