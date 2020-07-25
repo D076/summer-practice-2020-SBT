@@ -21,6 +21,7 @@ paths:
             example:
               login: "a1pha1337@gmail.com"
               password: "rhokef3"
+              
       responses:
         200:
           description: OK
@@ -33,17 +34,19 @@ paths:
         400:
           description: Incorrect login/pass
           content: {}
-  /validate:
+  /validate/{token}:
     get:
-      summary: Validation
-      description: Send token and check it
-      operationId: doValidation
+      summary: "Validation"
+      description: "Send token and check it"
+      operationId: "doValidation"
       parameters:
-        - name: token
-          in: header
-          required: true
-          schema:
-            type: string
+      - name: "token"
+        in: "path"
+        description: "User token"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
       responses:
         200:
           description: OK
