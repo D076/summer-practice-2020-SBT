@@ -10,6 +10,7 @@ paths:
       summary: "Authentication"
       description: "Create token and get it"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -60,6 +61,7 @@ paths:
       summary: "Register user"
       description: "Register user and get session token"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -205,8 +207,9 @@ paths:
       tags: 
       - "User Info"
       summary: "Edit user info (himself)"
-      description: ""
+      description: "Leave the fields that do not need to be changed blank"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -214,17 +217,21 @@ paths:
               properties:
                 token:
                   type: "string"
-                login:
-                  type: "string"
-                password:
-                  type: "string"
-                name: 
-                  type: "string"
+                info:
+                  type: "object"
+                  properties:
+                    login:
+                      type: "string"
+                    password:
+                      type: "string"
+                    name: 
+                      type: "string"
             example:
               token: "f57ebe597a3741b688269209fa29b053"
-              login: "a1pha1337@gmail.com"
-              password: "rhokef3"
-              name: "Solo_322"
+              info:
+                login: "a1pha1337@gmail.com"
+                password: "rhokef3"
+                name: "Solo_322"
       responses:
         200:
           description: "OK"
@@ -304,6 +311,7 @@ paths:
       summary: "Edit user permissions"
       description: "Edit user permissions by user ID and token"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
