@@ -55,6 +55,8 @@ paths:
           description: "Non-existing token"
   /register:
     post:
+      tags:
+        - "User Info"
       summary: "Register user"
       description: "Register user and get session token"
       requestBody:
@@ -83,6 +85,8 @@ paths:
           content: {}
   /deleteUser/{token}:
     delete:
+      tags:
+        - "User Info"
       summary: "Delete user himself"
       description: ""
       parameters:
@@ -99,6 +103,8 @@ paths:
           description: "Non-existing token"
   /deleteUserTarget:
     delete:
+      tags:
+        - "User Info"
       summary: "Delete target user"
       description: "Send your token and user ID of user you want to delete"
       parameters:
