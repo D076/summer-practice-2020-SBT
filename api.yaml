@@ -49,3 +49,71 @@ paths:
           description: "OK"
         404:
           description: "Non-existing token"
+  /register:
+    post:
+      summary: "Register user"
+      description: "Register user and get session token"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                login:
+                  type: "string"
+                password:
+                  type: "string"
+            example:
+              login: "a1pha1337@gmail.com"
+              password: "rhokef3"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              example: f57ebe597a3741b688269209fa29b053
+        400:
+          description: "Incorrect login/pass"
+          content: {}
+  /deleteUser/{token}:
+    delete:
+      summary: "Delete user himself"
+      description: ""
+      parameters:
+      - name: "token"
+        in: "path"
+        description: "User token"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Non-existing token"
+  /deleteUserTarget:
+    delete:
+      summary: "Delete target user"
+      description: "Send your token and user ID of user you want to delete"
+      parameters:
+      - name: "token"
+        in: "query"
+        description: "User token"
+        required: true
+        schema:
+          type: "string"
+      - name: "userID"
+        in: "query"
+        description: "ID of user you want to delete"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Non-existing user ID"
+        404:
+          description: "Non-existing token"
