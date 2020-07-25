@@ -46,8 +46,7 @@ paths:
         description: "User token"
         required: true
         schema:
-          type: "integer"
-          format: "int64"
+          type: "string"
       responses:
         200:
           description: "OK"
@@ -125,5 +124,24 @@ paths:
           description: "OK"
         400:
           description: "Non-existing user ID"
+        404:
+          description: "Non-existing token"
+
+  /GetUserInfo/{token}:
+    get:
+      tags: 
+      - "User Info"
+      summary: "Get user info"
+      description: ""
+      parameters: 
+      - name: "token"
+        in: "path"
+        description: "User token"
+        schema:
+          type: "string"
+        required: true
+      responses:
+        200:
+          description: "OK"
         404:
           description: "Non-existing token"
