@@ -335,4 +335,6 @@ paths:
         200:
           description: "OK"
         400:
-          description: "Not ok"
+          description: "Access error"
+        404:
+          description: "Non-existing token"
