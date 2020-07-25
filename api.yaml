@@ -196,3 +196,29 @@ paths:
                 Name: "Solo_228"
         404:
           description: "Non-existing token"
+  /EditUserPermissons:
+    put:
+      tags:
+      - "Permissons"
+      summary: "Edit permissons of user"
+      description: "Send your token and user ID of user you want to edit permissions"
+      parameters:
+      - name: "token"
+        in: "query"
+        description: "User token"
+        required: true
+        schema:
+          type: "string"
+      - name: "userID"
+        in: "query"
+        description: "ID of user you want to edit permissions"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Non-existing user ID"
+        404:
+          description: "Non-existing token"
