@@ -199,6 +199,72 @@ paths:
                 Name: "Solo_228"
         404:
           description: "Non-existing token"
+          
+  /getUserPermissions/{user_id}:
+    get:
+      tags:
+        - Permissions
+      summary: "Gets user permissions"
+      description: "Gets user permissions by user ID"
+      parameters:
+      - name: "user_id"
+        in: path
+        description: "User ID"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    CollectionID:
+                      type: "integer"
+                      format: "int64"
+                    Permissions:
+                      type: "object"
+                      properties:
+                        Read:
+                          type: "boolean"
+                        Write:
+                          type: "boolean"
+                        Edit others:
+                          type: "boolean"
+                        Share:
+                          type: "boolean"
+                        Delete post:
+                          type: "boolean"
+                        Delete collection:
+                          type: "boolean"
+                        Delete user from collection:
+                          type: "boolean"
+              example: 
+                - collection_id: "228"
+                  permissions:
+                    read: true
+                    write: false
+                    edit_others: false
+                    share: false
+                    delete_post: false
+                    delete_collection: false
+                    delete_user_from_collection: false
+                - collection_id: "322"
+                  permissions:
+                    read: true
+                    write: true
+                    edit_others: true
+                    share: true
+                    delete_post: true
+                    delete_collection: false
+                    delete_user_from_collection: false
+        404:
+          description: "Not ok"
 
   /EditUserInfo:
     put:
