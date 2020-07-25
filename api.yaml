@@ -222,3 +222,34 @@ paths:
           description: "Non-existing user ID"
         404:
           description: "Non-existing token"
+
+  /EditUserInfo:
+    put:
+      tags: 
+      - "User Info"
+      summary: "Edit user info (himself)"
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                token:
+                  type: "string"
+                login:
+                  type: "string"
+                password:
+                  type: "string"
+                name: 
+                  type: "string"
+            example:
+              token: "f57ebe597a3741b688269209fa29b053"
+              login: "a1pha1337@gmail.com"
+              password: "rhokef3"
+              name: "Solo_322"
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Non-existing token"
