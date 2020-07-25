@@ -29,7 +29,7 @@ paths:
             application/json:
               schema:
                 type: "string"
-              example: "dfsaFDKSJGFN"
+              example: "f57ebe597a3741b688269209fa29b053"
         401:
           description: "Incorrect login/pass"
           content: {}
@@ -79,7 +79,7 @@ paths:
             application/json:
               schema:
                 type: "string"
-              example: f57ebe597a3741b688269209fa29b053
+              example: "f57ebe597a3741b688269209fa29b053"
         400:
           description: "Incorrect login/pass"
           content: {}
