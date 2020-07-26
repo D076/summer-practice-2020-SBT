@@ -122,7 +122,7 @@ paths:
         required: true
         schema:
           type: "string"
-      - name: "userID"
+      - name: "user_id"
         in: "query"
         description: "ID of user you want to delete"
         required: true
@@ -157,17 +157,17 @@ paths:
               schema:
                 type: "object"
                 properties:
-                  UserID:
+                  user_id:
                     type: "integer"
                     format: "int64"
-                  Login:
+                  login:
                     type: "string"
-                  Name:
+                  name:
                     type: "string"
               example:
-                UserID: 0
-                Login: "alpha13371@mail.ru"
-                Name: "Solo_228"
+                user_id: 0
+                login: "alpha13371@mail.ru"
+                name: "Solo_228"
         404:
           description: "Non-existing token"
           
@@ -192,17 +192,17 @@ paths:
               schema:
                 type: "object"
                 properties:
-                  UserID:
+                  user_id:
                     type: "integer"
                     format: "int64"
-                  Login:
+                  login:
                     type: "string"
-                  Name:
+                  name:
                     type: "string"
               example:
-                UserID: 0
-                Login: "alpha13371@mail.ru"
-                Name: "Solo_228"
+                user_id: 0
+                login: "alpha13371@mail.ru"
+                name: "Solo_228"
         404:
           description: "Non-existing token"
           
@@ -406,4 +406,57 @@ paths:
                 user_id: 4
         404:
           description: "Incorrect post_id"
-          
+
+  /setPublicCollection/{collection_id}:
+    post:
+      tags:
+        - "Permissions"
+      summary: "Set public collection by collection ID"
+      description: ""
+      parameters:
+      - name: "collection_id"
+        in: "path"
+        description: ""
+        schema:
+          type: "integer"
+        required: true
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Incorrect collection_id"
+  
+  /filterPublicCollection:
+    post:
+      tags:
+        - "Permissions"
+      summary: "Get public collection from list of collection"
+      description: ""
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "array"
+              items:
+                type: "integer"
+                description: "ID пользователя"
+            example:
+              - 1
+              - 2
+              - 3
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "integer"
+                  format: "int64"
+              example: 
+                - 1
+                - 3
+        404:
+          description: "Not OK"
