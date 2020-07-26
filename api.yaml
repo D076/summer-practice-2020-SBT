@@ -336,6 +336,9 @@ paths:
                   read:
                     type: "boolean"
                     description: "Просмотр коллекции (Читатель role_id = 40)"
+                  rate:
+                    type: "boolean"
+                    description: "Возможность оценивать посты (Читатель role_id = 40)"
                   write:
                     type: "boolean"
                     description: "Загружать пост в коллекцию (Пользователь role_id = 30)"
