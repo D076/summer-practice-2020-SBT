@@ -268,19 +268,19 @@ paths:
                     Permissions:
                       type: "object"
                       properties:
-                        Read:
+                        read:
                           type: "boolean"
-                        Write:
+                        write:
                           type: "boolean"
-                        Edit others:
+                        edit_others:
                           type: "boolean"
-                        Share:
+                        share:
                           type: "boolean"
-                        Delete post:
+                        delete_post:
                           type: "boolean"
-                        Delete collection:
+                        delete_collection:
                           type: "boolean"
-                        Delete user from collection:
+                        delete_user_from_collection:
                           type: "boolean"
               example: 
                 - collection_id: "228"
@@ -325,19 +325,19 @@ paths:
                 Permissions:
                       type: "object"
                       properties:
-                        Read:
+                        read:
                           type: "boolean"
-                        Write:
+                        write:
                           type: "boolean"
-                        Edit others:
+                        edit_others:
                           type: "boolean"
-                        Share:
+                        share:
                           type: "boolean"
-                        Delete post:
+                        delete_post:
                           type: "boolean"
-                        Delete collection:
+                        delete_collection:
                           type: "boolean"
-                        Delete user from collection:
+                        delete_user_from_collection:
                           type: "boolean"
       responses:
         200:
