@@ -29,8 +29,12 @@ paths:
           content:
             application/json:
               schema:
-                type: "string"
-              example: "f57ebe597a3741b688269209fa29b053"
+                type: "object"
+                properties:
+                  token: 
+                    type: "string"
+              example:
+                token: "f57ebe597a3741b688269209fa29b053"
         401:
           description: "Incorrect login/pass"
           content: {}
@@ -132,7 +136,7 @@ paths:
         404:
           description: "Non-existing token"
 
-  /GetUserInfo/{token}:
+  /getUserInfo/{token}:
     get:
       tags: 
       - "User Info"
@@ -161,13 +165,13 @@ paths:
                   Name:
                     type: "string"
               example:
-                UserID: "0"
+                UserID: 0
                 Login: "alpha13371@mail.ru"
                 Name: "Solo_228"
         404:
           description: "Non-existing token"
           
-  /GetUserPublicInfo/{login}:
+  /getUserPublicInfo/{login}:
     get:
       tags: 
       - "User Info"
@@ -196,13 +200,13 @@ paths:
                   Name:
                     type: "string"
               example:
-                UserID: "0"
+                UserID: 0
                 Login: "alpha13371@mail.ru"
                 Name: "Solo_228"
         404:
           description: "Non-existing token"
           
-  /EditUserInfo:
+  /editUserInfo:
     put:
       tags: 
       - "User Info"
@@ -269,10 +273,10 @@ paths:
                       type: "integer"
                       format: "int64"
               example: 
-                - collection_id: "228"
-                  role_id: "10"
-                - collection_id: "322"
-                  role_id: "20"
+                - collection_id: 228
+                  role_id: 10
+                - collection_id: 322
+                  role_id: 20
                   
         403:
           description: "Not permissions"
@@ -312,7 +316,7 @@ paths:
     get:
       tags:
         - "Permissions"
-      summary: ""
+      summary: "Get permissions by role ID"
       description: ""
       parameters:
       - name: "role_id"
@@ -349,3 +353,57 @@ paths:
                     description: "Удаление всей коллекции (Админ role_id = 0)"
         404:
           description: "Incorrect role ID"
+          
+  /setPostOwner:
+    post:
+      tags:
+        - "Permissions"
+      summary: "Set post owner by User ID and Post ID"
+      description: ""
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                user_id:
+                  type: "integer"
+                  description: "ID пользователя"
+                post_id:
+                  type: "integer"
+                  description: "ID поcта"
+            example:
+              user_id: 42
+              post_id: 3
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Incorrect user_id/post_id"
+          
+  /getPostOwner/{post_id}:
+    get:
+      tags:
+        - "Permissions"
+      summary: "Get post owner (User ID) by Post ID"
+      description: ""
+      parameters:
+      - name: "post_id"
+        in: "path"
+        description: ""
+        schema:
+          type: "integer"
+        required: true
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "integer"
+              example: 
+                user_id: 4
+        404:
+          description: "Incorrect post_id"
+          
