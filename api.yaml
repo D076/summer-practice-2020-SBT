@@ -244,12 +244,12 @@ paths:
                       format: "int64"
               example: 
                 - collection_id: 228
-                  role_id: 10
+                  role_id: 40
                 - collection_id: 322
-                  role_id: 20
+                  role_id: 30
                   
         403:
-          description: "Not permissions"
+          description: "No permissions"
         404:
           description: "Incorrect ID"
     
@@ -311,16 +311,18 @@ paths:
                     description: "Просмотр коллекции (Читатель role_id = 40)"
                   rate:
                     type: "boolean"
-                    description: "Возможность оценивать посты (Читатель role_id = 40)"
+                    description: "Возможность оценивать посты (Читатель role_id = 40). Без этого права нельзя оценивать посты, даже если они публичные"
                   write:
                     type: "boolean"
                     description: "Загружать пост в коллекцию (Пользователь role_id = 30)"
-                  share:
-                    type: "boolean"
-                    description: "Возможность предоставить/отнять права read/write у других (Супер пользователь role_id = 20)"
-                  edit_other_posts_and_users:
-                    type: "boolean"
-                    description: "Редактирование/удаление любого поста + может менять права других пользователей (Модератор role_id = 10)"
+                  # Вероятно, эти права никому не интересны (для стабильности их можно убрать)
+                  # В итоге расшарить коллекцию может только ее создатель (админ role_id = 0)
+                  # share:
+                  #   type: "boolean"
+                  #   description: "Возможность предоставить/отнять права read/write у других (Супер пользователь role_id = 20)"
+                  # edit_other_posts_and_users:
+                  #   type: "boolean"
+                  #   description: "Редактирование/удаление любого поста + может менять права других пользователей (Модератор role_id = 10)"
                   edit_other_user_permissions:
                     type: "boolean"
                     description: "Редактирование прав других пользователей, кроме полей edit_other_user_permissions, delete_collection (Админ role_id = 0)"
@@ -455,8 +457,8 @@ paths:
                   format: "int64"
               example: 
                 - 1
-                - 2
                 - 3
                 - 5
+                - 8
         404:
           description: "Not OK"
