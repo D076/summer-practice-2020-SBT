@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: "Swagger Auth, validate and user permission"
-  version: 1.0.0
+  version: 1.0.1
 paths:
   /auth:
     post:
@@ -39,7 +39,7 @@ paths:
           description: "Incorrect login/pass"
           content: {}
           
-  /validate/{token}:
+  /auth/{token}:
     get:
       tags: 
         - "Auth and Valid"
@@ -58,7 +58,7 @@ paths:
         404:
           description: "Non-existing token"
           
-  /register:
+  /user:
     post:
       tags:
         - "User Info"
@@ -90,7 +90,7 @@ paths:
           description: "Incorrect login/pass"
           content: {}
           
-  /deleteUser/{token}:
+  /user/{token}:
     delete:
       tags:
         - "User Info"
@@ -108,35 +108,8 @@ paths:
           description: "OK"
         404:
           description: "Non-existing token"
-          
-  # /deleteUserTarget:
-  #   delete:
-  #     tags:
-  #       - "User Info"
-  #     summary: "Delete target user"
-  #     description: "Send your token and user ID of user you want to delete"
-  #     parameters:
-  #     - name: "token"
-  #       in: "query"
-  #       description: "User token"
-  #       required: true
-  #       schema:
-  #         type: "string"
-  #     - name: "user_id"
-  #       in: "query"
-  #       description: "ID of user you want to delete"
-  #       required: true
-  #       schema:
-  #         type: "string"
-  #     responses:
-  #       200:
-  #         description: "OK"
-  #       400:
-  #         description: "Non-existing user ID"
-  #       404:
-  #         description: "Non-existing token"
 
-  /getUserInfo/{token}:
+  /user/info/{token}:
     get:
       tags: 
       - "User Info"
@@ -171,7 +144,7 @@ paths:
         404:
           description: "Non-existing token"
           
-  /getUserPublicInfo/{login}:
+  /user/info/{login}:
     get:
       tags: 
       - "User Info"
@@ -206,7 +179,7 @@ paths:
         404:
           description: "Non-existing token"
           
-  /editUserInfo:
+  /user/info:
     put:
       tags: 
       - "User Info"
@@ -224,8 +197,6 @@ paths:
                 info:
                   type: "object"
                   properties:
-                    login:
-                      type: "string"
                     password:
                       type: "string"
                     name: 
@@ -233,7 +204,6 @@ paths:
             example:
               token: "f57ebe597a3741b688269209fa29b053"
               info:
-                login: "a1pha1337@gmail.com"
                 password: "rhokef3"
                 name: "Solo_322"
       responses:
@@ -242,7 +212,7 @@ paths:
         404:
           description: "Non-existing token"
       
-  /getUserRole/{user_id}:
+  /permissions/userRole/{user_id}:
     get:
       tags:
         - "Permissions"
@@ -283,7 +253,7 @@ paths:
         404:
           description: "Incorrect ID"
     
-  /editUserRole:
+  /permissions/userRole:
     put:
       tags:
         - "Permissions"
@@ -298,12 +268,15 @@ paths:
               properties:
                 token:
                   type: "string"
+                collection_id:
+                  type: "integer"
+                  format: "int64"
                 user_id:
                   type: "integer"
                   format: "int64"
                 role_id:
-                      type: "integer"
-                      format: "int64"
+                  type: "integer"
+                  format: "int64"
       responses:
         200:
           description: "OK"
@@ -312,7 +285,7 @@ paths:
         404:
           description: "Non-existing token"
   
-  /getPermissionsByRoleID/{role_id}:
+  /permissions/role/{role_id}:
     get:
       tags:
         - "Permissions"
@@ -357,7 +330,7 @@ paths:
         404:
           description: "Incorrect role ID"
           
-  /setPostOwner:
+  /permissions/post:
     post:
       tags:
         - "Permissions"
@@ -385,7 +358,7 @@ paths:
         404:
           description: "Incorrect user_id/post_id"
           
-  /getPostOwner/{post_id}:
+  /permissions/post/{post_id}:
     get:
       tags:
         - "Permissions"
@@ -410,7 +383,7 @@ paths:
         404:
           description: "Incorrect post_id"
 
-  /setPublicCollection/{collection_id}:
+  /permissions/publicCollection/{collection_id}:
     post:
       tags:
         - "Permissions"
@@ -429,7 +402,7 @@ paths:
         404:
           description: "Incorrect collection_id"
   
-  /filterPublicCollection:
+  /permissions/publicCollection:
     post:
       tags:
         - "Permissions"
@@ -443,7 +416,7 @@ paths:
               type: "array"
               items:
                 type: "integer"
-                description: "ID пользователя"
+                description: "массив из ID коллекций, среди которых хотим узнать публичные"
             example:
               - 1
               - 2
@@ -461,5 +434,29 @@ paths:
               example: 
                 - 1
                 - 3
+        404:
+          description: "Not OK"
+  
+  /permissions/publicCollection/all:
+    get:
+      tags:
+        - "Permissions"
+      summary: "Get public collection from list of collection"
+      description: ""
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "integer"
+                  format: "int64"
+              example: 
+                - 1
+                - 2
+                - 3
+                - 5
         404:
           description: "Not OK"
