@@ -108,33 +108,6 @@ paths:
           description: "OK"
         404:
           description: "Non-existing token"
-          
-  # /deleteUserTarget:
-  #   delete:
-  #     tags:
-  #       - "User Info"
-  #     summary: "Delete target user"
-  #     description: "Send your token and user ID of user you want to delete"
-  #     parameters:
-  #     - name: "token"
-  #       in: "query"
-  #       description: "User token"
-  #       required: true
-  #       schema:
-  #         type: "string"
-  #     - name: "user_id"
-  #       in: "query"
-  #       description: "ID of user you want to delete"
-  #       required: true
-  #       schema:
-  #         type: "string"
-  #     responses:
-  #       200:
-  #         description: "OK"
-  #       400:
-  #         description: "Non-existing user ID"
-  #       404:
-  #         description: "Non-existing token"
 
   /getUserInfo/{token}:
     get:
@@ -224,8 +197,6 @@ paths:
                 info:
                   type: "object"
                   properties:
-                    login:
-                      type: "string"
                     password:
                       type: "string"
                     name: 
@@ -233,7 +204,6 @@ paths:
             example:
               token: "f57ebe597a3741b688269209fa29b053"
               info:
-                login: "a1pha1337@gmail.com"
                 password: "rhokef3"
                 name: "Solo_322"
       responses:
@@ -298,12 +268,15 @@ paths:
               properties:
                 token:
                   type: "string"
+                collection_id:
+                  type: "integer"
+                  format: "int64"
                 user_id:
                   type: "integer"
                   format: "int64"
                 role_id:
-                      type: "integer"
-                      format: "int64"
+                  type: "integer"
+                  format: "int64"
       responses:
         200:
           description: "OK"
@@ -443,7 +416,7 @@ paths:
               type: "array"
               items:
                 type: "integer"
-                description: "ID пользователя"
+                description: "массив из ID коллекций, среди которых хотим узнать публичные"
             example:
               - 1
               - 2
