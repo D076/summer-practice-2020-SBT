@@ -1,8 +1,6 @@
 language: python
-env:
-  - FLASK=1.0.2
-  - FLASK=0.10.1
 install:
   - pip install -q Flask==$FLASK
+  - pip install flask_script
 scripts:
   - python AuthMicroservice/manage.py
