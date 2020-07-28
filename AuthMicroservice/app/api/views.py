@@ -13,4 +13,4 @@ module = Blueprint('entity', __name__)
 
 @module.route('/', methods=['GET'])
 def index():
-    return 'Hui'
+    return 'Hello'
