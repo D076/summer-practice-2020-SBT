@@ -3,5 +3,6 @@ install:
   - pip install flask
   - pip install flask_script
   - pip install flask_sqlalchemy
-scripts:
-  - python AuthMicroservice/manage.py
+# scripts:
+#   - python AuthMicroservice/manage.py
+script: nosetests
