@@ -1,6 +1,6 @@
 language: python
 install:
-  - pip install -q Flask==$FLASK
+  - pip install flask
   - pip install flask_script
 scripts:
   - python AuthMicroservice/manage.py
