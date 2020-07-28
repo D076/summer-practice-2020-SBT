@@ -109,32 +109,32 @@ paths:
         404:
           description: "Non-existing token"
           
-  /deleteUserTarget:
-    delete:
-      tags:
-        - "User Info"
-      summary: "Delete target user"
-      description: "Send your token and user ID of user you want to delete"
-      parameters:
-      - name: "token"
-        in: "query"
-        description: "User token"
-        required: true
-        schema:
-          type: "string"
-      - name: "user_id"
-        in: "query"
-        description: "ID of user you want to delete"
-        required: true
-        schema:
-          type: "string"
-      responses:
-        200:
-          description: "OK"
-        400:
-          description: "Non-existing user ID"
-        404:
-          description: "Non-existing token"
+  # /deleteUserTarget:
+  #   delete:
+  #     tags:
+  #       - "User Info"
+  #     summary: "Delete target user"
+  #     description: "Send your token and user ID of user you want to delete"
+  #     parameters:
+  #     - name: "token"
+  #       in: "query"
+  #       description: "User token"
+  #       required: true
+  #       schema:
+  #         type: "string"
+  #     - name: "user_id"
+  #       in: "query"
+  #       description: "ID of user you want to delete"
+  #       required: true
+  #       schema:
+  #         type: "string"
+  #     responses:
+  #       200:
+  #         description: "OK"
+  #       400:
+  #         description: "Non-existing user ID"
+  #       404:
+  #         description: "Non-existing token"
 
   /getUserInfo/{token}:
     get:
