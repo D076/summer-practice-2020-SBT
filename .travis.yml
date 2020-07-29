@@ -9,6 +9,6 @@ install:
 env:
   -  APP_SETTINGS=config.DevelopmentConfig DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/DBNAME
 script:
-  - notests
+  - notest
    # - pytest
    # - python AuthMicroservice/manage.py runserver
