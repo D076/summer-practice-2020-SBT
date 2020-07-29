@@ -9,6 +9,4 @@ env:
 script:
   - python -m pytest -v
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
-# after_success:
-#   - codecov
+  - codecov
