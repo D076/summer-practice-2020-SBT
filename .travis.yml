@@ -8,6 +8,7 @@ env:
   - APP_SETTINGS=config.DevelopmentConfig DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/DBNAME # CODECOV_TOKEN="b2ffc986-a1ac-48ef-87c3-270a572a3ced"
 script:
   - python -m pytest -v
+  - coverage run test/test_class.py
 # after_success:
 #   - bash <(curl -s https://codecov.io/bash)
 after_success:
