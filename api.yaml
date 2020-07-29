@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: "Swagger Auth, validate and user permission"
-  version: 1.0.0
+  version: 1.0.1
 paths:
   /auth:
     post:
@@ -39,7 +39,7 @@ paths:
           description: "Incorrect login/pass"
           content: {}
           
-  /validate/{token}:
+  /auth/{token}:
     get:
       tags: 
         - "Auth and Valid"
@@ -58,7 +58,7 @@ paths:
         404:
           description: "Non-existing token"
           
-  /register:
+  /user:
     post:
       tags:
         - "User Info"
@@ -90,7 +90,7 @@ paths:
           description: "Incorrect login/pass"
           content: {}
           
-  /deleteUser/{token}:
+  /user/{token}:
     delete:
       tags:
         - "User Info"
@@ -109,7 +109,7 @@ paths:
         404:
           description: "Non-existing token"
 
-  /getUserInfo/{token}:
+  /user/info/{token}:
     get:
       tags: 
       - "User Info"
@@ -144,7 +144,7 @@ paths:
         404:
           description: "Non-existing token"
           
-  /getUserPublicInfo/{login}:
+  /user/info/{login}:
     get:
       tags: 
       - "User Info"
@@ -179,7 +179,7 @@ paths:
         404:
           description: "Non-existing token"
           
-  /editUserInfo:
+  /user/info:
     put:
       tags: 
       - "User Info"
@@ -212,7 +212,7 @@ paths:
         404:
           description: "Non-existing token"
       
-  /getUserRole/{user_id}:
+  /permissions/userRole/{user_id}:
     get:
       tags:
         - "Permissions"
@@ -244,16 +244,16 @@ paths:
                       format: "int64"
               example: 
                 - collection_id: 228
-                  role_id: 10
+                  role_id: 40
                 - collection_id: 322
-                  role_id: 20
+                  role_id: 30
                   
         403:
-          description: "Not permissions"
+          description: "No permissions"
         404:
           description: "Incorrect ID"
     
-  /editUserRole:
+  /permissions/userRole:
     put:
       tags:
         - "Permissions"
@@ -285,7 +285,7 @@ paths:
         404:
           description: "Non-existing token"
   
-  /getPermissionsByRoleID/{role_id}:
+  /permissions/role/{role_id}:
     get:
       tags:
         - "Permissions"
@@ -311,16 +311,10 @@ paths:
                     description: "Просмотр коллекции (Читатель role_id = 40)"
                   rate:
                     type: "boolean"
-                    description: "Возможность оценивать посты (Читатель role_id = 40)"
+                    description: "Возможность оценивать посты (Читатель role_id = 40). Без этого права нельзя оценивать посты, даже если они публичные"
                   write:
                     type: "boolean"
                     description: "Загружать пост в коллекцию (Пользователь role_id = 30)"
-                  share:
-                    type: "boolean"
-                    description: "Возможность предоставить/отнять права read/write у других (Супер пользователь role_id = 20)"
-                  edit_other_posts_and_users:
-                    type: "boolean"
-                    description: "Редактирование/удаление любого поста + может менять права других пользователей (Модератор role_id = 10)"
                   edit_other_user_permissions:
                     type: "boolean"
                     description: "Редактирование прав других пользователей, кроме полей edit_other_user_permissions, delete_collection (Админ role_id = 0)"
@@ -330,7 +324,7 @@ paths:
         404:
           description: "Incorrect role ID"
           
-  /setPostOwner:
+  /permissions/post:
     post:
       tags:
         - "Permissions"
@@ -358,7 +352,7 @@ paths:
         404:
           description: "Incorrect user_id/post_id"
           
-  /getPostOwner/{post_id}:
+  /permissions/post/{post_id}:
     get:
       tags:
         - "Permissions"
@@ -383,7 +377,7 @@ paths:
         404:
           description: "Incorrect post_id"
 
-  /setPublicCollection/{collection_id}:
+  /permissions/publicCollection/{collection_id}:
     post:
       tags:
         - "Permissions"
@@ -402,7 +396,7 @@ paths:
         404:
           description: "Incorrect collection_id"
   
-  /filterPublicCollection:
+  /permissions/publicCollection:
     post:
       tags:
         - "Permissions"
@@ -434,5 +428,29 @@ paths:
               example: 
                 - 1
                 - 3
+        404:
+          description: "Not OK"
+  
+  /permissions/publicCollection/all:
+    get:
+      tags:
+        - "Permissions"
+      summary: "Get public collection from list of collection"
+      description: ""
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "integer"
+                  format: "int64"
+              example: 
+                - 1
+                - 3
+                - 5
+                - 8
         404:
           description: "Not OK"
