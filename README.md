@@ -10,8 +10,9 @@
 
 ## Installation
 
-Use the pakage manager [pip](https://pip.pypa.io/en/stable/) and [virtualenv](https://virtualenv.pypa.io/en/latest/) for building.
+Use the paсkage manager [pip](https://pip.pypa.io/en/stable/) and [virtualenv](https://virtualenv.pypa.io/en/latest/) for building.
 
+#### Windows
 ```bash
 git clone https://github.com/D076/summer-practice-2020-SBT/
 cd summer-practice-2020-SBT
@@ -21,4 +22,16 @@ pip install -r requirements.txt
 set APP_SETTINGS=config.DevelopmentConfig
 set DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/DBNAME
 python manage.py runserver
+```
+
+#### Linux and macOS
+```bash
+git clone https://github.com/D076/summer-practice-2020-SBT/
+cd summer-practice-2020-SBT
+python -m venv venv
+source venv/Scripts/activate
+pip3 install -r requirements.txt
+export APP_SETTINGS=config.DevelopmentConfig
+export DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/DBNAME
+python3 manage.py runserver
 ```
