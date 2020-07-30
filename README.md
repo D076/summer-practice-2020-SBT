@@ -29,7 +29,7 @@ python manage.py runserver
 git clone https://github.com/D076/summer-practice-2020-SBT/
 cd summer-practice-2020-SBT
 python -m venv venv
-source venv/Scripts/activate
+source venv/bin/activate
 pip3 install -r requirements.txt
 export APP_SETTINGS=config.DevelopmentConfig
 export DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/DBNAME
