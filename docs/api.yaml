@@ -1,0 +1,456 @@
+openapi: 3.0.2
+info:
+  title: "Swagger Auth, validate and user permission"
+  version: 1.0.1
+paths:
+  /auth:
+    post:
+      tags: 
+        - "Auth and Valid"
+      summary: "Authentication"
+      description: "Create token and get it"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                login:
+                  type: "string"
+                password:
+                  type: "string"
+            example:
+              login: "a1pha1337@gmail.com"
+              password: "rhokef3"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  token: 
+                    type: "string"
+              example:
+                token: "f57ebe597a3741b688269209fa29b053"
+        401:
+          description: "Incorrect login/pass"
+          content: {}
+          
+  /auth/{token}:
+    get:
+      tags: 
+        - "Auth and Valid"
+      summary: "Validation"
+      description: "Send token and check it"
+      parameters:
+      - name: "token"
+        in: "path"
+        description: "User token"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Non-existing token"
+          
+  /user:
+    post:
+      tags:
+        - "User Info"
+      summary: "Register user"
+      description: "Register user and get session token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                login:
+                  type: "string"
+                password:
+                  type: "string"
+            example:
+              login: "a1pha1337@gmail.com"
+              password: "rhokef3"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              example: "f57ebe597a3741b688269209fa29b053"
+        400:
+          description: "Incorrect login/pass"
+          content: {}
+          
+  /user/{token}:
+    delete:
+      tags:
+        - "User Info"
+      summary: "Delete user himself"
+      description: ""
+      parameters:
+      - name: "token"
+        in: "path"
+        description: "User token"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Non-existing token"
+
+  /user/info/{token}:
+    get:
+      tags: 
+      - "User Info"
+      summary: "Get user info"
+      description: ""
+      parameters: 
+      - name: "token"
+        in: "path"
+        description: "User token"
+        schema:
+          type: "string"
+        required: true
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  user_id:
+                    type: "integer"
+                    format: "int64"
+                  login:
+                    type: "string"
+                  name:
+                    type: "string"
+              example:
+                user_id: 0
+                login: "alpha13371@mail.ru"
+                name: "Solo_228"
+        404:
+          description: "Non-existing token"
+          
+  /user/info/{login}:
+    get:
+      tags: 
+      - "User Info"
+      summary: "Get user public info"
+      description: ""
+      parameters: 
+      - name: "login"
+        in: "path"
+        description: "User login"
+        schema:
+          type: "string"
+        required: true
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  user_id:
+                    type: "integer"
+                    format: "int64"
+                  login:
+                    type: "string"
+                  name:
+                    type: "string"
+              example:
+                user_id: 0
+                login: "alpha13371@mail.ru"
+                name: "Solo_228"
+        404:
+          description: "Non-existing login"
+          
+  /user/info:
+    put:
+      tags: 
+      - "User Info"
+      summary: "Edit user info (himself)"
+      description: "Leave the fields that do not need to be changed blank"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                token:
+                  type: "string"
+                info:
+                  type: "object"
+                  properties:
+                    password:
+                      type: "string"
+                    name: 
+                      type: "string"
+            example:
+              token: "f57ebe597a3741b688269209fa29b053"
+              info:
+                password: "rhokef3"
+                name: "Solo_322"
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Non-existing token"
+      
+  /permissions/userRole/{user_id}:
+    get:
+      tags:
+        - "Permissions"
+      summary: "Gets user role"
+      description: "Gets user role by user ID"
+      parameters:
+      - name: "user_id"
+        in: path
+        description: "User ID"
+        required: true
+        schema:
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    collection_id:
+                      type: "integer"
+                      format: "int64"
+                    role_id:
+                      type: "integer"
+                      format: "int64"
+              example: 
+                - collection_id: 228
+                  role_id: 40
+                - collection_id: 322
+                  role_id: 30
+                  
+        403:
+          description: "No permissions"
+        404:
+          description: "Incorrect ID"
+    
+  /permissions/userRole:
+    put:
+      tags:
+        - "Permissions"
+      summary: "Edit user permissions"
+      description: "Edit user role by user ID and token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                token:
+                  type: "string"
+                collection_id:
+                  type: "integer"
+                  format: "int64"
+                user_id:
+                  type: "integer"
+                  format: "int64"
+                role_id:
+                  type: "integer"
+                  format: "int64"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Access error"
+        404:
+          description: "Non-existing token"
+  
+  /permissions/role/{role_id}:
+    get:
+      tags:
+        - "Permissions"
+      summary: "Get permissions by role ID"
+      description: ""
+      parameters:
+      - name: "role_id"
+        in: "path"
+        description: ""
+        schema:
+          type: "string"
+        required: true
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  read:
+                    type: "boolean"
+                    description: "Просмотр коллекции (Читатель role_id = 40)"
+                  rate:
+                    type: "boolean"
+                    description: "Возможность оценивать посты (Читатель role_id = 40). Без этого права нельзя оценивать посты, даже если они публичные"
+                  write:
+                    type: "boolean"
+                    description: "Загружать пост в коллекцию (Пользователь role_id = 30)"
+                  edit_other_user_permissions:
+                    type: "boolean"
+                    description: "Редактирование прав других пользователей, кроме полей edit_other_user_permissions, delete_collection (Админ role_id = 0)"
+                  delete_collection: 
+                    type: "boolean"
+                    description: "Удаление всей коллекции (Админ role_id = 0)"
+        404:
+          description: "Incorrect role ID"
+          
+  /permissions/post:
+    post:
+      tags:
+        - "Permissions"
+      summary: "Set post owner by User ID and Post ID"
+      description: ""
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                user_id:
+                  type: "integer"
+                  description: "ID пользователя"
+                post_id:
+                  type: "integer"
+                  description: "ID поcта"
+            example:
+              user_id: 42
+              post_id: 3
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Incorrect user_id/post_id"
+          
+  /permissions/post/{post_id}:
+    get:
+      tags:
+        - "Permissions"
+      summary: "Get post owner (User ID) by Post ID"
+      description: ""
+      parameters:
+      - name: "post_id"
+        in: "path"
+        description: ""
+        schema:
+          type: "integer"
+        required: true
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "integer"
+              example: 
+                user_id: 4
+        404:
+          description: "Incorrect post_id"
+
+  /permissions/publicCollection/{collection_id}:
+    post:
+      tags:
+        - "Permissions"
+      summary: "Set public collection by collection ID"
+      description: ""
+      parameters:
+      - name: "collection_id"
+        in: "path"
+        description: ""
+        schema:
+          type: "integer"
+        required: true
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Incorrect collection_id"
+  
+  /permissions/publicCollection:
+    post:
+      tags:
+        - "Permissions"
+      summary: "Get public collection from list of collection"
+      description: ""
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "array"
+              items:
+                type: "integer"
+                description: "массив из ID коллекций, среди которых хотим узнать публичные"
+            example:
+              - 1
+              - 2
+              - 3
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "integer"
+                  format: "int64"
+              example: 
+                - 1
+                - 3
+        404:
+          description: "Not OK"
+  
+  /permissions/publicCollection/all:
+    get:
+      tags:
+        - "Permissions"
+      summary: "Get public collection from list of collection"
+      description: ""
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "integer"
+                  format: "int64"
+              example: 
+                - 1
+                - 3
+                - 5
+                - 8
+        404:
+          description: "Not OK"
