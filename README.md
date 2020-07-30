@@ -28,7 +28,7 @@ python manage.py runserver
 ```bash
 git clone https://github.com/D076/summer-practice-2020-SBT/
 cd summer-practice-2020-SBT
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
 export APP_SETTINGS=config.DevelopmentConfig
