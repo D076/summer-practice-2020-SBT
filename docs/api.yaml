@@ -177,7 +177,7 @@ paths:
                 login: "alpha13371@mail.ru"
                 name: "Solo_228"
         404:
-          description: "Non-existing token"
+          description: "Non-existing login"
           
   /user/info:
     put:
