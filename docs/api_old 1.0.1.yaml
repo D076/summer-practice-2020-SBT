@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: "Swagger Auth, validate and user permission"
-  version: 1.0.2
+  version: 1.0.1
 paths:
   /auth:
     post:
@@ -39,7 +39,7 @@ paths:
           description: "Incorrect login/pass"
           content: {}
           
-  /validate/{token}:
+  /auth/{token}:
     get:
       tags: 
         - "Auth and Valid"
@@ -90,7 +90,7 @@ paths:
           description: "Incorrect login/pass"
           content: {}
           
-  /user/delete/{token}:
+  /user/{token}:
     delete:
       tags:
         - "User Info"
@@ -144,7 +144,7 @@ paths:
         404:
           description: "Non-existing token"
           
-  /user/info/public/{login}:
+  /user/info/{login}:
     get:
       tags: 
       - "User Info"
@@ -253,7 +253,7 @@ paths:
         404:
           description: "Incorrect ID"
     
-  /permissions/editUserRole:
+  /permissions/userRole:
     put:
       tags:
         - "Permissions"
@@ -324,7 +324,7 @@ paths:
         404:
           description: "Incorrect role ID"
           
-  /permissions/setPostOwner:
+  /permissions/post:
     post:
       tags:
         - "Permissions"
@@ -352,7 +352,7 @@ paths:
         404:
           description: "Incorrect user_id/post_id"
           
-  /permissions/getPostOwner/{post_id}:
+  /permissions/post/{post_id}:
     get:
       tags:
         - "Permissions"
@@ -377,7 +377,7 @@ paths:
         404:
           description: "Incorrect post_id"
 
-  /permissions/setPublicCollection/{collection_id}:
+  /permissions/publicCollection/{collection_id}:
     post:
       tags:
         - "Permissions"
@@ -396,7 +396,7 @@ paths:
         404:
           description: "Incorrect collection_id"
   
-  /permissions/getPublicCollection:
+  /permissions/publicCollection:
     post:
       tags:
         - "Permissions"
@@ -431,7 +431,7 @@ paths:
         404:
           description: "Not OK"
   
-  /permissions/getPublicCollection/all:
+  /permissions/publicCollection/all:
     get:
       tags:
         - "Permissions"
