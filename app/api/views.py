@@ -31,6 +31,8 @@ def auth(body):
     # data = json.loads(body)
     # login = ''
     # password = ''
+    # if 'login' not in data.keys() or 'password' not in data.keys():
+    #     return 400 # incorrect json body
     # for key, value in data.items():
     #     if key == 'login':
     #         login = value
@@ -72,6 +74,8 @@ def userRegister(body):
     # data = json.loads(body)
     # login = ''
     # password = ''
+    # if 'login' not in data.keys() or 'password' not in data.keys():
+    #     return 400 # incorrect json body
     # for key, value in data.items():
     #     if key == 'login':
     #         login = value
