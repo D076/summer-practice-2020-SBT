@@ -22,6 +22,9 @@ venv\Scripts\activate.bat
 pip install -r requirements.txt
 set APP_SETTINGS=config.DevelopmentConfig
 set DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/DBNAME
+python manage.py db init
+python manage.py db migrate
+python manage.py db upgrade
 python manage.py runserver
 ```
 
@@ -34,5 +37,8 @@ source venv/bin/activate
 pip3 install -r requirements.txt
 export APP_SETTINGS=config.DevelopmentConfig
 export DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/DBNAME
+python3 manage.py db init
+python3 manage.py db migrate
+python3 manage.py db upgrade
 python3 manage.py runserver
 ```
