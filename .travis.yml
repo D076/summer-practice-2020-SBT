@@ -1,0 +1,13 @@
+language: python
+python:
+  -  "3.8"
+install:
+  - pip install -r requirements.txt
+  - pip install codecov
+env:
+  - APP_SETTINGS=config.DevelopmentConfig DATABASE_URL=sqlite:///test.db
+script:
+  - python -m pytest -v
+  - coverage run test_class.py
+after_success:
+  - codecov
