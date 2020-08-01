@@ -13,10 +13,10 @@ module = Blueprint('entity', __name__)
 
 @module.route('/', methods=['GET'])
 def index():
-    return 'def Index'
+    return 'Hello'
 
 @module.route('/auth/', methods=['POST'])
-def auth():
+def auth(body):
     return 'def auth'
 
 @module.route('/validate/<token>/', methods=['GET'])
@@ -24,7 +24,7 @@ def validate(token):
     return f'def validate {token}'
 
 @module.route('/user/', methods=['POST'])
-def userRegister():
+def userRegister(body):
     return 'def userRegister'
 
 @module.route('/user/delete/<token>/', methods=['DELETE'])
