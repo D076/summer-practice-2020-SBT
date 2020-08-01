@@ -1,4 +1,4 @@
-import uuid
+import uuid, json
 import bcrypt
 from flask import (
     Blueprint,
@@ -26,10 +26,11 @@ def auth(body):
         "password": "rhokef3"
     }
     out
-    {
-        "token": "f57ebe597a3741b688269209fa29b053"
-    }
+    token
     '''
+    # data = json.loads(body)
+    # ...create a token...
+    # response = token
     return 'def auth'
 
 @module.route('/validate/<token>/', methods=['GET'])
@@ -45,6 +46,7 @@ def validate(token):
     #   response = 200
     # else:
     #   response = 404
+    # return response
     return f'def validate {token}'
 
 @module.route('/user/', methods=['POST'])
@@ -60,6 +62,9 @@ def userRegister(body):
     token
     - 400 Incorrect login/pass
     '''
+    # data = json.loads(body)
+    # ...registration...create token...
+    # response = token
     return 'def userRegister'
 
 @module.route('/user/delete/<token>/', methods=['DELETE'])
