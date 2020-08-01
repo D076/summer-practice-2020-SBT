@@ -14,5 +14,5 @@ class Test(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
     
     def test_requests(self):
-        response = self.app.post('http://127.0.0.1:5000/auth/', data = {'login':'test', 'password':'123'})
+        response = self.app.post('/auth/', data = {'login':'test', 'password':'123'})
         self.assertEqual(response.status_code, 200)
