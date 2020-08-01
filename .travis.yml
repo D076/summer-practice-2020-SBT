@@ -11,4 +11,3 @@ script:
   - coverage run test_class.py
 after_success:
   - codecov
-  
