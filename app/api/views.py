@@ -18,7 +18,7 @@ def index():
     return 'Hello'
 
 @module.route('/auth/', methods=['POST'])
-def auth(body):
+def auth():
     '''
     in 
     {
@@ -28,7 +28,7 @@ def auth(body):
     out
     token
     '''
-    # data = json.loads(body)
+    # data = ???
     # login = ''
     # password = ''
     # if 'login' not in data.keys() or 'password' not in data.keys():
@@ -59,7 +59,7 @@ def validate(token):
     return f'def validate {token}'
 
 @module.route('/user/', methods=['POST'])
-def userRegister(body):
+def userRegister():
     '''
     in
     {
@@ -71,7 +71,7 @@ def userRegister(body):
     token
     - 400 Incorrect login/pass
     '''
-    # data = json.loads(body)
+    # data = ???
     # login = ''
     # password = ''
     # if 'login' not in data.keys() or 'password' not in data.keys():
@@ -129,7 +129,7 @@ def userInfoPublicGet(login):
     return f'def userInfoPublicGet {login}'
 
 @module.route('/user/info/', methods=['PUT'])
-def userInfoEdit(body):
+def userInfoEdit():
     '''
     in
     {
@@ -143,7 +143,7 @@ def userInfoEdit(body):
     - 200
     - 400
     '''
-    # data = json.loads(body)
+    # data = ???
     # login = ''
     # password = ''
     # if 'token' not in data.keys() or 'info' not in data.keys():
