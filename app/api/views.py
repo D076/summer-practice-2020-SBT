@@ -139,5 +139,21 @@ def userInfoEdit(body):
             "name": "Solo_322"
         }
     }
+    out
+    - 200
+    - 400
     '''
+    # data = json.loads(body)
+    # login = ''
+    # password = ''
+    # if 'token' not in data.keys() or 'info' not in data.keys():
+    #     return 400 # incorrect json body
+    # elif 'password' not in data.keys(info) or 'name' not in data.keys(info):
+    #     return 400
+    # for key, value in data.items():
+    #     if key == 'login':
+    #         login = value
+    #     if key == 'password':
+    # ...create a token...
+    # response = token
     return f'def userInfoEdit'
