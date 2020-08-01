@@ -12,3 +12,7 @@ class Test(unittest.TestCase):
     def test_page(self):
         response = self.app.get('/', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
+    
+    def test_requests(self):
+        response = self.app.post('/auth/', data = {'login':'test', 'password':'123'})
+        self.assertEqual(response.status_code, 200)
