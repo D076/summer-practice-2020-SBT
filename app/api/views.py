@@ -29,6 +29,12 @@ def auth(body):
     token
     '''
     # data = json.loads(body)
+    # login = ''
+    # password = ''
+    # for key, value in data.items():
+    #     if key == 'login':
+    #         login = value
+    #     if key == 'password':
     # ...create a token...
     # response = token
     return 'def auth'
@@ -63,6 +69,13 @@ def userRegister(body):
     - 400 Incorrect login/pass
     '''
     # data = json.loads(body)
+    # login = ''
+    # password = ''
+    # for key, value in data.items():
+    #     if key == 'login':
+    #         login = value
+    #     if key == 'password':
+    #         password = value
     # ...registration...create token...
     # response = token
     return 'def userRegister'
