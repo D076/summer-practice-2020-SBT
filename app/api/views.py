@@ -1,3 +1,5 @@
+import uuid
+import bcrypt
 from flask import (
     Blueprint,
     render_template,
@@ -39,6 +41,10 @@ def validate(token):
     - 200 OK
     - 404 Non-existing token
     '''
+    # if token == user_token:
+    #   response = 200
+    # else:
+    #   response = 404
     return f'def validate {token}'
 
 @module.route('/user/', methods=['POST'])
