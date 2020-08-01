@@ -48,6 +48,7 @@ def validate(token):
     - 200 OK
     - 404 Non-existing token
     '''
+    # ...find actual user token...
     # if token == user_token:
     #   response = 200
     # else:
