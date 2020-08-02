@@ -310,9 +310,9 @@ def userInfoEdit():
     else:
         update_name = temp_user.name
 
-    # stmt = db.update(User).\
-    #         where(db.User.id==temp_user.id).\
-    #         values(id=temp_user.id, login=temp_user.login, password=hashed_password, name=update_name)
+    temp_user.password = hashed_password
+    temp_user.name = update_name
+    db.session.commit()
 
     return '', 200
 
