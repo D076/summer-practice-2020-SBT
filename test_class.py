@@ -24,12 +24,12 @@ class Test(unittest.TestCase):
     #     response = self.app.post('/auth/', data={'login':'test@mail.ru', 'password':'test12345'})
     #     self.assertEqual(response.status_code, 200)
 
-    def test_registration(self):
+    def test_1_registration(self):
         info = {'login': 'test@mail.ru', 'password': 'test12345', 'name': 'test'}
         response = self.app.post('/user/', data=json.dumps(info), headers={'Content-Type': 'application/json'})
         self.assertEqual(response.status_code, 200)
 
-    def test_authentication(self):
+    def test_2_authentication(self):
         info = {'login':'test@mail.ru', 'password':'test12345'}
         response = self.app.post('/auth/', data=json.dumps(info), headers={'Content-Type': 'application/json'})
         self.assertEqual(response.status_code, 200)
