@@ -96,14 +96,6 @@ def userRegister():
 
     login = request.json['login']
     password = request.json['password']
-    # comp login with logins in db
-    # if true -> abort(401)
-
-    # else write in db
-    # token = generateToken()
-    # tokens['token'] = token
-    # write token in memory
-    return token, 200
     name = request.json['name']
 
     # Get from database user with same login
@@ -131,19 +123,7 @@ def userRegister():
 
     db.session.add(newUser)
     db.session.commit()
-
-    # data = ???
-    # login = ''
-    # password = ''
-    # if 'login' not in data.keys() or 'password' not in data.keys():
-    #     return 400 # incorrect json body
-    # for key, value in data.items():
-    #     if key == 'login':
-    #         login = value
-    #     if key == 'password':
-    #         password = value
-    # ...registration...create token...
-    # response = token
+    
     return generateToken()
 
 @module.route('/user/delete/<token>/', methods=['DELETE'])
