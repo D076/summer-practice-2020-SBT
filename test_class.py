@@ -3,12 +3,11 @@ import unittest
 from manage import app
 
 class Test(unittest.TestCase):
-    self.token = ''
-
     def setUp(self):
         unittest.TestLoader.sortTestMethodsUsing = None
         app.testing = True
         self.app = app.test_client()
+        self.token = ''
 
     def tearDown(self):
         pass
