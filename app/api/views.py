@@ -257,15 +257,46 @@ def userInfoEdit():
     if not 'password' in info or not 'new_password' in info or not 'name' in info:
         abort(400)
 
-    # user_id_ = validateIternal(token)
-    # if user_id_ == -1:
-    #     abort(404)
+    
+    global tokens
+
+    # Searching token in tokens list
+    user_id = None
+    for i in tokens:
+        if i['token'] == token:
+            user_id = i['user_id']
+            break
+
+    # If token doesn't exist
+    if user_id is None:
+        abort(404, 'Non-existing token')
+
+    # temp_user = User.query.filter_by(id=user_id).first()
 
     # update_password = ''
     # update_name = ''
+    # password = info['password']
+    # new_password = info['new_password']
+    # name = info['name']
 
+    # if password != '' and new_password != '':
+    #     if temp_user is None or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
+    #         abort(401, 'Password is incorrect')
+    #     update_password = new_password
 
-    # temp_user = User.query.filter_by(id=user_id_).first()
-    # update_user = User(id=last_user_id, login=login, password=hashed_password, name=name)
+    # hashed_password = ''
+    # if update_password != '':
+    #     hashed_password = bcrypt.hashpw(update_password.encode('utf8'), bcrypt.gensalt())
+    # else:
+    #     hashed_password = temp_user.password
 
-    return f'def userInfoEdit'
+    # if name != '':
+    #     update_name = name
+    # else:
+    #     update_name = temp_user.name
+
+    # stmt = db.update(User).\
+    #         where(db.User.id==temp_user.id).\
+    #         values(id=temp_user.id, login=temp_user.login, password=hashed_password, name=update_name)
+    # #
+    return '', 200
