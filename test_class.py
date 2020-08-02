@@ -29,5 +29,5 @@ class Test(unittest.TestCase):
 
     def test_3_validation(self):
         info = self.token
-        response = self.app.get('/info', follow_redirects=True)
+        response = self.app.get('/validate/{info}/', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
