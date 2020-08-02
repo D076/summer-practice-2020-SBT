@@ -3,6 +3,8 @@ import unittest
 from manage import app
 
 class Test(unittest.TestCase):
+    self.token = ''
+
     def setUp(self):
         unittest.TestLoader.sortTestMethodsUsing = None
         app.testing = True
@@ -26,7 +28,7 @@ class Test(unittest.TestCase):
         self.token = response
         self.assertEqual(response.status_code, 200)
 
-    # def test_3_validation(self):
-    #     info = self.token
-    #     response = self.app.get('/', follow_redirects=True)
-    #     self.assertEqual(response.status_code, 200)
+    def test_3_validation(self):
+        info = self.token
+        response = self.app.get('/info', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
