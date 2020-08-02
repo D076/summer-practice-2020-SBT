@@ -25,17 +25,24 @@ class Test(unittest.TestCase):
         info = {'login':'test@mail.ru', 'password':'test12345'}
         response = self.app.post('/auth/', data=json.dumps(info), headers={'Content-Type': 'application/json'})
         
+    
         #    
         # тестовый блок
         # 
 
         # json_response = response.json()
         # self.token = json_response['token']
+
+        # после ' забрать 32 символа
+        temp_token = str(response.data)
+        temp_token = temp_token[temp_token.find("'") + 1: 34]
+        self.token = temp_token
         self.assertEqual(self.token, '111111')
 
         # 
         # конец
         # 
+
 
         # self.token = str(response.data)
         self.assertEqual(response.status_code, 200)
@@ -43,6 +50,11 @@ class Test(unittest.TestCase):
     def test_3_validation(self):
         info = self.token
         response = self.app.get('/validate/{info}/', follow_redirects=True)
+
+        # тест
+        self.assertEqual(info, response.data)
+        # конец
+
         self.assertEqual(response.status_code, 200)
     
     # def test_4_logout(self):
