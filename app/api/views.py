@@ -139,6 +139,7 @@ def userInfoEdit():
         "token": "f57ebe597a3741b688269209fa29b053",
         "info": {
             "password": "rhokef3",
+            "new_password": "123",
             "name": "Solo_322"
         }
     }
@@ -146,17 +147,13 @@ def userInfoEdit():
     - 200
     - 400
     '''
-    # data = ???
-    # login = ''
-    # password = ''
-    # if 'token' not in data.keys() or 'info' not in data.keys():
-    #     return 400 # incorrect json body
-    # elif 'password' not in data.keys(info) or 'name' not in data.keys(info):
-    #     return 400
-    # for key, value in data.items():
-    #     if key == 'login':
-    #         login = value
-    #     if key == 'password':
+    if not request.json or not 'token' in request.json or not 'info' in request.json:
+        abort(400)
+    token = request.json['token']
+    info = request.json['info']
+
+    if not 'password' in info or not 'new_password' in info or not 'name' in info:
+        abort(400)
     # ...create a token...
     # response = token
     return f'def userInfoEdit'
