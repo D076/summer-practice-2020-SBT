@@ -3,8 +3,6 @@ import unittest
 from manage import app
 
 class Test(unittest.TestCase):
-    self.token = ''
-
     def setUp(self):
         unittest.TestLoader.sortTestMethodsUsing = None
         app.testing = True
