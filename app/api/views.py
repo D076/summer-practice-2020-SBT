@@ -74,10 +74,10 @@ def validate(token):
     '''
     for i in tokens:
         if i['token'] == token:
-            return 200
+            return '', 200
     abort(404, 'Non-existing token')
-    
-    return 200
+
+    return '', 200
 
 @module.route('/user/', methods=['POST'])
 def userRegister():
