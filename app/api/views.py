@@ -97,11 +97,11 @@ def userDelete(token):
     - 200 OK
     - 404 Non-existing token
     '''
-    # valid tioken ?
-    # yes -> go next
-    # no -> ERROR 404
+    # valid token ?
+    # yes -> Remove login from db. Decrement userId. Code 200
+    # no -> Code 404
 
-    
+
 
 
     return f'def userDelete {token}'
@@ -120,6 +120,11 @@ def userInfoGet(token):
     }
     - 404 Non-existing token
     '''
+
+
+
+
+
     return f'def userInfoGet {token}'
 
 @module.route('/user/info/public/<login>/', methods=['GET'])
