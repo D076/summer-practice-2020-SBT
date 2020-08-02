@@ -123,7 +123,7 @@ def userInfoGet(token):
     # valid token ?
     # yes -> get userId from token. Get login and password by userId. Add to Answer. Return Answer, 200
     # no -> return 404
-
+    
 
 
 
