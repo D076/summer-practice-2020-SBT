@@ -63,6 +63,23 @@ def auth():
 
     return token, 200
 
+@module.route('/logout/<token>/', methods=['GET'])
+def logout(token):
+    '''
+    in
+    string
+    out
+    - 200 OK
+    - 404 Non-existing token
+    '''
+    for i in tokens:
+        if i['token'] == token:
+            tokens.pop(tokens.index(i))
+            return '', 200
+    abort(404, 'Non-existing token')
+
+    return '', 200
+
 @module.route('/validate/<token>/', methods=['GET'])
 def validate(token):
     '''
