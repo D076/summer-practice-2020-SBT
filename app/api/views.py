@@ -12,6 +12,8 @@ from flask import (
     jsonify
 )
 
+tokens = {}
+
 # Token generation function uses
 # UUIDv4
 def generateToken():
@@ -84,7 +86,8 @@ def userRegister():
     # if true -> abort(401)
 
     # else write in db
-    token = generateToken()
+    # token = generateToken()
+    # tokens['token'] = token
     # write token in memory
     return token, 200
 
