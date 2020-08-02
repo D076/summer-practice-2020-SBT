@@ -12,7 +12,11 @@ class Test(unittest.TestCase):
     def test_page(self):
         response = self.app.get('/', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-    
+
+    def test_registration(self):
+        response = self.app.post('/user/', data={'login': 'test@mail.ru', 'password': 'test12345', 'name': 'test'})
+        self.assertEqual(response.status_code, 200)
+
     def test_requests(self):
-        response = self.app.post('/auth/', data = {'login':'test', 'password':'123'})
+        response = self.app.post('/auth/', data={'login':'test@mail.ru', 'password':'test12345'})
         self.assertEqual(response.status_code, 200)
