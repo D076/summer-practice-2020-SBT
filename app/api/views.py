@@ -28,13 +28,6 @@ module = Blueprint('entity', __name__)
 
 last_user_id = None
 
-def validateIternal(token):
-    for i in tokens:
-        if i['token'] == token:
-            return i['user_id']
-    
-    return -1
-
 @module.route('/', methods=['GET'])
 def index():
     return 'Hello'
