@@ -46,6 +46,11 @@ class Test(unittest.TestCase):
     def test_3_validation(self):
         info = self.token
         response = self.app.get('/validate/{info}/', follow_redirects=True)
+
+        # тест
+        self.assertEqual(info, response.data)
+        # конец
+
         self.assertEqual(response.status_code, 200)
     
     # def test_4_logout(self):
