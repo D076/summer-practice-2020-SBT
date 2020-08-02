@@ -28,7 +28,7 @@ class Test(unittest.TestCase):
         # тестовый блок
         json_response = response.json()
         self.token = json_response['token']
-
+        self.assertEqual(self.token, '')
         # конец
 
         # self.token = str(response.data)
