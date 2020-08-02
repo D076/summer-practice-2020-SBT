@@ -34,22 +34,17 @@ def auth():
     out
     token
     '''
-    if not request.json:
+    if not request.json or not 'login' in request.json or not 'password' in request.json:
         abort(400)
     login = request.json['login']
     password = request.json['password']
-    # data = ????
-    # login = ''
-    # password = ''
-    # if 'login' not in data.keys() or 'password' not in data.keys():
-    #     return 400 # incorrect json body
-    # for key, value in data.items():
-    #     if key == 'login':
-    #         login = value
-    #     if key == 'password':
-    # ...create a token...
-    # response = token
-    return f'login: {login}, password: {password}'
+    # comp login/pass with data in db
+    # if incorret -> abort(401)
+
+    # else
+    token = generateToken()
+    # write token in memory
+    return token, 200
 
 @module.route('/validate/<token>/', methods=['GET'])
 def validate(token):
