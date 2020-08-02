@@ -34,7 +34,7 @@ def auth():
     out
     token
     '''
-    if not request.json or not 'title' in request.json:
+    if not request.json:
         abort(400)
     login = request.json['login']
     password = request.json['password']
