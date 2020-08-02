@@ -16,7 +16,8 @@ from flask import (
 
 tokens = []
 from app.api.models import (
-    User
+    User,
+    PublicCollection
 )
 
 # Token generation function uses
@@ -259,3 +260,32 @@ def userInfoEdit():
     # ...create a token...
     # response = token
     return f'def userInfoEdit'
+
+@module.route('/permissions/setPublicCollection/<int:collection_id>/', methods=['POST'])
+def setPublicCollection(collection_id):
+    '''
+    in
+    int
+    out
+    - 200
+    - 400
+    '''
+
+    # Finding public collection with same collection_id
+    existing_public_collection = PublicCollection \
+                                .query \
+                                .filter_by(collection_id=collection_id) \
+                                .first()
+
+    # If collection already public, abort
+    if existing_public_collection:
+        abort(400, 'Collection already public!')
+
+    # Create new public collection
+    new_public_collection = PublicCollection(collection_id=collection_id)
+
+    # Add new public collection into 
+    db.session.add(new_public_collection)
+    db.session.commit()
+
+    return '', 200
