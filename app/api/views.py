@@ -50,7 +50,7 @@ def auth():
     # comp login/pass with data in db
     # if incorret -> abort(401)
     temp_user = User.query.filter_by(login=login).first()
-    if temp_user is None or not bcrypt.checkpw(password, temp_user.password):
+    if temp_user is None or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
         abort(401, 'Login or password is incorrect')
 
     token = generateToken()
