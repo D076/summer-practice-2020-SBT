@@ -1,4 +1,5 @@
 import bcrypt
+import json
 from uuid import uuid4 
 from app.database import db
 from sqlalchemy.sql import func
@@ -310,9 +311,9 @@ def userInfoEdit():
     else:
         update_name = temp_user.name
 
-    # stmt = db.update(User).\
-    #         where(db.User.id==temp_user.id).\
-    #         values(id=temp_user.id, login=temp_user.login, password=hashed_password, name=update_name)
+    temp_user.password = hashed_password
+    temp_user.name = update_name
+    db.session.commit()
 
     return '', 200
 
@@ -344,3 +345,25 @@ def setPublicCollection(collection_id):
     db.session.commit()
 
     return '', 200
+
+@module.route('/permissions/getPublicCollection/', methods=['POST'])
+def getPublicCollection():
+    '''
+    in
+    [5, 7, 8, 12, 56]
+    out
+    - 200
+    [12, 56]
+    - 400
+    '''
+
+    if not request.json:
+        abort(400)
+
+    request_collections = json.loads(request.json)
+
+    # Filter collections
+    filtered_collections = [public_collection.collection_id for public_collection in PublicCollection.query \
+                            if public_collection.collection_id in request_collections]
+
+    return jsonify(filtered_collections), 200
