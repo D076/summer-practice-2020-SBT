@@ -283,36 +283,35 @@ def userInfoEdit():
     if user_id is None:
         abort(404, 'Non-existing token')
 
-    # temp_user = User.query.filter_by(id=user_id).first()
+    temp_user = User.query.filter_by(id=user_id).first()
 
-    # update_password = ''
-    # update_name = ''
-    # password = info['password']
-    # new_password = info['new_password']
-    # name = info['name']
+    update_password = ''
+    update_name = ''
+    password = info['password']
+    new_password = info['new_password']
+    name = info['name']
 
-    # if password != '' and new_password != '':
-    #     if temp_user is None or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
-    #         abort(401, 'Password is incorrect')
-    #     update_password = new_password
+    if password != '' and new_password != '':
+        if temp_user is None or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
+            abort(401, 'Password is incorrect')
+        update_password = new_password
 
-    # hashed_password = ''
-    # if update_password != '':
-    #     hashed_password = bcrypt.hashpw(update_password.encode('utf8'), bcrypt.gensalt())
-    # else:
-    #     hashed_password = temp_user.password
+    hashed_password = ''
+    if update_password != '':
+        hashed_password = bcrypt.hashpw(update_password.encode('utf8'), bcrypt.gensalt())
+    else:
+        hashed_password = temp_user.password
 
-    # if name != '':
-    #     update_name = name
-    # else:
-    #     update_name = temp_user.name
+    if name != '':
+        update_name = name
+    else:
+        update_name = temp_user.name
 
     # stmt = db.update(User).\
     #         where(db.User.id==temp_user.id).\
     #         values(id=temp_user.id, login=temp_user.login, password=hashed_password, name=update_name)
-    # #
+
     return '', 200
-    return f'def userInfoEdit'
 
 @module.route('/permissions/setPublicCollection/<int:collection_id>/', methods=['POST'])
 def setPublicCollection(collection_id):
