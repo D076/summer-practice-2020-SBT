@@ -57,7 +57,7 @@ def auth():
 
     global tokens
     temp_dict = {}
-    temp_dict['user_id'] = last_user_id
+    temp_dict['user_id'] = temp_user.id
     temp_dict['token'] = token
     tokens.append(temp_dict)
 
@@ -145,6 +145,7 @@ def userRegister():
 
     newUser = User(id=last_user_id, login=login, password=hashed_password, name=name)
 
+    # Add user information into database
     db.session.add(newUser)
     db.session.commit()
     token = generateToken()
@@ -193,7 +194,28 @@ def userInfoGet(token):
     # yes -> get userId from token. Get login and password by userId. Add to Answer. Return Answer, 200
     # no -> return 404
 
-    return f'def userInfoGet {token}'
+    global tokens
+
+    # Searching token in tokens list
+    user_id = None
+    for i in tokens:
+        if i['token'] == token:
+            user_id = i['user_id']
+            break
+
+    # If token doesn't exist
+    if user_id is None:
+        abort(404, 'Non-existing token')
+
+    user = User.query.filter_by(id=user_id).first()
+
+    info = {
+        'user_id': user_id,
+        'login': user.login,
+        'name': user.name
+    }
+
+    return jsonify(info), 200
 
 @module.route('/user/info/public/<login>/', methods=['GET'])
 def userInfoPublicGet(login):
