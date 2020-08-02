@@ -31,8 +31,8 @@ class Test(unittest.TestCase):
 
         # json_response = response.json()
         # self.token = json_response['token']
-        self.assertEqual(self.token, '')
-        
+        self.assertEqual(self.token, '111111')
+
         # 
         # конец
         # 
