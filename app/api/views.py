@@ -72,13 +72,11 @@ def validate(token):
     - 200 OK
     - 404 Non-existing token
     '''
-    # ...find actual user token...
-    # if token == user_token:
-    #   response = 200
-    # else:
-    #   response = 404
-    # return response
-    return f'def validate {token}'
+    for i in tokens:
+        if i['token'] == token:
+            return 200
+    abort(404, 'Non-existing token')
+    return 200
 
 @module.route('/user/', methods=['POST'])
 def userRegister():
