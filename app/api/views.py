@@ -257,8 +257,18 @@ def userInfoEdit():
 
     if not 'password' in info or not 'new_password' in info or not 'name' in info:
         abort(400)
-    # ...create a token...
-    # response = token
+
+    # user_id_ = validateIternal(token)
+    # if user_id_ == -1:
+    #     abort(404)
+
+    # update_password = ''
+    # update_name = ''
+
+
+    # temp_user = User.query.filter_by(id=user_id_).first()
+    # update_user = User(id=last_user_id, login=login, password=hashed_password, name=name)
+
     return f'def userInfoEdit'
 
 @module.route('/permissions/setPublicCollection/<int:collection_id>/', methods=['POST'])
