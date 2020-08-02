@@ -3,14 +3,13 @@ python:
   -  "3.8"
 install:
   - pip install -r requirements.txt
-  - pip install codecov
+  - pip install coverage
 env:
   - APP_SETTINGS=config.DevelopmentConfig DATABASE_URL=sqlite:///test.db
 script:
   - python manage.py db init
   - python manage.py db migrate
   - python manage.py db upgrade
-  - python -m pytest -v
-  - coverage run test_class.py
+  - coverage run -m unittest discover
 after_success:
-  - codecov
+  - bash <(curl -s https://codecov.io/bash)
