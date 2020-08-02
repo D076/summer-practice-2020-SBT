@@ -42,22 +42,17 @@ def auth():
     out
     token
     '''
-    if not request.json:
+    if not request.json or not 'login' in request.json or not 'password' in request.json:
         abort(400)
     login = request.json['login']
     password = request.json['password']
-    # data = ????
-    # login = ''
-    # password = ''
-    # if 'login' not in data.keys() or 'password' not in data.keys():
-    #     return 400 # incorrect json body
-    # for key, value in data.items():
-    #     if key == 'login':
-    #         login = value
-    #     if key == 'password':
-    # ...create a token...
-    # response = token
-    return generateToken()
+    # comp login/pass with data in db
+    # if incorret -> abort(401)
+
+    # else
+    token = generateToken()
+    # write token in memory
+    return token, 200
 
 @module.route('/validate/<token>/', methods=['GET'])
 def validate(token):
@@ -90,6 +85,7 @@ def userRegister():
     token
     - 400 Incorrect login/pass
     '''
+    
     # JSON body checking
     if not request.json or \
         not 'login' in request.json or \
@@ -150,7 +146,14 @@ def userDelete(token):
     - 200 OK
     - 404 Non-existing token
     '''
-    return f'def userDelete {token}'
+    # valid token ?
+    # yes -> Remove login from db. Decrement userId. return 200
+    # no -> return 404
+
+
+
+    return "Complete", 200
+    # return f'def userDelete {token}'
 
 @module.route('/user/info/<token>/', methods=['GET'])
 def userInfoGet(token):
@@ -166,6 +169,10 @@ def userInfoGet(token):
     }
     - 404 Non-existing token
     '''
+    # valid token ?
+    # yes -> get userId from token. Get login and password by userId. Add to Answer. Return Answer, 200
+    # no -> return 404
+
     return f'def userInfoGet {token}'
 
 @module.route('/user/info/public/<login>/', methods=['GET'])
@@ -192,6 +199,7 @@ def userInfoEdit():
         "token": "f57ebe597a3741b688269209fa29b053",
         "info": {
             "password": "rhokef3",
+            "new_password": "123",
             "name": "Solo_322"
         }
     }
@@ -199,17 +207,13 @@ def userInfoEdit():
     - 200
     - 400
     '''
-    # data = ???
-    # login = ''
-    # password = ''
-    # if 'token' not in data.keys() or 'info' not in data.keys():
-    #     return 400 # incorrect json body
-    # elif 'password' not in data.keys(info) or 'name' not in data.keys(info):
-    #     return 400
-    # for key, value in data.items():
-    #     if key == 'login':
-    #         login = value
-    #     if key == 'password':
+    if not request.json or not 'token' in request.json or not 'info' in request.json:
+        abort(400)
+    token = request.json['token']
+    info = request.json['info']
+
+    if not 'password' in info or not 'new_password' in info or not 'name' in info:
+        abort(400)
     # ...create a token...
     # response = token
     return f'def userInfoEdit'
