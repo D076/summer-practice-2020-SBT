@@ -49,10 +49,18 @@ def auth():
     password = request.json['password']
     # comp login/pass with data in db
     # if incorret -> abort(401)
+    temp_user = User.query.filter_by(login=login).first()
+    if temp_user is None or not bcrypt.checkpw(password, temp_user.password):
+        abort(401, 'Login or password is incorrect')
 
-    # else
     token = generateToken()
-    # write token in memory
+
+    global tokens
+    temp_dict = {}
+    temp_dict['user_id'] = last_user_id
+    temp_dict['token'] = token
+    tokens.append(temp_dict)
+
     return token, 200
 
 @module.route('/validate/<token>/', methods=['GET'])
