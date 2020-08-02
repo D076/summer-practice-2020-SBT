@@ -280,17 +280,20 @@ def userInfoEdit():
     new_password = info['new_password']
     name = info['name']
 
+    # If user want to change pass, check with hash in db
     if password != '' and new_password != '':
         if temp_user is None or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
             abort(401, 'Password is incorrect')
         update_password = new_password
 
+    # Save new hash
     hashed_password = ''
     if update_password != '':
         hashed_password = bcrypt.hashpw(update_password.encode('utf8'), bcrypt.gensalt())
     else:
         hashed_password = temp_user.password
 
+    # Check if user want to change name
     if name != '':
         update_name = name
     else:
