@@ -97,6 +97,13 @@ def userDelete(token):
     - 200 OK
     - 404 Non-existing token
     '''
+    # valid tioken ?
+    # yes -> go next
+    # no -> ERROR 404
+
+    
+
+
     return f'def userDelete {token}'
 
 @module.route('/user/info/<token>/', methods=['GET'])
