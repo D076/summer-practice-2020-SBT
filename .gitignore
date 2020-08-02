@@ -1,4 +1,5 @@
 /venv/*
+/venv_old/*
 *.bat
 /.vscode/*
 # Byte-compiled / optimized / DLL files
