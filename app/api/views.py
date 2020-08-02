@@ -21,18 +21,22 @@ from app.api.models import (
     PublicCollection
 )
 
+
 # Token generation function uses
 # UUIDv4
 def generateToken():
     return uuid4().hex
 
+
 module = Blueprint('entity', __name__)
 
 last_user_id = None
 
+
 @module.route('/', methods=['GET'])
 def index():
     return 'Hello'
+
 
 @module.route('/auth/', methods=['POST'])
 def auth():
@@ -65,6 +69,7 @@ def auth():
 
     return token, 200
 
+
 @module.route('/logout/<token>/', methods=['GET'])
 def logout(token):
     '''
@@ -82,6 +87,7 @@ def logout(token):
 
     return '', 200
 
+
 @module.route('/validate/<token>/', methods=['GET'])
 def validate(token):
     '''
@@ -96,6 +102,7 @@ def validate(token):
             return '', 200
     abort(404, 'Non-existing token')
 
+
 '''
     for i in tokens:
         if i['token'] == token:
@@ -104,7 +111,6 @@ def validate(token):
 
     return '', 200
 '''
-
 
 
 @module.route('/user/', methods=['POST'])
@@ -169,6 +175,7 @@ def userRegister():
 
     return token, 200
 
+
 @module.route('/user/delete/<token>/', methods=['DELETE'])
 def userDelete(token):
     '''
@@ -182,10 +189,8 @@ def userDelete(token):
     # yes -> Remove login from db. Decrement userId. return 200
     # no -> return 404
 
-
-
     return "Complete", 200
-    # return f'def userDelete {token}'
+
 
 @module.route('/user/info/<token>/', methods=['GET'])
 def userInfoGet(token):
@@ -228,6 +233,7 @@ def userInfoGet(token):
 
     return jsonify(info), 200
 
+
 @module.route('/user/info/public/<login>/', methods=['GET'])
 def userInfoPublicGet(login):
     '''
@@ -243,6 +249,7 @@ def userInfoPublicGet(login):
     - 404 Non-existing login
     '''
     return f'def userInfoPublicGet {login}'
+
 
 @module.route('/user/info/', methods=['PUT'])
 def userInfoEdit():
@@ -270,7 +277,6 @@ def userInfoEdit():
             not 'name' in info:
         abort(400)
 
-    
     global tokens
 
     # Searching token in tokens list
@@ -295,7 +301,7 @@ def userInfoEdit():
     # If user want to change pass, check with hash in db
     if password != '' and new_password != '':
         if temp_user is None \
-            or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
+                or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
             abort(401, 'Password is incorrect')
         hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())
 
@@ -308,6 +314,7 @@ def userInfoEdit():
     db.session.commit()
 
     return '', 200
+
 
 @module.route('/permissions/setPublicCollection/<int:collection_id>/', methods=['POST'])
 def setPublicCollection(collection_id):
@@ -337,6 +344,7 @@ def setPublicCollection(collection_id):
     db.session.commit()
 
     return '', 200
+
 
 @module.route('/permissions/getPublicCollection/', methods=['POST'])
 def getPublicCollection():
