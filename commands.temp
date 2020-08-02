@@ -1,0 +1,13 @@
+curl -i -H "Content-Type: application/json" -X POST -d "{"""login""":"""test@test.ru""", """name""":"""test""", """password""":"""123"""}" http://localhost:5000/user/
+
+curl -i -H "Content-Type: application/json" -X POST -d "{"""login""":"""test@test.ru""", """password""":"""123"""}" http://localhost:5000/auth/
+
+curl -i http://localhost:5000/validate/?
+
+curl -i http://localhost:5000/logout/?
+
+curl -i -H "Content-Type: application/json" -X PUT -d "{"""token""":"""49db8dcc98e440eda493530557186c89""", """info""":{"""password""": """123""", """new_password""": """123""", """name""": """Solo_322"""}}" http://localhost:5000/user/info/
+
+curl -i http://localhost:5000/user/info/?
+
+curl -X DELETE http://localhost:5000/user/delete/100/
