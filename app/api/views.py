@@ -14,7 +14,7 @@ from flask import (
     jsonify
 )
 
-tokens = {}
+tokens = []
 from app.api.models import (
     User
 )
@@ -123,8 +123,15 @@ def userRegister():
 
     db.session.add(newUser)
     db.session.commit()
-    
-    return generateToken()
+    token = generateToken()
+
+    # global tokens
+    # temp_dict = {}
+    # temp_dict['user_id'] = db.
+    # temp_dict['token'] = token
+    # tokens.append({user_id: })
+
+    return token
 
 @module.route('/user/delete/<token>/', methods=['DELETE'])
 def userDelete(token):
