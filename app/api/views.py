@@ -267,7 +267,9 @@ def userInfoEdit():
     token = request.json['token']
     info = request.json['info']
 
-    if not 'password' in info or not 'new_password' in info or not 'name' in info:
+    if not 'password' in info or \
+            not 'new_password' in info or \
+            not 'name' in info:
         abort(400)
 
     
@@ -294,7 +296,8 @@ def userInfoEdit():
 
     # If user want to change pass, check with hash in db
     if password != '' and new_password != '':
-        if temp_user is None or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
+        if temp_user is None \
+            or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
             abort(401, 'Password is incorrect')
         update_password = new_password
 
