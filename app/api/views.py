@@ -125,13 +125,13 @@ def userRegister():
     db.session.commit()
     token = generateToken()
 
-    # global tokens
-    # temp_dict = {}
-    # temp_dict['user_id'] = db.
-    # temp_dict['token'] = token
-    # tokens.append({user_id: })
+    global tokens
+    temp_dict = {}
+    temp_dict['user_id'] = last_user_id
+    temp_dict['token'] = token
+    tokens.append(temp_dict)
 
-    return token
+    return token, 200
 
 @module.route('/user/delete/<token>/', methods=['DELETE'])
 def userDelete(token):
