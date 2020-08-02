@@ -1,5 +1,5 @@
-# import uuid, json
-# import bcrypt
+import bcrypt
+from uuid import uuid4 
 from flask import (
     Blueprint,
     render_template,
@@ -9,7 +9,13 @@ from flask import (
     redirect,
     url_for,
     current_app,
+    jsonify
 )
+
+# Token generation function uses
+# UUIDv4
+def generateToken():
+    return uuid4().hex
 
 module = Blueprint('entity', __name__)
 
