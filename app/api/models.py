@@ -17,7 +17,7 @@ class User(db.Model):
     user_posts =  db.relationship('Post')
 
     def __repr__(self):
-        return '<User(id={0}, login={1}, name{2})>'
+        return '<User(id={0}, login={1}, name{2})>' \
                 .format(self.id, self.login, self.name)
 
 # Role database tabel
@@ -41,7 +41,7 @@ class Role(db.Model):
 
     def __repr__(self):
         return '<Role(id={0}, role_id={1}, name={2}, read={3}, rate={4}, write={5}, \
-                    edit_other_user_permissions={6}, delete_collection={7})>'
+                    edit_other_user_permissions={6}, delete_collection={7})>' \
                 .format(self.id, self.role_id, self.name, self.read, self.rate, self.write, \
                     self.edit_other_user_permissions, self.delete_collection)
 
@@ -60,7 +60,7 @@ class UserRoleInCollection(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return '<UserRoleInCollection(id={0}, collection_id={1}, role_id={2}, user_id={3})>'
+        return '<UserRoleInCollection(id={0}, collection_id={1}, role_id={2}, user_id={3})>' \
                 .format(self.id, self.collection_id, self.role_id, self.user_id)
 
 # Post database table
@@ -77,7 +77,7 @@ class Post(db.Model):
     user_id = db.Column(db.BigInteger, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return '<Post(id={0}, post_id={1}, user_id={2})>'
+        return '<Post(id={0}, post_id={1}, user_id={2})>' \
                 .format(self.id, self.post_id, self.user_id)
 
 # PublicCollection database table
@@ -85,5 +85,5 @@ class PublicCollection(db.Model):
     collection_id = db.Column(db.BigInteger, primary_key=True, unique=True, nullable=False)
 
     def __repr__(self):
-        return '<PublicCollection(collection_id={0})>'
+        return '<PublicCollection(collection_id={0})>' \
                 .format(self.collection_id)
