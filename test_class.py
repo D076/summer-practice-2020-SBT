@@ -32,7 +32,11 @@ class Test(unittest.TestCase):
 
         # json_response = response.json()
         # self.token = json_response['token']
-        self.token = str(response.data)
+
+        # после ' забрать 32 символа
+        temp_token = str(response.data)
+        temp_token = temp_token[temp_token.find("'") + 1: 34]
+        self.token = temp_token
         self.assertEqual(self.token, '111111')
 
         # 
