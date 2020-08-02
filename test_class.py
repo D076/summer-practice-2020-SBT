@@ -27,7 +27,17 @@ class Test(unittest.TestCase):
         self.token = str(response.data)
         self.assertEqual(response.status_code, 200)
 
-    def test_3_validation(self):
-        info = self.token
-        response = self.app.get('/validate/{info}/', follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+    # def test_3_validation(self):
+    #     info = self.token
+    #     response = self.app.get('/validate/{info}/', follow_redirects=True)
+    #     self.assertEqual(response.status_code, 200)
+    
+    # def test_4_logout(self):
+    #     info = self.token
+    #     response = self.app.get('/logout/{info}/', follow_redirects=True)
+    #     self.assertEqual(response.status_code, 200)
+    
+    # def test_5_validation(self):
+    #     info = self.token
+    #     response = self.app.get('/validate/{info}/', follow_redirects=True)
+    #     self.assertEqual(response.status_code, 404)
