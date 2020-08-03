@@ -424,36 +424,31 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                collections:
-                  type: "array"
-                  items:
-                    type: "integer"
-                    description: "массив из ID коллекций, среди которых хотим узнать публичные"
+              type: "array"
+              items:
+                type: "integer"
+                format: "int64"
+                description: "Collections ID"
             example:
-              collections:
-                - 1
-                - 2
-                - 3
+              - 3
+              - 6
+              - 9
+              - 15
+              - 69
       responses:
         200:
           description: "OK"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  public_collections:
-                    type: "array"
-                    items:
-                      type: "integer"
-                      format: "int64"
-              example: 
-                public_collections:
-                  - 1
-                  - 2
-                  - 3
+                type: "array"
+                items:
+                  type: "integer"
+                  format: "int64"
+                  description: "Public collections ID"
+              example:
+                - 9
+                - 15
         404:
           description: "Not OK"
   
@@ -469,15 +464,12 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  public_collections:
-                    type: "array"
-                    items:
-                      type: "integer"
-                      format: "int64"
+                type: "array"
+                items:
+                  type: "integer"
+                  format: "int64"
+                  description: "Public collections ID"
               example: 
-                public_collections:
                   - 1
                   - 2
                   - 3
