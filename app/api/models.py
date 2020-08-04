@@ -23,6 +23,17 @@ class User(db.Model):
 # Role database tabel
 class Role(db.Model):
     # Primary key
+    id = db.Column(db.BigInteger, primary_key=True)
+
+    # Name role
+    name = db.Column(db.String(lenght=30), nullable=False)
+
+    # List of permissions
+    perm_list = db.Column()     # to be continue
+
+
+    '''
+    # Primary key
     id = db.Column(db.BigInteger, 
         db.Sequence('role_seq', start=0, increment=1), 
         primary_key=True)
@@ -44,6 +55,19 @@ class Role(db.Model):
                     edit_other_user_permissions={6}, delete_collection={7})>' \
                 .format(self.id, self.role_id, self.name, self.read, self.rate, self.write, \
                     self.edit_other_user_permissions, self.delete_collection)
+    '''
+
+# Permission database table
+class Permission(db.Model):
+    # Primary key
+    id = db.Column(db.BigInteger, 
+        db.Sequence('perm_seq', start=0, increment=1), 
+        primary_key=True)
+
+    # Permissions
+    # to be continue
+
+
 
 # UserRoleInCollection database table
 class UserRoleInCollection(db.Model):
