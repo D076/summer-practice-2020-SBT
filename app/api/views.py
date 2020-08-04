@@ -15,11 +15,13 @@ from flask import (
     jsonify
 )
 
-tokens = []
+
 from app.api.models import (
     User,
     PublicCollection
 )
+
+tokens = []
 
 
 # Token generation function uses
@@ -54,7 +56,7 @@ def auth():
     login = request.json['login']
     password = request.json['password']
     # comp login/pass with data in db
-    # if incorret -> abort(401)
+    # if incorrect -> abort(401)
     temp_user = User.query.filter_by(login=login).first()
     if temp_user is None or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
         abort(401, 'Login or password is incorrect')
@@ -101,16 +103,6 @@ def validate(token):
         if i['token'] == token:
             return '', 200
     abort(404, 'Non-existing token')
-
-
-'''
-    for i in tokens:
-        if i['token'] == token:
-            return token, 200
-    abort(404, 'Non-existing token')
-
-    return '', 200
-'''
 
 
 @module.route('/user/', methods=['POST'])
@@ -409,3 +401,10 @@ def getPublicCollection():
                             if public_collection.collection_id in request_collections]
 
     return jsonify(filtered_collections), 200
+
+
+@module.route('/permissions/getPublicCollection/all/', methods=['GET'])
+def getPublicCollectionAll():
+    collections = [public_collection.collection_id for public_collection in PublicCollection.query]
+    
+    return jsonify(collections), 200
