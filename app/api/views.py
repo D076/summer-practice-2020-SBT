@@ -192,7 +192,7 @@ def userDelete(token):
     # yes -> Remove login from db. Decrement userId. return 200
     user = User.query.filter_by(id=user_id).first()
     db.session.delete(user)
-    db.commit()
+    db.session.commit()
 
     # Temporarily. In the future, transfer initialization and remove code below
     global last_user_id
@@ -207,11 +207,10 @@ def userDelete(token):
     # End of temp code
 
     last_user_id -= 1
-    # logout
+    # logout all tokens with current user_id
     for i in tokens:
-        if i['token'] == token:
+        if i['user_id'] == user_id:
             tokens.pop(tokens.index(i))
-            break
 
     return "Complete", 200
 
