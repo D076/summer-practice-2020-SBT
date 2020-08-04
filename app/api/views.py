@@ -185,9 +185,41 @@ def userDelete(token):
     - 200 OK
     - 404 Non-existing token
     '''
-    # valid token ?
+
+    global tokens
+    user_id = None
+    for i in tokens:
+        if i['token'] == token:
+            user_id = i['user_id']
+            break
+
+    # If token doesn't exist
+    if user_id is None:
+        abort(404, 'Non-existing token')
+
     # yes -> Remove login from db. Decrement userId. return 200
-    # no -> return 404
+    user = User.query.filter_by(id=user_id).first()
+    db.session.delete(user)
+    db.commit()
+
+    # Temporarily. In the future, transfer initialization and remove code below
+    global last_user_id
+
+    # Initialize last_user_id
+    if last_user_id is None:
+        last_user_table_id = db.session.query(func.max(User.id)).scalar()
+        if last_user_table_id is None:
+            last_user_id = 0
+        else:
+            last_user_id = last_user_table_id
+    # End of temp code
+
+    last_user_id -= 1
+    # logout
+    for i in tokens:
+        if i['token'] == token:
+            tokens.pop(tokens.index(i))
+            break
 
     return "Complete", 200
 
@@ -248,7 +280,17 @@ def userInfoPublicGet(login):
     }
     - 404 Non-existing login
     '''
-    return f'def userInfoPublicGet {login}'
+    user = User.query.filter_by(login=login).first()
+    if user is None:
+        abort(404, 'Non-existing login')
+
+    info = {
+        'user_id': user.id,
+        'login': user.login,
+        'name': user.name
+    }
+
+    return jsonify(info), 200
 
 
 @module.route('/user/info/', methods=['PUT'])
