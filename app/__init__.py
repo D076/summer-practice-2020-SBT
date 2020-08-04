@@ -3,6 +3,11 @@ from flask import Flask
 
 from .database import db
 
+from app.api.tokenManager import TokenManager
+
+tokenManagerInstance = TokenManager()
+tokenManagerInstance.start()
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(os.environ['APP_SETTINGS'])
