@@ -361,6 +361,61 @@ def userInfoEdit():
     return '', 200
 
 
+@module.route('/permissions/userRole/<int:user_id>/', methods=['GET'])
+def getUserRole(user_id):
+    '''
+    in
+    :user_id:
+    out
+    - 200
+    {
+        [
+            {
+                collection_id: 228
+                role_id: 40
+            }
+            {
+                collection_id: 322
+                role_id: 30
+            }
+        ]
+    }
+    - 403: "No permissions"
+    - 404: "Incorrect ID"
+    '''
+    return '', 200
+
+
+@module.route('/permissions/editUserRole/', methods=['PUT'])
+def editUserRole():
+    '''
+    in
+    {
+        "token": "f57ebe597a3741b688269209fa29b053",
+        "collection_id": 228,
+        "user_id": 5,
+        "role_id": 30
+    }
+    out
+    - 200: "OK"
+    - 400: "Access error"
+    - 404: "Non-existing token"
+    '''
+    return '', 200
+
+
+@module.route('/permissions/role/<int:role_id>/', methods=['GET'])
+def getPermissionsByRole(role_id):
+    '''
+    in
+    role_id
+    out
+    - 200: ???
+    - 404: "Incorrect role ID"
+    '''
+    return '', 200
+
+
 @module.route('/permissions/setPostOwner/', methods=['POST'])
 def setPostOwner():
     '''
