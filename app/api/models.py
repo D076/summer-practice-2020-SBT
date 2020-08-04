@@ -63,7 +63,7 @@ class RolesPermissions(db.Model):
 
     # Foreign keys
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
-    perm_id = db.Column(db.Integer, db.ForeignKey('perm.id'), nullable=False)
+    perm_id = db.Column(db.Integer, db.ForeignKey('permission.id'), nullable=False)
 
     def __repr__(self):
         return '<Link(id={0}, role_id={1}. perm_id={2})>' \
