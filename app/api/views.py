@@ -267,7 +267,17 @@ def userInfoPublicGet(login):
     }
     - 404 Non-existing login
     '''
-    return f'def userInfoPublicGet {login}'
+    user = User.query.filter_by(login=login).first()
+    if user is None:
+        abort(404, 'Non-existing login')
+
+    info = {
+        'user_id': user.id,
+        'login': user.login,
+        'name': user.name
+    }
+
+    return jsonify(info), 200
 
 
 @module.route('/user/info/', methods=['PUT'])
