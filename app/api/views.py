@@ -201,6 +201,19 @@ def userDelete(token):
     user = User.query.filter_by(id=user_id).first()
     db.session.delete(user)
     db.commit()
+
+    # Temporarily. In the future, transfer initialization and remove code below
+    global last_user_id
+
+    # Initialize last_user_id
+    if last_user_id is None:
+        last_user_table_id = db.session.query(func.max(User.id)).scalar()
+        if last_user_table_id is None:
+            last_user_id = 0
+        else:
+            last_user_id = last_user_table_id
+    # End of temp code
+
     last_user_id -= 1
     # logout
     for i in tokens:
