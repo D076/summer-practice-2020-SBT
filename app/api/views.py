@@ -216,9 +216,11 @@ def userDelete(token):
 
     last_user_id -= 1
     # logout all tokens with current user_id
-    for i in tokens:
-        if i['user_id'] == user_id:
-            tokens.pop(tokens.index(i))
+    # for i in tokens:
+    #     if i['user_id'] == user_id:
+    #         tokens.pop(tokens.index(i))
+    if isinstance(token, str):
+        is_exist = tokenManagerInstance.deleteToken(token)
 
     return "Complete", 200
 

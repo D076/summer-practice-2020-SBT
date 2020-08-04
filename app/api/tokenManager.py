@@ -5,6 +5,7 @@ from time import sleep
 # Token TTL (time to live)
 TTL = timedelta(seconds=50)
 
+
 class TokenInfo(object):
     def __init__(self, user_id, token, last_request_time):
         self.__user_id = user_id
@@ -31,6 +32,7 @@ class TokenInfo(object):
         return 'user_id = {0}, token = {1}, last_request_time = {2}' \
             .format(self.__user_id, self.__token, self.__last_request_time)
 
+
 # Token managment class
 class TokenManager(Thread):
     def __init__(self):
@@ -39,13 +41,11 @@ class TokenManager(Thread):
         self.tokens = list()
         self.semaphore = BoundedSemaphore(2)
 
-
     # Main thread runner
     def run(self):
         while True:
             self.__removeInactiveTokens()
             sleep(1)
-
 
     # Add TokenInfo into query
     def addToken(self, TokenInfo):
@@ -55,11 +55,9 @@ class TokenManager(Thread):
 
         self.semaphore.release()
 
-
     # Add token information directly into query
     def addTokenDirect(self, user_id, token, last_request_time):
         self.addToken(TokenInfo(user_id, token, last_request_time))
-
 
     # Update token TTL
     def updateToken(self, token):
@@ -71,7 +69,6 @@ class TokenManager(Thread):
                 break
 
         self.semaphore.release()
-
 
     def deleteToken(self, token):
         self.semaphore.acquire()
@@ -104,7 +101,6 @@ class TokenManager(Thread):
 
         return None
 
-
     # Remove old tokens
     def __removeInactiveTokens(self):
         captured_time = datetime.now()
@@ -120,5 +116,3 @@ class TokenManager(Thread):
             self.tokens.pop(indexes[i])
 
         self.semaphore.release()
-
-        
