@@ -102,7 +102,7 @@ class TokenManager(Thread):
             
         self.semaphore.release()
 
-        return None if index is None else self.tokens[i].user_id
+        return None if index is None else self.tokens[index].user_id
 
     # Remove old tokens
     def __removeInactiveTokens(self):
