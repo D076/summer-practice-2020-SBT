@@ -35,9 +35,10 @@ class Test(unittest.TestCase):
         info = self.token
 
         # тест
-        self.assertEqual(info, self.token)
 
-        response = self.app.get('/validate/{info}/', follow_redirects=True)
+        # response = self.app.get('/validate/{info}/', follow_redirects=True)
+        response = self.app.get('/validate/{}/'.format(info), follow_redirects=True)
+        # self.client.get('{0}?username=user1&password=pass1'.format(url_for('get_test_data')))
 
      
         self.assertEqual(info, response.data)
