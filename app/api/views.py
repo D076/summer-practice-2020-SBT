@@ -97,20 +97,22 @@ def validate(token):
     - 200 OK
     - 404 Non-existing token
     '''
+    # old
+    '''
     for i in tokens:
         if i['token'] == token:
             return '', 200
     abort(404, 'Non-existing token')
+    '''
+    return token, 200
 
-
-'''
     for i in tokens:
         if i['token'] == token:
             return token, 200
     abort(404, 'Non-existing token')
 
     return '', 200
-'''
+
 
 
 @module.route('/user/', methods=['POST'])
