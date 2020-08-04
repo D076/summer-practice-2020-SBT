@@ -1,12 +1,10 @@
 import os
+import sys
 from flask import Flask
-
 from .database import db
-
 from app.api.tokenManager import TokenManager
 
 tokenManagerInstance = TokenManager()
-tokenManagerInstance.start()
 
 def create_app():
     app = Flask(__name__)
@@ -15,6 +13,9 @@ def create_app():
     db.init_app(app)
     with app.test_request_context():
         db.create_all()
+
+    if not 'db' in sys.argv:
+        tokenManagerInstance.start()
 
     if app.debug == True:
         try:
