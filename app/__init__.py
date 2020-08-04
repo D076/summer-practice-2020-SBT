@@ -18,7 +18,7 @@ def create_app():
     if not 'db' in sys.argv:
         tokenManagerInstance.start()
 
-    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGKILL, signal_handler)
 
     if app.debug == True:
         try:
@@ -34,4 +34,5 @@ def create_app():
     return app
 
 def signal_handler(sig, frame):
+    print('Server stopped')
     os.kill(os.getpid(), signal.SIGTERM)
