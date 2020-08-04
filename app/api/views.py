@@ -352,6 +352,37 @@ def userInfoEdit():
     return '', 200
 
 
+@module.route('/permissions/setPostOwner/', methods=['POST'])
+def setPostOwner():
+    '''
+    in
+    {
+        user_id: 42
+        post_id: 3
+    }
+    out
+    200:
+        description: "OK"
+    404:
+        description: "Incorrect user_id/post_id"
+    '''
+    return '', 200
+
+
+@module.route('/permissions/getPostOwner/<int:post_id>/', methods=['GET'])
+def getPostOwner(post_id):
+    '''
+    in
+    post_id
+    out
+    - 200:
+        4
+    - 404:
+        "Incorrect post_id"
+    '''
+    return '', 200
+
+
 @module.route('/permissions/setPublicCollection/<int:collection_id>/', methods=['POST'])
 def setPublicCollection(collection_id):
     '''
