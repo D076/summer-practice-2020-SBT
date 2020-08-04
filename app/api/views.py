@@ -201,6 +201,7 @@ def userDelete(token):
     user = User.query.filter_by(id=user_id).first()
     db.session.delete(user)
     db.commit()
+    user_id -= 1
     # logout
     for i in tokens:
         if i['token'] == token:
