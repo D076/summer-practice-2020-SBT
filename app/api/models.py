@@ -23,39 +23,19 @@ class User(db.Model):
 # Role database tabel
 class Role(db.Model):
     # Primary key
-    id = db.Column(db.BigInteger, primary_key=True)
-
-    # Name role
-    name = db.Column(db.String(lenght=30), nullable=False)
-
-    # List of permissions
-    perm_list = db.Column()     # to be continue
-
-
-    '''
-    # Primary key
     id = db.Column(db.BigInteger, 
         db.Sequence('role_seq', start=0, increment=1), 
         primary_key=True)
 
-    # Role permissions
-    role_id = db.Column(db.BigInteger, unique=True, nullable=False)
+    # Name role
     name = db.Column(db.String(length=30), unique=True, nullable=False)
-    read = db.Column(db.Boolean, nullable=False)
-    rate = db.Column(db.Boolean, nullable=False)
-    write = db.Column(db.Boolean, nullable=False)
-    edit_other_user_permissions = db.Column(db.Boolean, nullable=False)
-    delete_collection = db.Column(db.Boolean, nullable=False)
 
-    # Role relationships
-    roles_in_users_collections = db.relationship('UserRoleInCollection')
+    # Link relationships
+    role_in_link = db.relationship('Link')
 
     def __repr__(self):
-        return '<Role(id={0}, role_id={1}, name={2}, read={3}, rate={4}, write={5}, \
-                    edit_other_user_permissions={6}, delete_collection={7})>' \
-                .format(self.id, self.role_id, self.name, self.read, self.rate, self.write, \
-                    self.edit_other_user_permissions, self.delete_collection)
-    '''
+        return '<Permission(id={0}, name={1})>' \
+                .format(self.id, self.name)  
 
 # Permission database table
 class Permission(db.Model):
@@ -64,10 +44,30 @@ class Permission(db.Model):
         db.Sequence('perm_seq', start=0, increment=1), 
         primary_key=True)
 
-    # Permissions
-    # to be continue
+    # Name permission
+    name = db.Column(db.String(length=30), unique=True, nullable=False)
 
+    # Link relationships
+    perm_in_link = db.relationship('Link')
 
+    def __repr__(self):
+        return '<Permission(id={0}, name={1})>' \
+                .format(self.id, self.name) 
+
+# Link database table
+class Link(db.Model):
+    # Primary key
+    id = db.Column(db.BigInteger, 
+        db.Sequence('link_seq', start=0, increment=1), 
+        primary_key=True)
+
+    # Foreign keys
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
+    perm_id = db.Column(db.Integer, db.ForeignKey('perm.id'), nullable=False)
+
+    def __repr__(self):
+        return '<Link(id={0}, role_id={1}. prem_id={2})>' \
+                .format(self.id, self.role_id, self.perm_id)        
 
 # UserRoleInCollection database table
 class UserRoleInCollection(db.Model):
