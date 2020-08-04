@@ -99,6 +99,7 @@ def validate(token):
     - 200 OK
     - 404 Non-existing token
     '''
+
     # old
     '''
     for i in tokens:
@@ -109,7 +110,7 @@ def validate(token):
 
     for i in tokens:
         if i['token'] == token:
-            return token, 200
+            return '', 200
     abort(404, 'Non-existing token')
 
 
