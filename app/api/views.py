@@ -19,10 +19,13 @@ from flask import (
 from app import tokenManagerInstance
 
 tokens = []
+
 from app.api.models import (
     User,
     PublicCollection
 )
+
+tokens = []
 
 
 # Token generation function uses
@@ -56,7 +59,7 @@ def auth():
     login = request.json['login']
     password = request.json['password']
     # comp login/pass with data in db
-    # if incorret -> abort(401)
+    # if incorrect -> abort(401)
     temp_user = User.query.filter_by(login=login).first()
     if temp_user is None or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
         abort(401, 'Login or password is incorrect')
@@ -117,17 +120,6 @@ def validate(token):
         abort(404, 'Non-existing token')
 
     return '', 200
-
-
-'''
-    for i in tokens:
-        if i['token'] == token:
-            return token, 200
-    abort(404, 'Non-existing token')
-
-    return '', 200
-'''
-
 
 @module.route('/user/', methods=['POST'])
 def userRegister():
@@ -203,9 +195,40 @@ def userDelete(token):
     - 200 OK
     - 404 Non-existing token
     '''
-    # valid token ?
+
+    global tokens
+    user_id = None
+    for i in tokens:
+        if i['token'] == token:
+            user_id = i['user_id']
+            break
+
+    # If token doesn't exist
+    if user_id is None:
+        abort(404, 'Non-existing token')
+
     # yes -> Remove login from db. Decrement userId. return 200
-    # no -> return 404
+    user = User.query.filter_by(id=user_id).first()
+    db.session.delete(user)
+    db.session.commit()
+
+    # Temporarily. In the future, transfer initialization and remove code below
+    global last_user_id
+
+    # Initialize last_user_id
+    if last_user_id is None:
+        last_user_table_id = db.session.query(func.max(User.id)).scalar()
+        if last_user_table_id is None:
+            last_user_id = 0
+        else:
+            last_user_id = last_user_table_id
+    # End of temp code
+
+    last_user_id -= 1
+    # logout all tokens with current user_id
+    for i in tokens:
+        if i['user_id'] == user_id:
+            tokens.pop(tokens.index(i))
 
     return "Complete", 200
 
@@ -267,7 +290,17 @@ def userInfoPublicGet(login):
     }
     - 404 Non-existing login
     '''
-    return f'def userInfoPublicGet {login}'
+    user = User.query.filter_by(login=login).first()
+    if user is None:
+        abort(404, 'Non-existing login')
+
+    info = {
+        'user_id': user.id,
+        'login': user.login,
+        'name': user.name
+    }
+
+    return jsonify(info), 200
 
 
 @module.route('/user/info/', methods=['PUT'])
@@ -335,6 +368,92 @@ def userInfoEdit():
     return '', 200
 
 
+@module.route('/permissions/userRole/<int:user_id>/', methods=['GET'])
+def getUserRole(user_id):
+    '''
+    in
+    :user_id:
+    out
+    - 200
+    {
+        [
+            {
+                collection_id: 228
+                role_id: 40
+            }
+            {
+                collection_id: 322
+                role_id: 30
+            }
+        ]
+    }
+    - 403: "No permissions"
+    - 404: "Incorrect ID"
+    '''
+    return '', 200
+
+
+@module.route('/permissions/editUserRole/', methods=['PUT'])
+def editUserRole():
+    '''
+    in
+    {
+        "token": "f57ebe597a3741b688269209fa29b053",
+        "collection_id": 228,
+        "user_id": 5,
+        "role_id": 30
+    }
+    out
+    - 200: "OK"
+    - 400: "Access error"
+    - 404: "Non-existing token"
+    '''
+    return '', 200
+
+
+@module.route('/permissions/role/<int:role_id>/', methods=['GET'])
+def getPermissionsByRole(role_id):
+    '''
+    in
+    role_id
+    out
+    - 200: ???
+    - 404: "Incorrect role ID"
+    '''
+    return '', 200
+
+
+@module.route('/permissions/setPostOwner/', methods=['POST'])
+def setPostOwner():
+    '''
+    in
+    {
+        user_id: 42
+        post_id: 3
+    }
+    out
+    200:
+        description: "OK"
+    404:
+        description: "Incorrect user_id/post_id"
+    '''
+    return '', 200
+
+
+@module.route('/permissions/getPostOwner/<int:post_id>/', methods=['GET'])
+def getPostOwner(post_id):
+    '''
+    in
+    post_id
+    out
+    - 200:
+        4
+    - 404:
+        "Incorrect post_id"
+    '''
+    return '', 200
+
+
 @module.route('/permissions/setPublicCollection/<int:collection_id>/', methods=['POST'])
 def setPublicCollection(collection_id):
     '''
@@ -386,3 +505,10 @@ def getPublicCollection():
                             if public_collection.collection_id in request_collections]
 
     return jsonify(filtered_collections), 200
+
+
+@module.route('/permissions/getPublicCollection/all/', methods=['GET'])
+def getPublicCollectionAll():
+    collections = [public_collection.collection_id for public_collection in PublicCollection.query]
+    
+    return jsonify(collections), 200
