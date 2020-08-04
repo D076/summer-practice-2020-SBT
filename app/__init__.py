@@ -18,7 +18,10 @@ def create_app():
     if not 'db' in sys.argv:
         tokenManagerInstance.start()
 
-    signal.signal(signal.SIGKILL, signal_handler)
+    if os.name == 'nt':
+        signal.signal(signal.SIGINT, signal_handler)
+    elif os.name == 'posix':
+        signal.signal(signal.SIGHUP, signal_handler)
 
     if app.debug == True:
         try:
