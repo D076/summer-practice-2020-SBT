@@ -15,11 +15,13 @@ from flask import (
     jsonify
 )
 
-tokens = []
+
 from app.api.models import (
     User,
     PublicCollection
 )
+
+tokens = []
 
 
 # Token generation function uses
@@ -54,7 +56,7 @@ def auth():
     login = request.json['login']
     password = request.json['password']
     # comp login/pass with data in db
-    # if incorret -> abort(401)
+    # if incorrect -> abort(401)
     temp_user = User.query.filter_by(login=login).first()
     if temp_user is None or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
         abort(401, 'Login or password is incorrect')
@@ -202,7 +204,7 @@ def userDelete(token):
     # yes -> Remove login from db. Decrement userId. return 200
     user = User.query.filter_by(id=user_id).first()
     db.session.delete(user)
-    db.commit()
+    db.session.commit()
 
     # Temporarily. In the future, transfer initialization and remove code below
     global last_user_id
@@ -217,11 +219,10 @@ def userDelete(token):
     # End of temp code
 
     last_user_id -= 1
-    # logout
+    # logout all tokens with current user_id
     for i in tokens:
-        if i['token'] == token:
+        if i['user_id'] == user_id:
             tokens.pop(tokens.index(i))
-            break
 
     return "Complete", 200
 
@@ -411,3 +412,10 @@ def getPublicCollection():
                             if public_collection.collection_id in request_collections]
 
     return jsonify(filtered_collections), 200
+
+
+@module.route('/permissions/getPublicCollection/all/', methods=['GET'])
+def getPublicCollectionAll():
+    collections = [public_collection.collection_id for public_collection in PublicCollection.query]
+    
+    return jsonify(collections), 200
