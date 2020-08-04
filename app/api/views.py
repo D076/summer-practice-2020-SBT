@@ -111,6 +111,7 @@ def validate(token):
 
     return '', 200
 
+
 @module.route('/user/', methods=['POST'])
 def userRegister():
     '''
