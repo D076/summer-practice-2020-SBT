@@ -31,15 +31,19 @@ class Test(unittest.TestCase):
         self.token = temp_token
         self.assertEqual(response.status_code, 200)
 
-    # def test_3_validation(self):
-    #     info = self.token
-    #     response = self.app.get('/validate/{info}/', follow_redirects=True)
+    def test_3_validation(self):
+        info = self.token
 
-    #     # тест
-    #     self.assertEqual(info, response.data)
-    #     # конец
+        # тест
+        self.assertEqual(info, self.token)
 
-    #     self.assertEqual(response.status_code, 200)
+        response = self.app.get('/validate/{info}/', follow_redirects=True)
+
+     
+        self.assertEqual(info, response.data)
+        # конец
+
+        self.assertEqual(response.status_code, 200)
     
     # def test_4_logout(self):
     #     info = self.token
