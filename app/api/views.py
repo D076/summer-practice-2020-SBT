@@ -185,9 +185,27 @@ def userDelete(token):
     - 200 OK
     - 404 Non-existing token
     '''
-    # valid token ?
+
+    global tokens
+    user_id = None
+    for i in tokens:
+        if i['token'] == token:
+            user_id = i['user_id']
+            break
+
+    # If token doesn't exist
+    if user_id is None:
+        abort(404, 'Non-existing token')
+
     # yes -> Remove login from db. Decrement userId. return 200
-    # no -> return 404
+    user = User.query.filter_by(id=user_id).first()
+    db.session.delete(user)
+    db.commit()
+    # logout
+    for i in tokens:
+        if i['token'] == token:
+            tokens.pop(tokens.index(i))
+            break
 
     return "Complete", 200
 
