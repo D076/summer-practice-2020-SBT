@@ -44,7 +44,7 @@ class TokenManager(Thread):
     def run(self):
         while True:
             self.__removeInactiveTokens()
-            sleep(1)
+            sleep(2)
 
 
     # Add TokenInfo into query
@@ -96,13 +96,15 @@ class TokenManager(Thread):
     def getUserIdByToken(self, token):
         self.semaphore.acquire()
         
+        index = None
         for i in range(len(self.tokens)):
             if self.tokens[i].token == token:
-                return self.tokens[i].user_id
+                index = i
+                break
 
         self.semaphore.release()
 
-        return None
+        return None if index is None else self.tokens[i].user_id
 
 
     # Remove old tokens
