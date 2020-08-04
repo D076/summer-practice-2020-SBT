@@ -36,7 +36,7 @@ class Test(unittest.TestCase):
 
         # тест
 
-        response = self.app.get('/validate/{info}/', follow_redirects=True)
+        response = self.app.get(f'/validate/{info}/', follow_redirects=True)
         # response = self.app.get('/validate/{}/'.format(info), follow_redirects=True)
         # self.client.get('{0}?username=user1&password=pass1'.format(url_for('get_test_data')))
 
