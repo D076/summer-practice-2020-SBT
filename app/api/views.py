@@ -3,6 +3,7 @@ import json
 from uuid import uuid4 
 from app.database import db
 from sqlalchemy.sql import func
+from app import tokenManagerInstance
 from datetime import datetime
 from flask import (
     Blueprint,
@@ -15,17 +16,15 @@ from flask import (
     current_app,
     jsonify
 )
-
-from app import tokenManagerInstance
-
-tokens = []
-
 from app.api.models import (
     User,
     PublicCollection
 )
 
-tokens = []
+module = Blueprint('entity', __name__)
+
+
+last_user_id = None
 
 
 # Token generation function uses
@@ -33,10 +32,6 @@ tokens = []
 def generateToken():
     return uuid4().hex
 
-
-module = Blueprint('entity', __name__)
-
-last_user_id = None
 
 @module.route('/', methods=['GET'])
 def index():
@@ -56,22 +51,19 @@ def auth():
     '''
     if not request.json or not 'login' in request.json or not 'password' in request.json:
         abort(400)
+
     login = request.json['login']
     password = request.json['password']
+
     # comp login/pass with data in db
     # if incorrect -> abort(401)
     temp_user = User.query.filter_by(login=login).first()
-    if temp_user is None or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
+    if temp_user is None or \
+        not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
+        
         abort(401, 'Login or password is incorrect')
 
     token = generateToken()
-    
-    # OLD
-    # global tokens
-    # temp_dict = {}
-    # temp_dict['user_id'] = temp_user.id
-    # temp_dict['token'] = token
-    # tokens.append(temp_dict)
 
     # NEW
     tokenManagerInstance.addTokenDirect(temp_user.id, token, datetime.now())
@@ -79,7 +71,7 @@ def auth():
     return token, 200
 
 
-@module.route('/logout/<token>/', methods=['GET'])
+@module.route('/logout/<string:token>/', methods=['GET'])
 def logout(token):
     '''
     in
@@ -88,11 +80,15 @@ def logout(token):
     - 200 OK
     - 404 Non-existing token
     '''
-    for i in tokens:
-        if i['token'] == token:
-            tokens.pop(tokens.index(i))
-            return '', 200
-    abort(404, 'Non-existing token')
+
+    if isinstance(token, str):
+        is_exist = tokenManagerInstance.deleteToken(token)
+
+        if not is_exist:
+            abort(404, 'Non-existing token')
+
+    else:
+        abort(400, 'Bad request')
 
     return '', 200
 
@@ -106,12 +102,6 @@ def validate(token):
     - 200 OK
     - 404 Non-existing token
     '''
-
-    # OLD
-    # for i in tokens:
-    #     if i['token'] == token:
-    #         return '', 200
-    # abort(404, 'Non-existing token')
 
     # NEW
     user_id = tokenManagerInstance.getUserIdByToken(token)
@@ -165,9 +155,11 @@ def userRegister():
             last_user_id = last_user_table_id
 
     last_user_id += 1
-    
+
+    # Hashing and salting password    
     hashed_password = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
 
+    # Create new user
     newUser = User(id=last_user_id, login=login, password=hashed_password, name=name)
 
     # Add user information into database
@@ -175,12 +167,7 @@ def userRegister():
     db.session.commit()
     token = generateToken()
 
-    # global tokens
-    # temp_dict = {}
-    # temp_dict['user_id'] = last_user_id
-    # temp_dict['token'] = token
-    # tokens.append(temp_dict)
-
+    # Add token to tokenManager
     tokenManagerInstance.addTokenDirect(last_user_id, token, datetime.now())
 
     return token, 200
@@ -195,13 +182,16 @@ def userDelete(token):
     - 200 OK
     - 404 Non-existing token
     '''
+    
+    # OLD
+    # global tokens
+    # user_id = None
+    # for i in tokens:
+    #     if i['token'] == token:
+    #         user_id = i['user_id']
+    #         break
 
-    global tokens
-    user_id = None
-    for i in tokens:
-        if i['token'] == token:
-            user_id = i['user_id']
-            break
+    user_id = tokenManagerInstance.getUserIdByToken(token)
 
     # If token doesn't exist
     if user_id is None:
@@ -254,8 +244,9 @@ def userInfoGet(token):
     global tokens
 
     # Searching token in tokens list
-    user_id = None
     user_id = tokenManagerInstance.getUserIdByToken(token)
+
+    # OLD
     # for i in tokens:
     #     if i['token'] == token:
     #         user_id = i['user_id']
@@ -329,14 +320,16 @@ def userInfoEdit():
             not 'name' in info:
         abort(400)
 
-    global tokens
-
     # Searching token in tokens list
-    user_id = None
-    for i in tokens:
-        if i['token'] == token:
-            user_id = i['user_id']
-            break
+    user_id = tokenManagerInstance.getUserIdByToken(token)
+
+    # OLD
+    # global tokens
+    # user_id = None
+    # for i in tokens:
+    #     if i['token'] == token:
+    #         user_id = i['user_id']
+    #         break
 
     # If token doesn't exist
     if user_id is None:
