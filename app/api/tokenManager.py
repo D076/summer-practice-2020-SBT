@@ -3,7 +3,7 @@ from threading import Thread, BoundedSemaphore
 from time import sleep
 
 # Token TTL (time to live)
-TTL = timedelta(seconds=50)
+TTL = timedelta(seconds=120)
 
 
 class TokenInfo(object):
@@ -45,7 +45,8 @@ class TokenManager(Thread):
     def run(self):
         while True:
             self.__removeInactiveTokens()
-            sleep(1)
+
+            sleep(30)
 
     # Add TokenInfo into query
     def addToken(self, TokenInfo):
@@ -93,13 +94,15 @@ class TokenManager(Thread):
     def getUserIdByToken(self, token):
         self.semaphore.acquire()
         
+        index = None
         for i in range(len(self.tokens)):
             if self.tokens[i].token == token:
-                return self.tokens[i].user_id
-
+                index = i
+                break
+            
         self.semaphore.release()
 
-        return None
+        return None if index is None else self.tokens[i].user_id
 
     # Remove old tokens
     def __removeInactiveTokens(self):
