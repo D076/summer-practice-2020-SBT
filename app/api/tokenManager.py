@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
 from threading import Thread, BoundedSemaphore
 from time import sleep
-from functools import lru_cache
 
 # Token TTL (time to live)
-TTL = timedelta(seconds=10)
+TTL = timedelta(seconds=50)
 
 class TokenInfo(object):
     def __init__(self, user_id, token, last_request_time):
@@ -40,14 +39,13 @@ class TokenManager(Thread):
         self.tokens = list()
         self.semaphore = BoundedSemaphore(2)
 
+
     # Main thread runner
     def run(self):
         while True:
-            print('CURRENT TOKENS')
-            for token in self.tokens:
-                print(token)
             self.__removeInactiveTokens()
             sleep(1)
+
 
     # Add TokenInfo into query
     def addToken(self, TokenInfo):
@@ -57,9 +55,11 @@ class TokenManager(Thread):
 
         self.semaphore.release()
 
+
     # Add token information directly into query
     def addTokenDirect(self, user_id, token, last_request_time):
         self.addToken(TokenInfo(user_id, token, last_request_time))
+
 
     # Update token TTL
     def updateToken(self, token):
@@ -68,10 +68,31 @@ class TokenManager(Thread):
         for i in range(len(self.tokens)):
             if self.tokens[i].token == token:
                 self.tokens[i].last_request_time = datetime.now()
+                break
 
         self.semaphore.release()
 
-    @lru_cache(maxsize=32)
+
+    def deleteToken(self, token):
+        self.semaphore.acquire()
+
+        delete_index = None
+        for i in range(len(self.tokens)):
+            if self.tokens[i].token == token:
+                delete_index = i
+                break
+
+        if delete_index is None:
+            self.semaphore.release()
+
+            return False
+        else:
+            self.tokens.pop(delete_index)
+
+            self.semaphore.release()
+
+            return True
+
     def getUserIdByToken(self, token):
         self.semaphore.acquire()
         
@@ -82,6 +103,7 @@ class TokenManager(Thread):
         self.semaphore.release()
 
         return None
+
 
     # Remove old tokens
     def __removeInactiveTokens(self):
