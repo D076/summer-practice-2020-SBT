@@ -1,6 +1,6 @@
 from app.database import db
 
-# User database tabel
+# User database table
 class User(db.Model):
     # Primary key
     id = db.Column(db.BigInteger, primary_key=True)
@@ -20,7 +20,7 @@ class User(db.Model):
         return '<User(id={0}, login={1}, name{2})>' \
                 .format(self.id, self.login, self.name)
 
-# Role database tabel
+# Role database table
 class Role(db.Model):
     # Primary key
     id = db.Column(db.BigInteger, 
@@ -31,7 +31,7 @@ class Role(db.Model):
     name = db.Column(db.String(length=30), unique=True, nullable=False)
 
     # Link relationships
-    role_in_link = db.relationship('Link')
+    permissions_in_role = db.relationship('RolesPermissions')
 
     def __repr__(self):
         return '<Permission(id={0}, name={1})>' \
@@ -48,14 +48,14 @@ class Permission(db.Model):
     name = db.Column(db.String(length=30), unique=True, nullable=False)
 
     # Link relationships
-    perm_in_link = db.relationship('Link')
+    roles_in_permission = db.relationship('RolesPermissions')
 
     def __repr__(self):
         return '<Permission(id={0}, name={1})>' \
                 .format(self.id, self.name) 
 
 # Link database table
-class Link(db.Model):
+class RolesPermissions(db.Model):
     # Primary key
     id = db.Column(db.BigInteger, 
         db.Sequence('link_seq', start=0, increment=1), 
@@ -66,7 +66,7 @@ class Link(db.Model):
     perm_id = db.Column(db.Integer, db.ForeignKey('perm.id'), nullable=False)
 
     def __repr__(self):
-        return '<Link(id={0}, role_id={1}. prem_id={2})>' \
+        return '<Link(id={0}, role_id={1}. perm_id={2})>' \
                 .format(self.id, self.role_id, self.perm_id)        
 
 # UserRoleInCollection database table
