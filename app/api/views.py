@@ -19,7 +19,8 @@ from flask import (
 from app.api.models import (
     User,
     PublicCollection,
-    UserRoleInCollection
+    UserRoleInCollection,
+    Post
 )
 
 module = Blueprint('entity', __name__)
@@ -356,6 +357,25 @@ def userInfoEdit():
 
     return '', 200
 
+
+@module.route('/permissions/userRole/', methods=['POST'])
+def setUserRole():
+    '''
+    in
+    {
+        "token": "f57ebe597a3741b688269209fa29b053",
+        "collection_id": 228,
+        "user_id": 5,
+        "role_id": 30
+    }
+    out
+    - 200: "OK"
+    - 400: "Access error"
+    - 404: "Non-existing token"
+    '''
+    return '', 200
+
+
 # FIX SWAGGER API
 @module.route('/permissions/userRole/<int:user_id>/', methods=['GET'])
 def getUserRole(user_id):
@@ -438,6 +458,29 @@ def setPostOwner():
     404:
         description: "Incorrect user_id/post_id"
     '''
+    # JSON body checking
+    if not request.json or \
+            not 'user_id' in request.json or \
+            not 'post_id' in request.json:
+        abort(400, 'Missed required arguments')
+
+    user_id = request.json['user_id']
+    post_id = request.json['post_id']
+
+    user = User.query.filter_by(user_id=user_id).first()
+    if user is None:
+        abort(404, 'Incorrect user_id')
+
+    post = Post.query.filter_by(post_id=post_id).first()
+    if post is not None:
+        abort(404, 'Current post already has owner')
+
+    newPost = Post(post_id=post_id, user_id=user_id)
+
+    # Add post into database
+    db.session.add(newPost)
+    db.session.commit()
+
     return '', 200
 
 
@@ -452,7 +495,13 @@ def getPostOwner(post_id):
     - 404:
         "Incorrect post_id"
     '''
-    return '', 200
+    post = Post.query.filter_by(post_id=post_id).first()
+    if post is None:
+        abort(404, 'Incorrect post ID')
+
+    owner = post.user_id
+
+    return owner, 200
 
 
 @module.route('/permissions/setPublicCollection/<int:collection_id>/', methods=['POST'])
