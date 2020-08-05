@@ -373,6 +373,7 @@ def setUserRole():
     '''
     return '', 200
 
+
 @module.route('/permissions/userRole/<int:user_id>/', methods=['GET'])
 def getUserRole(user_id):
     '''
