@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: "Swagger Auth, validate and user permission"
-  version: 1.0.5
+  version: 1.0.6
 paths:
   /auth/:
     post:
@@ -34,10 +34,10 @@ paths:
         401:
           description: "Incorrect login/pass"
           content: {}
-          
+
   /validate/{token}/:
     get:
-      tags: 
+      tags:
         - "Auth and Valid"
       summary: "Validation"
       description: "Send token and check it"
@@ -53,10 +53,10 @@ paths:
           description: "OK"
         404:
           description: "Non-existing token"
-  
+
   /logout/{token}/:
     get:
-      tags: 
+      tags:
         - "Auth and Valid"
       summary: "Logout"
       description: "Send token and logout"
@@ -72,7 +72,7 @@ paths:
           description: "OK"
         404:
           description: "Non-existing token"
-          
+
   /user/:
     post:
       tags:
@@ -104,7 +104,7 @@ paths:
         400:
           description: "Incorrect login/pass"
           content: {}
-          
+
   /user/delete/{token}/:
     delete:
       tags:
@@ -126,11 +126,11 @@ paths:
 
   /user/info/{token}/:
     get:
-      tags: 
+      tags:
       - "User Info"
       summary: "Get user info"
       description: ""
-      parameters: 
+      parameters:
       - name: "token"
         in: "path"
         description: "User token"
@@ -158,14 +158,14 @@ paths:
                 name: "Solo_228"
         404:
           description: "Non-existing token"
-          
+
   /user/info/public/{login}/:
     get:
-      tags: 
+      tags:
       - "User Info"
       summary: "Get user public info"
       description: ""
-      parameters: 
+      parameters:
       - name: "login"
         in: "path"
         description: "User login"
@@ -193,10 +193,10 @@ paths:
                 name: "Solo_228"
         404:
           description: "Non-existing login"
-          
+
   /user/info/:
     put:
-      tags: 
+      tags:
       - "User Info"
       summary: "Edit user info (himself)"
       description: "Leave the fields that do not need to be changed blank"
@@ -216,7 +216,7 @@ paths:
                       type: "string"
                     new_password:
                       type: "string"
-                    name: 
+                    name:
                       type: "string"
             example:
               token: "f57ebe597a3741b688269209fa29b053"
@@ -229,7 +229,7 @@ paths:
           description: "OK"
         404:
           description: "Non-existing token"
-      
+
   /permissions/userRole/{user_id}/:
     get:
       tags:
@@ -260,17 +260,49 @@ paths:
                     role_id:
                       type: "integer"
                       format: "int64"
-              example: 
+              example:
                 - collection_id: 228
                   role_id: 40
                 - collection_id: 322
                   role_id: 30
-                  
+
         403:
           description: "No permissions"
         404:
           description: "Incorrect ID"
-    
+
+  /permissions/userRole/:
+    post:
+      tags:
+        - "Permissions"
+      summary: "Set user permissions"
+      description: "Edit user role by user ID and token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                token:
+                  type: "string"
+                collection_id:
+                  type: "integer"
+                  format: "int64"
+                user_id:
+                  type: "integer"
+                  format: "int64"
+                role_id:
+                  type: "integer"
+                  format: "int64"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Access error"
+        404:
+          description: "Non-existing token"
+
   /permissions/editUserRole/:
     put:
       tags:
@@ -302,7 +334,7 @@ paths:
           description: "Access error"
         404:
           description: "Non-existing token"
-  
+
   /permissions/role/{role_id}/:
     get:
       tags:
@@ -336,12 +368,12 @@ paths:
                   edit_other_user_permissions:
                     type: "boolean"
                     description: "Редактирование прав других пользователей, кроме полей edit_other_user_permissions, delete_collection (Админ role_id = 0)"
-                  delete_collection: 
+                  delete_collection:
                     type: "boolean"
                     description: "Удаление всей коллекции (Админ role_id = 0)"
         404:
           description: "Incorrect role ID"
-          
+
   /permissions/setPostOwner/:
     post:
       tags:
@@ -369,7 +401,7 @@ paths:
           description: "OK"
         404:
           description: "Incorrect user_id/post_id"
-          
+
   /permissions/getPostOwner/{post_id}/:
     get:
       tags:
@@ -394,25 +426,34 @@ paths:
         404:
           description: "Incorrect post_id"
 
-  /permissions/setPublicCollection/{collection_id}/:
+  /permissions/setPublicCollection/:
     post:
       tags:
         - "Permissions"
       summary: "Set public collection by collection ID"
       description: ""
-      parameters:
-      - name: "collection_id"
-        in: "path"
-        description: ""
-        schema:
-          type: "integer"
+      requestBody:
         required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                token:
+                  type: "integer"
+                collection_id:
+                  type: "integer"
+            example:
+              token: "3fd43fre324543dsf4353dsf"
+              collection_id: 3
       responses:
         200:
           description: "OK"
+        403:
+          description: "No permissions"
         404:
           description: "Incorrect collection_id"
-  
+
   /permissions/getPublicCollection/:
     post:
       tags:
@@ -451,7 +492,7 @@ paths:
                 - 15
         404:
           description: "Not OK"
-  
+
   /permissions/getPublicCollection/all/:
     get:
       tags:
@@ -469,7 +510,7 @@ paths:
                   type: "integer"
                   format: "int64"
                   description: "Public collections ID"
-              example: 
+              example:
                   - 1
                   - 2
                   - 3
