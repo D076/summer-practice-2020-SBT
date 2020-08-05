@@ -38,9 +38,7 @@ class Role(db.Model):
 # Permission database table
 class Permission(db.Model):
     # Primary key
-    id = db.Column(db.BigInteger, 
-        db.Sequence('perm_seq', start=0, increment=1), 
-        primary_key=True)
+    id = db.Column(db.BigInteger, primary_key=True)
 
     # Name permission
     name = db.Column(db.String(length=30), unique=True, nullable=False)
