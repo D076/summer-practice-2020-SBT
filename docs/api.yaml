@@ -1,11 +1,11 @@
 openapi: 3.0.2
 info:
   title: "Swagger Auth, validate and user permission"
-  version: 1.0.4
+  version: 1.0.6
 paths:
-  /auth:
+  /auth/:
     post:
-      tags: 
+      tags:
         - "Auth and Valid"
       summary: "Authentication"
       description: "Create token and get it"
@@ -34,10 +34,10 @@ paths:
         401:
           description: "Incorrect login/pass"
           content: {}
-          
-  /validate/{token}:
+
+  /validate/{token}/:
     get:
-      tags: 
+      tags:
         - "Auth and Valid"
       summary: "Validation"
       description: "Send token and check it"
@@ -53,8 +53,27 @@ paths:
           description: "OK"
         404:
           description: "Non-existing token"
-          
-  /user:
+
+  /logout/{token}/:
+    get:
+      tags:
+        - "Auth and Valid"
+      summary: "Logout"
+      description: "Send token and logout"
+      parameters:
+      - name: "token"
+        in: "path"
+        description: "User token"
+        required: true
+        schema:
+          type: "string"
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Non-existing token"
+
+  /user/:
     post:
       tags:
         - "User Info"
@@ -85,8 +104,8 @@ paths:
         400:
           description: "Incorrect login/pass"
           content: {}
-          
-  /user/delete/{token}:
+
+  /user/delete/{token}/:
     delete:
       tags:
         - "User Info"
@@ -105,13 +124,13 @@ paths:
         404:
           description: "Non-existing token"
 
-  /user/info/{token}:
+  /user/info/{token}/:
     get:
-      tags: 
+      tags:
       - "User Info"
       summary: "Get user info"
       description: ""
-      parameters: 
+      parameters:
       - name: "token"
         in: "path"
         description: "User token"
@@ -139,14 +158,14 @@ paths:
                 name: "Solo_228"
         404:
           description: "Non-existing token"
-          
-  /user/info/public/{login}:
+
+  /user/info/public/{login}/:
     get:
-      tags: 
+      tags:
       - "User Info"
       summary: "Get user public info"
       description: ""
-      parameters: 
+      parameters:
       - name: "login"
         in: "path"
         description: "User login"
@@ -174,10 +193,10 @@ paths:
                 name: "Solo_228"
         404:
           description: "Non-existing login"
-          
-  /user/info:
+
+  /user/info/:
     put:
-      tags: 
+      tags:
       - "User Info"
       summary: "Edit user info (himself)"
       description: "Leave the fields that do not need to be changed blank"
@@ -197,7 +216,7 @@ paths:
                       type: "string"
                     new_password:
                       type: "string"
-                    name: 
+                    name:
                       type: "string"
             example:
               token: "f57ebe597a3741b688269209fa29b053"
@@ -210,8 +229,8 @@ paths:
           description: "OK"
         404:
           description: "Non-existing token"
-      
-  /permissions/userRole/{user_id}:
+
+  /permissions/userRole/{user_id}/:
     get:
       tags:
         - "Permissions"
@@ -241,18 +260,50 @@ paths:
                     role_id:
                       type: "integer"
                       format: "int64"
-              example: 
+              example:
                 - collection_id: 228
                   role_id: 40
                 - collection_id: 322
                   role_id: 30
-                  
+
         403:
           description: "No permissions"
         404:
           description: "Incorrect ID"
-    
-  /permissions/editUserRole:
+
+  /permissions/userRole/:
+    post:
+      tags:
+        - "Permissions"
+      summary: "Set user permissions"
+      description: "Edit user role by user ID and token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                token:
+                  type: "string"
+                collection_id:
+                  type: "integer"
+                  format: "int64"
+                user_id:
+                  type: "integer"
+                  format: "int64"
+                role_id:
+                  type: "integer"
+                  format: "int64"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Access error"
+        404:
+          description: "Non-existing token"
+
+  /permissions/editUserRole/:
     put:
       tags:
         - "Permissions"
@@ -283,8 +334,8 @@ paths:
           description: "Access error"
         404:
           description: "Non-existing token"
-  
-  /permissions/role/{role_id}:
+
+  /permissions/role/{role_id}/:
     get:
       tags:
         - "Permissions"
@@ -317,13 +368,13 @@ paths:
                   edit_other_user_permissions:
                     type: "boolean"
                     description: "Редактирование прав других пользователей, кроме полей edit_other_user_permissions, delete_collection (Админ role_id = 0)"
-                  delete_collection: 
+                  delete_collection:
                     type: "boolean"
                     description: "Удаление всей коллекции (Админ role_id = 0)"
         404:
           description: "Incorrect role ID"
-          
-  /permissions/setPostOwner:
+
+  /permissions/setPostOwner/:
     post:
       tags:
         - "Permissions"
@@ -350,8 +401,8 @@ paths:
           description: "OK"
         404:
           description: "Incorrect user_id/post_id"
-          
-  /permissions/getPostOwner/{post_id}:
+
+  /permissions/getPostOwner/{post_id}/:
     get:
       tags:
         - "Permissions"
@@ -375,26 +426,35 @@ paths:
         404:
           description: "Incorrect post_id"
 
-  /permissions/setPublicCollection/{collection_id}:
+  /permissions/setPublicCollection/:
     post:
       tags:
         - "Permissions"
       summary: "Set public collection by collection ID"
       description: ""
-      parameters:
-      - name: "collection_id"
-        in: "path"
-        description: ""
-        schema:
-          type: "integer"
+      requestBody:
         required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                token:
+                  type: "integer"
+                collection_id:
+                  type: "integer"
+            example:
+              token: "3fd43fre324543dsf4353dsf"
+              collection_id: 3
       responses:
         200:
           description: "OK"
+        403:
+          description: "No permissions"
         404:
           description: "Incorrect collection_id"
-  
-  /permissions/getPublicCollection:
+
+  /permissions/getPublicCollection/:
     post:
       tags:
         - "Permissions"
@@ -405,40 +465,35 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                collections:
-                  type: "array"
-                  items:
-                    type: "integer"
-                    description: "массив из ID коллекций, среди которых хотим узнать публичные"
+              type: "array"
+              items:
+                type: "integer"
+                format: "int64"
+                description: "Collections ID"
             example:
-              collections:
-                - 1
-                - 2
-                - 3
+              - 3
+              - 6
+              - 9
+              - 15
+              - 69
       responses:
         200:
           description: "OK"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  public_collections:
-                    type: "array"
-                    items:
-                      type: "integer"
-                      format: "int64"
-              example: 
-                public_collections:
-                  - 1
-                  - 2
-                  - 3
+                type: "array"
+                items:
+                  type: "integer"
+                  format: "int64"
+                  description: "Public collections ID"
+              example:
+                - 9
+                - 15
         404:
           description: "Not OK"
-  
-  /permissions/getPublicCollection/all:
+
+  /permissions/getPublicCollection/all/:
     get:
       tags:
         - "Permissions"
@@ -450,15 +505,12 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  public_collections:
-                    type: "array"
-                    items:
-                      type: "integer"
-                      format: "int64"
-              example: 
-                public_collections:
+                type: "array"
+                items:
+                  type: "integer"
+                  format: "int64"
+                  description: "Public collections ID"
+              example:
                   - 1
                   - 2
                   - 3
