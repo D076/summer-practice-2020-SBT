@@ -23,9 +23,7 @@ class User(db.Model):
 # Role database table
 class Role(db.Model):
     # Primary key
-    id = db.Column(db.BigInteger, 
-        db.Sequence('role_seq', start=0, increment=1), 
-        primary_key=True)
+    id = db.Column(db.BigInteger, primary_key=True)
 
     # Name role
     name = db.Column(db.String(length=30), unique=True, nullable=False)
