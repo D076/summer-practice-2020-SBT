@@ -356,6 +356,23 @@ def userInfoEdit():
     return '', 200
 
 
+@module.route('/permissions/userRole/<int:user_id>/', methods=['POST'])
+def setUserRole():
+    '''
+    in
+    {
+        "token": "f57ebe597a3741b688269209fa29b053",
+        "collection_id": 228,
+        "user_id": 5,
+        "role_id": 30
+    }
+    out
+    - 200: "OK"
+    - 400: "Access error"
+    - 404: "Non-existing token"
+    '''
+    return '', 200
+
 @module.route('/permissions/userRole/<int:user_id>/', methods=['GET'])
 def getUserRole(user_id):
     '''
