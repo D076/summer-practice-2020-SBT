@@ -246,7 +246,7 @@ def userInfoGet(token):
     # yes -> get userId from token. Get login and password by userId. Add to Answer. Return Answer, 200
     # no -> return 404
 
-    global tokens
+    # global tokens
 
     # Searching token in tokens list
     user_id = tokenManagerInstance.getUserIdByToken(token)
