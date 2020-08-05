@@ -10,6 +10,7 @@ tokenManagerInstance = TokenManager()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(os.environ['APP_SETTINGS'])
+    app.config['SQLALCHEMY_ECHO'] = True
 
     db.init_app(app)
     with app.test_request_context():
