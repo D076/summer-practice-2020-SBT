@@ -18,8 +18,6 @@ def create_app():
     if not 'db' in sys.argv:
         tokenManagerInstance.start()
 
-    signal.signal(signal.SIGINT, signal_handler)
-
     if app.debug == True:
         try:
             from flask_debugtoolbar import DebugToolbarExtension
@@ -32,7 +30,3 @@ def create_app():
     app.register_blueprint(api.module)
     
     return app
-
-def signal_handler(sig, frame):
-    print('Server stopped')
-    os.kill(os.getpid(), signal.SIGTERM)
