@@ -3,7 +3,7 @@ from threading import Thread, BoundedSemaphore
 from time import sleep
 
 # Token TTL (time to live)
-TTL = timedelta(seconds=120)
+TTL = timedelta(seconds=20)
 
 
 class TokenInfo(object):
