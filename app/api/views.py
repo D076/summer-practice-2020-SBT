@@ -18,7 +18,8 @@ from flask import (
 )
 from app.api.models import (
     User,
-    PublicCollection
+    PublicCollection,
+    UserRoleInCollection
 )
 
 module = Blueprint('entity', __name__)
@@ -355,7 +356,7 @@ def userInfoEdit():
 
     return '', 200
 
-
+# FIX SWAGGER API
 @module.route('/permissions/userRole/<int:user_id>/', methods=['GET'])
 def getUserRole(user_id):
     '''
@@ -363,22 +364,32 @@ def getUserRole(user_id):
     :user_id:
     out
     - 200
-    {
-        [
-            {
-                collection_id: 228
-                role_id: 40
-            }
-            {
-                collection_id: 322
-                role_id: 30
-            }
-        ]
-    }
-    - 403: "No permissions"
-    - 404: "Incorrect ID"
+    [
+        {
+            collection_id: 228
+            role_id: 40
+        }
+        {
+            collection_id: 322
+            role_id: 30
+        }
+    ]
+    - 404: "Non-existing user ID"
     '''
-    return '', 200
+
+    user = User.query.filter_by(id=user_id).first()
+
+    if user is None:
+        abort(404, 'Non-existing user ID')
+
+    roles_in_collections = list()
+    for user_role_in_collection in UserRoleInCollection.query.filter_by(user_id=user_id).all():
+        roles_in_collections.append({
+            'collection_id': user_role_in_collection.collection_id,
+            'role_id': user_role_in_collection.role_id
+        })
+
+    return jsonify(roles_in_collections), 200
 
 
 @module.route('/permissions/editUserRole/', methods=['PUT'])
@@ -408,6 +419,8 @@ def getPermissionsByRole(role_id):
     - 200: ???
     - 404: "Incorrect role ID"
     '''
+
+
     return '', 200
 
 
