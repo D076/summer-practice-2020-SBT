@@ -356,7 +356,7 @@ def userInfoEdit():
     return '', 200
 
 
-@module.route('/permissions/setUserRole/<int:user_id>/', methods=['POST'])
+@module.route('/permissions/userRole/', methods=['POST'])
 def setUserRole():
     '''
     in
