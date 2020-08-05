@@ -17,7 +17,7 @@ class User(db.Model):
     user_posts =  db.relationship('Post')
 
     def __repr__(self):
-        return '<User(id={0}, login={1}, name{2})>' \
+        return '<User(id={0}, login={1}, name={2})>' \
                 .format(self.id, self.login, self.name)
 
 # Role database table
