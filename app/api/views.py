@@ -18,7 +18,8 @@ from flask import (
 )
 from app.api.models import (
     User,
-    PublicCollection
+    PublicCollection,
+    Post
 )
 
 module = Blueprint('entity', __name__)
@@ -443,6 +444,29 @@ def setPostOwner():
     404:
         description: "Incorrect user_id/post_id"
     '''
+    # JSON body checking
+    if not request.json or \
+            not 'user_id' in request.json or \
+            not 'post_id' in request.json:
+        abort(400, 'Missed required arguments')
+
+    user_id = request.json['user_id']
+    post_id = request.json['post_id']
+
+    user = User.query.filter_by(user_id=user_id).first()
+    if user is None:
+        abort(404, 'Incorrect user_id')
+
+    post = Post.query.filter_by(post_id=post_id).first()
+    if post is not None:
+        abort(404, 'Current post already has owner')
+
+    newPost = Post(post_id=post_id, user_id=user_id)
+
+    # Add post into database
+    db.session.add(newPost)
+    db.session.commit()
+
     return '', 200
 
 
@@ -457,7 +481,13 @@ def getPostOwner(post_id):
     - 404:
         "Incorrect post_id"
     '''
-    return '', 200
+    post = Post.query.filter_by(post_id=post_id).first()
+    if post is None:
+        abort(404, 'Incorrect post ID')
+
+    owner = post.user_id
+
+    return owner, 200
 
 
 @module.route('/permissions/setPublicCollection/<int:collection_id>/', methods=['POST'])
