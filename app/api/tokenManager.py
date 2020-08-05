@@ -38,23 +38,32 @@ class TokenManager(Thread):
     def __init__(self):
         super().__init__()
 
-        self.tokens = list()
-        self.semaphore = BoundedSemaphore(2)
+        self.__tokens = list()
+        self.__semaphore = BoundedSemaphore(2)
+        self.__running = True
+
+        self.daemon = True
+
+    # Terminate TokenManager thread
+    def terminate(self):
+        self.__running = False
 
     # Main thread runner
     def run(self):
-        while True:
+        while self.__running:
             self.__removeInactiveTokens()
 
             sleep(30)
 
+        return
+
     # Add TokenInfo into query
     def addToken(self, TokenInfo):
-        self.semaphore.acquire()
+        self.__semaphore.acquire()
 
-        self.tokens.append(TokenInfo)
+        self.__tokens.append(TokenInfo)
 
-        self.semaphore.release()
+        self.__semaphore.release()
 
     # Add token information directly into query
     def addTokenDirect(self, user_id, token, last_request_time):
@@ -62,60 +71,60 @@ class TokenManager(Thread):
 
     # Update token TTL
     def updateToken(self, token):
-        self.semaphore.acquire()
+        self.__semaphore.acquire()
 
-        for i in range(len(self.tokens)):
-            if self.tokens[i].token == token:
-                self.tokens[i].last_request_time = datetime.now()
+        for i in range(len(self.__tokens)):
+            if self.__tokens[i].token == token:
+                self.__tokens[i].last_request_time = datetime.now()
                 break
 
-        self.semaphore.release()
+        self.__semaphore.release()
 
     def deleteToken(self, token):
-        self.semaphore.acquire()
+        self.__semaphore.acquire()
 
         delete_index = None
-        for i in range(len(self.tokens)):
-            if self.tokens[i].token == token:
+        for i in range(len(self.__tokens)):
+            if self.__tokens[i].token == token:
                 delete_index = i
                 break
 
         if delete_index is None:
-            self.semaphore.release()
+            self.__semaphore.release()
 
             return False
         else:
-            self.tokens.pop(delete_index)
+            self.__tokens.pop(delete_index)
 
-            self.semaphore.release()
+            self.__semaphore.release()
 
             return True
 
     def getUserIdByToken(self, token):
-        self.semaphore.acquire()
+        self.__semaphore.acquire()
         
         index = None
-        for i in range(len(self.tokens)):
-            if self.tokens[i].token == token:
+        for i in range(len(self.__tokens)):
+            if self.__tokens[i].token == token:
                 index = i
                 break
             
-        self.semaphore.release()
+        self.__semaphore.release()
 
-        return None if index is None else self.tokens[index].user_id
+        return None if index is None else self.__tokens[index].user_id
 
     # Remove old tokens
     def __removeInactiveTokens(self):
         captured_time = datetime.now()
 
-        self.semaphore.acquire()
+        self.__semaphore.acquire()
 
         indexes = list()
-        for i in range(len(self.tokens)):
-            if self.tokens[i].last_request_time + TTL < captured_time:
+        for i in range(len(self.__tokens)):
+            if self.__tokens[i].last_request_time + TTL < captured_time:
                 indexes.append(i)
 
         for i in range(len(indexes) - 1, -1, -1):
-            self.tokens.pop(indexes[i])
+            self.__tokens.pop(indexes[i])
 
-        self.semaphore.release()
+        self.__semaphore.release()
