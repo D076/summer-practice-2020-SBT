@@ -109,6 +109,8 @@ def validate(token):
     if user_id is None:
         abort(404, 'Non-existing token')
 
+    tokenManagerInstance.updateToken(token)
+
     return '', 200
 
 
@@ -249,15 +251,11 @@ def userInfoGet(token):
     # Searching token in tokens list
     user_id = tokenManagerInstance.getUserIdByToken(token)
 
-    # OLD
-    # for i in tokens:
-    #     if i['token'] == token:
-    #         user_id = i['user_id']
-    #         break
-
     # If token doesn't exist
     if user_id is None:
         abort(404, 'Non-existing token')
+
+    tokenManagerInstance.updateToken(token)
 
     user = User.query.filter_by(id=user_id).first()
 
@@ -326,17 +324,11 @@ def userInfoEdit():
     # Searching token in tokens list
     user_id = tokenManagerInstance.getUserIdByToken(token)
 
-    # OLD
-    # global tokens
-    # user_id = None
-    # for i in tokens:
-    #     if i['token'] == token:
-    #         user_id = i['user_id']
-    #         break
-
     # If token doesn't exist
     if user_id is None:
         abort(404, 'Non-existing token')
+
+    tokenManagerInstance.updateToken(token)
 
     temp_user = User.query.filter_by(id=user_id).first()
 
