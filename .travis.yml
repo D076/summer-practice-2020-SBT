@@ -10,7 +10,6 @@ script:
   - python manage.py db init
   - python manage.py db migrate
   - python manage.py db upgrade
-  - python -m unittest
   - coverage run --concurrency=thread -m unittest
 after_success:
   - bash <(curl -s https://codecov.io/bash)
