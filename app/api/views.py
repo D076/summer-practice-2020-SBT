@@ -530,7 +530,7 @@ def editUserRole():
     if user_role_id > 20:
         abort(403, 'Not have enough permissions')
     # Moderator can't give admin or moderator permissions
-    elif user_role_id == 20 and target_user_role_id <= 20:
+    elif user_role_id > 10 and target_user_role_id <= 20:
         abort(403, 'Not have enough permissions')
 
     target_user_role_in_collection = UserRoleInCollection \
