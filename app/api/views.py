@@ -455,8 +455,10 @@ def editUserRole():
     }
     out
     - 200: "OK"
-    - 400: "Access error"
+    - 403: "Not have enough permissions"
     - 404: "Non-existing token"
+    - 404: "User doesn't belong to this collection"
+    - 404: "Unknown role"
     '''
     if not request.json or not 'token' in request.json or \
             not 'collection_id' in request.json or \

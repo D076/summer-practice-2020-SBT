@@ -5,7 +5,7 @@ from flask import Flask
 from .database import db
 from app.api.tokenManager import TokenManager
 
-tokenManagerInstance = TokenManager()
+token_manager = TokenManager()
 
 
 def create_app():
@@ -18,7 +18,7 @@ def create_app():
         db.create_all()
 
     if not 'db' in sys.argv:
-        tokenManagerInstance.start()
+        token_manager.start()
 
     if app.debug == True:
         try:
