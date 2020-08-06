@@ -3,7 +3,7 @@ import json
 from uuid import uuid4 
 from app.database import db
 from sqlalchemy.sql import func
-from app import tokenManagerInstance
+from app import token_manager
 from datetime import datetime
 from flask import (
     Blueprint,
@@ -71,7 +71,7 @@ def auth():
 
     token = generateToken()
 
-    tokenManagerInstance.addTokenDirect(temp_user.id, token, datetime.now())
+    token_manager.addTokenDirect(temp_user.id, token, datetime.now())
 
     return token, 200
 
@@ -88,7 +88,7 @@ def logout(token):
     '''
 
     if isinstance(token, str):
-        is_exist = tokenManagerInstance.deleteToken(token)
+        is_exist = token_manager.deleteToken(token)
 
         if not is_exist:
             abort(404, 'Non-existing token')
@@ -110,12 +110,12 @@ def validate(token):
     - 404 Non-existing token
     '''
 
-    user_id = tokenManagerInstance.getUserIdByToken(token)
+    user_id = token_manager.getUserIdByToken(token)
 
     if user_id is None:
         abort(404, 'Non-existing token')
 
-    tokenManagerInstance.updateToken(token)
+    token_manager.updateToken(token)
 
     return '', 200
 
@@ -178,7 +178,7 @@ def userRegister():
     token = generateToken()
 
     # Add token to tokenManager
-    tokenManagerInstance.addTokenDirect(last_user_id, token, datetime.now())
+    token_manager.addTokenDirect(last_user_id, token, datetime.now())
 
     return token, 200
 
@@ -193,7 +193,7 @@ def userDelete(token):
     - 404 Non-existing token
     '''
 
-    user_id = tokenManagerInstance.getUserIdByToken(token)
+    user_id = token_manager.getUserIdByToken(token)
 
     # If token doesn't exist
     if user_id is None:
@@ -222,7 +222,7 @@ def userDelete(token):
     #     if i['user_id'] == user_id:
     #         tokens.pop(tokens.index(i))
     if isinstance(token, str):
-        is_exist = tokenManagerInstance.deleteToken(token)
+        is_exist = token_manager.deleteToken(token)
 
     return "Complete", 200
 
@@ -246,16 +246,14 @@ def userInfoGet(token):
     # yes -> get userId from token. Get login and password by userId. Add to Answer. Return Answer, 200
     # no -> return 404
 
-    # global tokens
-
     # Searching token in tokens list
-    user_id = tokenManagerInstance.getUserIdByToken(token)
+    user_id = token_manager.getUserIdByToken(token)
 
     # If token doesn't exist
     if user_id is None:
         abort(404, 'Non-existing token')
 
-    tokenManagerInstance.updateToken(token)
+    token_manager.updateToken(token)
 
     user = User.query.filter_by(id=user_id).first()
 
@@ -323,13 +321,13 @@ def userInfoEdit():
         abort(400, 'Missed required arguments')
 
     # Searching token in tokens list
-    user_id = tokenManagerInstance.getUserIdByToken(token)
+    user_id = token_manager.getUserIdByToken(token)
 
     # If token doesn't exist
     if user_id is None:
         abort(404, 'Non-existing token')
 
-    tokenManagerInstance.updateToken(token)
+    token_manager.updateToken(token)
 
     temp_user = User.query.filter_by(id=user_id).first()
 
@@ -382,12 +380,12 @@ def setUserRole():
     user_id_target = request.json['user_id']
     role_id = request.json['role_id']
 
-    user_id_self = tokenManagerInstance.getUserIdByToken(token)
+    user_id_self = token_manager.getUserIdByToken(token)
 
     if user_id_self is None:
         abort(404, 'Non-existing token')
 
-    tokenManagerInstance.updateToken(token)
+    token_manager.updateToken(token)
 
     user_target = User.query.filter_by(user_id=user_id_target).first()
 
@@ -472,36 +470,66 @@ def editUserRole():
     - 404: "User doesn't belong to this collection"
     - 404: "Unknown role"
     '''
-    if not request.json or not 'token' in request.json or \
+    if not request.json or \
+            not 'token' in request.json or \
             not 'collection_id' in request.json or \
             not 'user_id' in request.json or \
             not 'role_id' in request.json:
+
         abort(400, 'Missed required arguments')
+
     token = request.json['token']
     collection_id = request.json['collection_id']
-    user_id_target = request.json['user_id']
-    role_id = request.json['role_id']
+    target_user_id = request.json['user_id']
+    target_role_id = request.json['role_id']
 
-    user_id_self = tokenManagerInstance.getUserIdByToken(token)
+    user_id = token_manager.getUserIdByToken(token)
 
-    if user_id_self is None:
+    if user_id is None:
         abort(404, 'Non-existing token')
 
-    tokenManagerInstance.updateToken(token)
+    # Role existing checking
+    role = Role.query.filter_by(id=target_role_id).first()
+    if role is None:
+        abort(404, 'Unknown role')
 
-    user_target = User.query.filter_by(user_id=user_id_target).first()
+    # Check client permissions and belonging to collection
+    user_collections_role = json.loads(getUserRole(user_id)[0])
 
-    if user_target is None:
-        abort(404, 'Non-existing user ID')
+    user_role_id = None
+    for collection_role in user_collections_role:
+        if collection_role['collection_id'] == collection_id:
+            user_role_id = collection_role['role_id']
+            break
+    
+    if user_role_id is None:
+        abort(404, 'User doesn\'t belong to this collection')
 
-    # Check if role_id is incorrect
-    # incorrect -> abort(404)
+    # Check target user existing and belonging to collection
+    target_user_collections_role = json.loads(getUserRole(target_user_id)[0])
 
-    # Check if user_id_self are enough rights for
-    # set current role_id to user_id_target
-    # false -> abort(400, 'Access error')
+    target_user_role_id = None
+    for collection_role in target_user_collections_role:
+        if collection_role['collection_id'] == collection_id:
+            target_user_role_id = collection_role['role_id']
+            break
 
-    # Set user_id_target in collection_id current role_id
+    if target_user_role_id is None:
+        abort(404, 'User doesn\'t belong to this collection')
+
+    # Checking client permissions (must be less then 10)
+    # for editing others permissions
+    if user_role_id > 10:
+        abort(403, 'Not have enough permissions')
+
+    target_user_role_in_collection = UserRoleInCollection \
+                                    .query \
+                                    .filter_by(user_id=target_user_id, collection_id=collection_id) \
+                                    .first()
+
+    target_user_role_in_collection.role_id = target_role_id
+
+    db.session.commit()
 
     return '', 200
 
