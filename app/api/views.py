@@ -761,3 +761,45 @@ def getPublicCollectionAll():
     collections = [public_collection.collection_id for public_collection in PublicCollection.query]
     
     return jsonify(collections), 200
+
+
+@module.route('/permissions/userRole/setCollectionOwner/', methods=['POST'])
+def setCollectionOwner():
+    '''
+    In:
+    {
+        "token": "f57ebe597a3741b688269209fa29b053",
+        "collection_id": 228
+    }
+    Out:
+    - 200: "Success"
+    - 400: "Missed required arguments"
+    - 404: "Non-existing token"
+    '''
+
+    if not request.json or \
+        not 'token' in request.json or \
+        not 'collection_id' in request.json:
+        
+        abort(400, 'Missed required arguments')
+
+    token = request.json['token']
+    collection_id = request.json['collection_id']
+    
+    token_manager.updateToken(token)
+
+    user_id = token_manager.getUserIdByToken(token)
+
+    if user_id is None:
+        abort(404, 'Non-existing token')
+
+    collection_owner = UserRoleInCollection(user_id=user_id, collection_id=collection_id, role_id=10)
+
+    db.session.add(collection_owner)
+    db.session.commit()
+
+    return '', 200
+
+
+# Delete post owner
+# Close public  collection
