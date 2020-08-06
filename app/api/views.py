@@ -780,6 +780,7 @@ def setCollectionOwner():
     Out:
     - 200: "Success"
     - 400: "Missed required arguments"
+    - 403: "Collection already have owner"
     - 404: "Non-existing token"
     '''
 
@@ -791,13 +792,21 @@ def setCollectionOwner():
 
     token = request.json['token']
     collection_id = request.json['collection_id']
-    
-    token_manager.updateToken(token)
 
     user_id = token_manager.getUserIdByToken(token)
 
     if user_id is None:
         abort(404, 'Non-existing token')
+
+    token_manager.updateToken(token)
+
+    # If collection already have owner -> abort(403)
+    if not UserRoleInCollection \
+            .query \
+            .filter_by(collection_id=collection_id, role_id=10) \
+            .first() is None:
+
+        abort(403, '"Collection already have owner')
 
     collection_owner = UserRoleInCollection(user_id=user_id, collection_id=collection_id, role_id=10)
 
