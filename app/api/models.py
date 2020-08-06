@@ -1,5 +1,6 @@
 from app.database import db
 
+
 # User database table
 class User(db.Model):
     # Primary key
@@ -20,6 +21,7 @@ class User(db.Model):
         return '<User(id={0}, login={1}, name={2})>' \
                 .format(self.id, self.login, self.name)
 
+
 # Role database table
 class Role(db.Model):
     # Primary key
@@ -34,6 +36,7 @@ class Role(db.Model):
     def __repr__(self):
         return '<Permission(id={0}, name={1})>' \
                 .format(self.id, self.name)  
+
 
 # Permission database table
 class Permission(db.Model):
@@ -50,6 +53,7 @@ class Permission(db.Model):
         return '<Permission(id={0}, name={1})>' \
                 .format(self.id, self.name) 
 
+
 # Link database table
 class RolesPermissions(db.Model):
     # Primary key
@@ -64,6 +68,7 @@ class RolesPermissions(db.Model):
     def __repr__(self):
         return '<Link(id={0}, role_id={1}. perm_id={2})>' \
                 .format(self.id, self.role_id, self.perm_id)        
+
 
 # UserRoleInCollection database table
 class UserRoleInCollection(db.Model):
@@ -83,6 +88,7 @@ class UserRoleInCollection(db.Model):
         return '<UserRoleInCollection(id={0}, collection_id={1}, role_id={2}, user_id={3})>' \
                 .format(self.id, self.collection_id, self.role_id, self.user_id)
 
+
 # Post database table
 class Post(db.Model):
     # Primary key
@@ -99,6 +105,7 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post(id={0}, post_id={1}, user_id={2})>' \
                 .format(self.id, self.post_id, self.user_id)
+
 
 # PublicCollection database table
 class PublicCollection(db.Model):

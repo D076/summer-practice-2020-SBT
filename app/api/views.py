@@ -165,10 +165,10 @@ def userRegister():
     hashed_password = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
 
     # Create new user
-    newUser = User(id=last_user_id, login=login, password=hashed_password, name=name)
+    new_user = User(id=last_user_id, login=login, password=hashed_password, name=name)
 
     # Add user information into database
-    db.session.add(newUser)
+    db.session.add(new_user)
     db.session.commit()
     token = generateToken()
 
@@ -475,10 +475,10 @@ def setPostOwner():
     if post is not None:
         abort(404, 'Current post already has owner')
 
-    newPost = Post(post_id=post_id, user_id=user_id)
+    new_post = Post(post_id=post_id, user_id=user_id)
 
     # Add post into database
-    db.session.add(newPost)
+    db.session.add(new_post)
     db.session.commit()
 
     return '', 200
