@@ -406,7 +406,7 @@ def setUserRole():
     # Check if user_id_self are enough rights for
     # set current role_id to user_id_target
     # false -> abort(400, 'Access error')        
-    if role_in_collection.self.role_id <= role_id:
+    if role_in_collection.self.role_id < role_id:
         user_target.role_id = role_id
         db.session.commit()
     else:
@@ -524,7 +524,8 @@ def editUserRole():
     if user_role_id > 20:
         abort(403, 'Not have enough permissions')
     # Moderator can't give admin or moderator permissions
-    elif user_role_id > 10 and target_user_role_id <= 20:
+    # elif user_role_id > 10 and target_user_role_id <= 20:
+    elif user_role_id >= target_user_role_id:
         abort(403, 'Not have enough permissions')
 
     target_user_role_in_collection = UserRoleInCollection \
