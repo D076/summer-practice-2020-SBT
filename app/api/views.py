@@ -654,7 +654,7 @@ def removePublicCollection(collection_id):
 
     for current_collection_user_role in user_collections_role:
         if current_collection_user_role['collection_id'] == collection_id and \
-                current_collection_user_role['role_id'] == 10
+                current_collection_user_role['role_id'] == 10:
             is_admin = True
     if not is_admin:
         abort(403, 'Not have enough permissions')
@@ -706,7 +706,7 @@ def setPublicCollection(collection_id):
 
     for current_collection_user_role in user_collections_role:
         if current_collection_user_role['collection_id'] == collection_id and \
-                current_collection_user_role['role_id'] == 10
+                current_collection_user_role['role_id'] == 10:
             is_admin = True
     if not is_admin:
         abort(403, 'Not have enough permissions')
