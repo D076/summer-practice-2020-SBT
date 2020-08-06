@@ -246,8 +246,6 @@ def userInfoGet(token):
     # yes -> get userId from token. Get login and password by userId. Add to Answer. Return Answer, 200
     # no -> return 404
 
-    # global tokens
-
     # Searching token in tokens list
     user_id = token_manager.getUserIdByToken(token)
 
@@ -460,12 +458,11 @@ def editUserRole():
     - 404: "User doesn't belong to this collection"
     - 404: "Unknown role"
     '''
-
     if not request.json or \
-        not 'token' in request.json or \
-        not 'collection_id' in request.json or \
-        not 'user_id' in request.json or \
-        not 'role_id' in request.json:
+            not 'token' in request.json or \
+            not 'collection_id' in request.json or \
+            not 'user_id' in request.json or \
+            not 'role_id' in request.json:
 
         abort(400, 'Missed required arguments')
 
