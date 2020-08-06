@@ -409,9 +409,14 @@ def setUserRole():
     # Check if user_id_self are enough rights for
     # set current role_id to user_id_target
     # false -> abort(400, 'Access error')
-
+    if 'admin' in role_in_collection_self or \
+        'moderator' in role_in_collection_self:
+        pass
+    else:
+        abort(400, 'Access error')
 
     # Set user_id_target in collection_id current role_id
+    
 
     return '', 200
 
