@@ -694,6 +694,9 @@ def setPublicCollection(collection_id):
         not 'collection_id' in request.json:
         abort(400, 'Missed required arguments')
 
+    token = request.json['token']
+    collection_id = request.json['collection_id']
+
     user_id = token_manager.getUserIdByToken(token)
 
     if user_id is None:
@@ -709,6 +712,8 @@ def setPublicCollection(collection_id):
         if current_collection_user_role['collection_id'] == collection_id and \
                 current_collection_user_role['role_id'] == 10:
             is_admin = True
+            break
+
     if not is_admin:
         abort(403, 'Not have enough permissions')
 
