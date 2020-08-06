@@ -629,11 +629,35 @@ def getPostOwner(post_id):
 def removePublicCollection(collection_id):
     '''
     in
-    int
+    {
+        token: df43f3rf34345452d2dfy3244
+        collection_id: 322
+    }
     out
     - 200
     - 400
     '''
+    if not request.json or \
+        not 'token' in request.json or \
+        not 'collection_id' in request.json:
+        abort(400, 'Missed required arguments')
+
+    user_id = token_manager.getUserIdByToken(token)
+
+    if user_id is None:
+        abort(404, 'Non-existing token')
+
+    token_manager.updateToken(token)
+
+    user_collections_role = json.loads(getUserRole(user_id)[0].get_data())
+    is_admin = False
+
+    for current_collection_user_role in user_collections_role:
+        if current_collection_user_role['collection_id'] == collection_id and \
+                current_collection_user_role['role_id'] == 10
+            is_admin = True
+    if not is_admin:
+        abort(403, 'Not have enough permissions')
 
     # Finding public collection with same collection_id
     existing_public_collection = PublicCollection \
@@ -656,11 +680,36 @@ def removePublicCollection(collection_id):
 def setPublicCollection(collection_id):
     '''
     in
-    int
+    {
+        token: df43f3rf34345452d2dfy3244
+        collection_id: 322
+    }
     out
     - 200
     - 400
     '''
+    if not request.json or \
+        not 'token' in request.json or \
+        not 'collection_id' in request.json:
+        abort(400, 'Missed required arguments')
+
+    user_id = token_manager.getUserIdByToken(token)
+
+    if user_id is None:
+        abort(404, 'Non-existing token')
+
+    token_manager.updateToken(token)
+
+    user_collections_role = json.loads(getUserRole(user_id)[0].get_data())
+
+    is_admin = False
+
+    for current_collection_user_role in user_collections_role:
+        if current_collection_user_role['collection_id'] == collection_id and \
+                current_collection_user_role['role_id'] == 10
+            is_admin = True
+    if not is_admin:
+        abort(403, 'Not have enough permissions')
 
     # Finding public collection with same collection_id
     existing_public_collection = PublicCollection \
