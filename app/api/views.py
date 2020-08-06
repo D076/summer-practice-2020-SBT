@@ -20,7 +20,10 @@ from app.api.models import (
     User,
     PublicCollection,
     UserRoleInCollection,
-    Post
+    Post,
+    RolesPermissions,
+    Role,
+    Permission
 )
 
 module = Blueprint('entity', __name__)
@@ -40,6 +43,7 @@ def index():
     return 'Hello'
 
 
+# COMPLETE
 @module.route('/auth/', methods=['POST'])
 def auth():
     '''
@@ -67,12 +71,12 @@ def auth():
 
     token = generateToken()
 
-    # NEW
     tokenManagerInstance.addTokenDirect(temp_user.id, token, datetime.now())
 
     return token, 200
 
 
+# COMPLETE
 @module.route('/logout/<string:token>/', methods=['GET'])
 def logout(token):
     '''
@@ -95,6 +99,7 @@ def logout(token):
     return '', 200
 
 
+# COMPLETE
 @module.route('/validate/<token>/', methods=['GET'])
 def validate(token):
     '''
@@ -105,7 +110,6 @@ def validate(token):
     - 404 Non-existing token
     '''
 
-    # NEW
     user_id = tokenManagerInstance.getUserIdByToken(token)
 
     if user_id is None:
@@ -116,6 +120,7 @@ def validate(token):
     return '', 200
 
 
+# COMPLETE
 @module.route('/user/', methods=['POST'])
 def userRegister():
     '''
@@ -222,6 +227,7 @@ def userDelete(token):
     return "Complete", 200
 
 
+# COMPLETE
 @module.route('/user/info/<token>/', methods=['GET'])
 def userInfoGet(token):
     '''
@@ -262,6 +268,7 @@ def userInfoGet(token):
     return jsonify(info), 200
 
 
+# COMPLETE
 @module.route('/user/info/public/<login>/', methods=['GET'])
 def userInfoPublicGet(login):
     '''
@@ -399,6 +406,7 @@ def setUserRole():
     return '', 200
 
 
+# COMPLETE
 # FIX SWAGGER API
 @module.route('/permissions/userRole/<int:user_id>/', methods=['GET'])
 def getUserRole(user_id):
@@ -409,11 +417,11 @@ def getUserRole(user_id):
     - 200
     [
         {
-            collection_id: 228
+            collection_id: 228,
             role_id: 40
         }
         {
-            collection_id: 322
+            collection_id: 322,
             role_id: 30
         }
     ]
@@ -453,20 +461,30 @@ def editUserRole():
     return '', 200
 
 
+# COMPLETE
 @module.route('/permissions/role/<int:role_id>/', methods=['GET'])
 def getPermissionsByRole(role_id):
     '''
     in
     role_id
     out
-    - 200: ???
+    - 200:
+    [
+        'read',
+        'rate',
+        'write',
+    ]
     - 404: "Incorrect role ID"
     '''
 
+    permissions = [Permission.query.filter_by(id=roles_permissions.perm_id).first().name \
+                for roles_permissions in RolesPermissions.query.filter_by(role_id=role_id).all()]
 
-    return '', 200
+
+    return jsonify(permissions), 200
 
 
+# COMPLETE
 @module.route('/permissions/setPostOwner/', methods=['POST'])
 def setPostOwner():
     '''
@@ -507,6 +525,7 @@ def setPostOwner():
     return '', 200
 
 
+# COMPLETE
 @module.route('/permissions/getPostOwner/<int:post_id>/', methods=['GET'])
 def getPostOwner(post_id):
     '''
@@ -527,6 +546,7 @@ def getPostOwner(post_id):
     return owner, 200
 
 
+# COMPLETE
 @module.route('/permissions/setPublicCollection/<int:collection_id>/', methods=['POST'])
 def setPublicCollection(collection_id):
     '''
@@ -557,6 +577,7 @@ def setPublicCollection(collection_id):
     return '', 200
 
 
+# COMPLETE
 @module.route('/permissions/getPublicCollection/', methods=['POST'])
 def getPublicCollection():
     '''
@@ -580,6 +601,7 @@ def getPublicCollection():
     return jsonify(filtered_collections), 200
 
 
+# COMPLETE
 @module.route('/permissions/getPublicCollection/all/', methods=['GET'])
 def getPublicCollectionAll():
     collections = [public_collection.collection_id for public_collection in PublicCollection.query]
