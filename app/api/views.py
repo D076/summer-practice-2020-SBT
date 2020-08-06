@@ -714,8 +714,8 @@ def getPublicCollectionAll():
     return jsonify(collections), 200
 
 
-@module.route('/permissions/userRole/setAdmin/', methods=['POST'])
-def setAdmin():
+@module.route('/permissions/userRole/setCollectionOwner/', methods=['POST'])
+def setCollectionOwner():
     '''
     In:
     {
@@ -731,6 +731,7 @@ def setAdmin():
     if not request.json or \
         not 'token' in request.json or \
         not 'collection_id' in request.json:
+        
         abort(400, 'Missed required arguments')
 
     token = request.json['token']
@@ -738,17 +739,14 @@ def setAdmin():
     
     token_manager.updateToken(token)
 
-    user_id_self = token_manager.getUserIdByToken(token)
+    user_id = token_manager.getUserIdByToken(token)
 
-    if user_id_self is None:
+    if user_id is None:
         abort(404, 'Non-existing token')
 
-    role_in_collection_self = UserRoleInCollection.query.filter_by(user_id=user_id_self, collection_id=collection_id).all()
+    collection_owner = UserRoleInCollection(user_id=user_id, collection_id=collection_id, role_id=10)
 
-    if role_in_collection_self is None:
-        abort(404, '')
-
-    role_in_collection_self.role_id = 10
+    db.session.add(collection_owner)
     db.session.commit()
 
     return '', 200
