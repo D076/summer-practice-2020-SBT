@@ -458,6 +458,37 @@ def editUserRole():
     - 400: "Access error"
     - 404: "Non-existing token"
     '''
+    if not request.json or not 'token' in request.json or \
+            not 'collection_id' in request.json or \
+            not 'user_id' in request.json or \
+            not 'role_id' in request.json:
+        abort(400, 'Missed required arguments')
+    token = request.json['token']
+    collection_id = request.json['collection_id']
+    user_id_target = request.json['user_id']
+    role_id = request.json['role_id']
+
+    user_id_self = tokenManagerInstance.getUserIdByToken(token)
+
+    if user_id_self is None:
+        abort(404, 'Non-existing token')
+
+    tokenManagerInstance.updateToken(token)
+
+    user_target = User.query.filter_by(user_id=user_id_target).first()
+
+    if user_target is None:
+        abort(404, 'Non-existing user ID')
+
+    # Check if role_id is incorrect
+    # incorrect -> abort(404)
+
+    # Check if user_id_self are enough rights for
+    # set current role_id to user_id_target
+    # false -> abort(400, 'Access error')
+
+    # Set user_id_target in collection_id current role_id
+
     return '', 200
 
 
