@@ -643,6 +643,9 @@ def removePublicCollection(collection_id):
         not 'collection_id' in request.json:
         abort(400, 'Missed required arguments')
 
+    token = request.json['token']
+    collection_id = request.json['collection']
+
     user_id = token_manager.getUserIdByToken(token)
 
     if user_id is None:
@@ -769,6 +772,7 @@ def getPublicCollectionAll():
     return jsonify(collections), 200
 
 
+# COMPLETE
 @module.route('/permissions/userRole/setCollectionOwner/', methods=['POST'])
 def setCollectionOwner():
     '''
