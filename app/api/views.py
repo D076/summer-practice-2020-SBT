@@ -477,10 +477,10 @@ def editUserRole():
     - 404: "Unknown role"
     '''
     if not request.json or \
-            not 'token' in request.json or \
-            not 'collection_id' in request.json or \
-            not 'user_id' in request.json or \
-            not 'role_id' in request.json:
+        not 'token' in request.json or \
+        not 'collection_id' in request.json or \
+        not 'user_id' in request.json or \
+        not 'role_id' in request.json:
 
         abort(400, 'Missed required arguments')
 
@@ -525,9 +525,12 @@ def editUserRole():
     if target_user_role_id is None:
         abort(404, 'User doesn\'t belong to this collection')
 
-    # Checking client permissions (must be less then 10)
+    # Checking client permissions (must be less or equal 20)
     # for editing others permissions
-    if user_role_id > 10:
+    if user_role_id > 20:
+        abort(403, 'Not have enough permissions')
+    # Moderator can't give admin or moderator permissions
+    elif user_role_id == 20 and target_user_role_id <= 20:
         abort(403, 'Not have enough permissions')
 
     target_user_role_in_collection = UserRoleInCollection \
