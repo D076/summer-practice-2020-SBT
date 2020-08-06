@@ -65,7 +65,7 @@ def auth():
     # if incorrect -> abort(401)
     temp_user = User.query.filter_by(login=login).first()
     if temp_user is None or \
-        not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
+        not bcrypt.checkpw(password.encode('utf8'), temp_user.password.encode('utf8')):
         
         abort(401, 'Login or password is incorrect')
 
@@ -170,7 +170,7 @@ def userRegister():
     hashed_password = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
 
     # Create new user
-    new_user = User(id=last_user_id, login=login, password=hashed_password, name=name)
+    new_user = User(id=last_user_id, login=login, password=hashed_password.decode('utf8'), name=name)
 
     # Add user information into database
     db.session.add(new_user)
@@ -340,7 +340,7 @@ def userInfoEdit():
     # If user want to change pass, check with hash in db
     if password != '' and new_password != '':
         if temp_user is None \
-                or not bcrypt.checkpw(password.encode('utf8'), temp_user.password):
+                or not bcrypt.checkpw(password.encode('utf8'), temp_user.password.encode('utf8')):
             abort(401, 'Password is incorrect')
         hashed_password = bcrypt.hashpw(new_password.encode('utf8'), bcrypt.gensalt())
 
@@ -348,7 +348,7 @@ def userInfoEdit():
     if name != '':
         update_name = name
 
-    temp_user.password = hashed_password
+    temp_user.password = hashed_password.decode('utf8')
     temp_user.name = update_name
     db.session.commit()
 
