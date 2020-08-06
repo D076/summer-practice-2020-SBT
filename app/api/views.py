@@ -441,6 +441,7 @@ def getUserRole(user_id):
     return jsonify(roles_in_collections), 200
 
 
+# COMPLETE
 @module.route('/permissions/editUserRole/', methods=['PUT'])
 def editUserRole():
     '''
@@ -476,13 +477,15 @@ def editUserRole():
     if user_id is None:
         abort(404, 'Non-existing token')
 
+    token_manager.updateToken(token)
+
     # Role existing checking
     role = Role.query.filter_by(id=target_role_id).first()
     if role is None:
         abort(404, 'Unknown role')
 
     # Check client permissions and belonging to collection
-    user_collections_role = json.loads(getUserRole(user_id)[0])
+    user_collections_role = json.loads(getUserRole(user_id)[0].get_data())
 
     user_role_id = None
     for collection_role in user_collections_role:
@@ -494,7 +497,7 @@ def editUserRole():
         abort(404, 'User doesn\'t belong to this collection')
 
     # Check target user existing and belonging to collection
-    target_user_collections_role = json.loads(getUserRole(target_user_id)[0])
+    target_user_collections_role = json.loads(getUserRole(target_user_id)[0].get_data())
 
     target_user_role_id = None
     for collection_role in target_user_collections_role:
