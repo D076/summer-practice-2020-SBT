@@ -208,15 +208,15 @@ def userDelete(token):
     global last_user_id
 
     # Initialize last_user_id
-    if last_user_id is None:
-        last_user_table_id = db.session.query(func.max(User.id)).scalar()
-        if last_user_table_id is None:
-            last_user_id = 0
-        else:
-            last_user_id = last_user_table_id
+    # if last_user_id is None:
+    #     last_user_table_id = db.session.query(func.max(User.id)).scalar()
+    #     if last_user_table_id is None:
+    #         last_user_id = 0
+    #     else:
+    #         last_user_id = last_user_table_id
     # End of temp code
 
-    last_user_id -= 1
+    # last_user_id -= 1
     # logout all tokens with current user_id
     # for i in tokens:
     #     if i['user_id'] == user_id:
@@ -623,6 +623,32 @@ def getPostOwner(post_id):
     owner = post.user_id
 
     return owner, 200
+
+
+@module.route('/permissions/removePublicCollection/<int:collection_id>/', methods=['POST'])
+def removePublicCollection(collection_id):
+    '''
+    in
+    int
+    out
+    - 200
+    - 400
+    '''
+
+    # Finding public collection with same collection_id
+    existing_public_collection = PublicCollection \
+                                .query \
+                                .filter_by(collection_id=collection_id) \
+                                .first()
+
+    # If collection already public, abort
+    if not existing_public_collection:
+        abort(400, 'Collection already private!')
+
+    db.session.delete(existing_public_collection)
+    db.session.commit()
+
+    return '', 200
 
 
 # COMPLETE
