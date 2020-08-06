@@ -371,10 +371,12 @@ def setUserRole():
     - 404: "Non-existing token"
     '''
     if not request.json or not 'token' in request.json or \
-            not 'collection_id' in request.json or \
-            not 'user_id' in request.json or \
-            not 'role_id' in request.json:
+        not 'collection_id' in request.json or \
+        not 'user_id' in request.json or \
+        not 'role_id' in request.json:
+
         abort(400, 'Missed required arguments')
+
     token = request.json['token']
     collection_id = request.json['collection_id']
     user_id_target = request.json['user_id']
@@ -392,25 +394,24 @@ def setUserRole():
     if user_target is None:
         abort(404, 'Non-existing user ID')
 
-
     # Check if role_id is incorrect
     # incorrect -> abort(404)
-    role_in_collection_self = UserRoleInCollection.query.filter_by(user_id=user_id_self, collection_id=collection_id).all()  # this is a list with all roles in collection
-    # role_in_collection_target = UserRoleInCollection.query.filter_by(user_id=user_id_target, collection_id=collection_id).all()  # this is a list with all roles in collection
+    role_in_collection_self = UserRoleInCollection \
+                            .query \
+                            .filter_by(user_id=user_id_self, collection_id=collection_id) \
+                            .first()
     
     if role_in_collection_self is None:
-        abort(404, '')
-
-
+        abort(404, 'User doesn\'t belong to this collection')
 
     # Check if user_id_self are enough rights for
     # set current role_id to user_id_target
-    # false -> abort(400, 'Access error')        
-    if role_in_collection.self.role_id < role_id:
+    # false -> abort(403, 'Not have enough permissions')        
+    if role_in_collection_self.role_id < role_id:
         user_target.role_id = role_id
         db.session.commit()
     else:
-        abort(400, 'Access error')
+        abort(403, 'Not have enough permissions')
         
     return '', 200
 
@@ -731,7 +732,7 @@ def setCollectionOwner():
     if not request.json or \
         not 'token' in request.json or \
         not 'collection_id' in request.json:
-        
+
         abort(400, 'Missed required arguments')
 
     token = request.json['token']
