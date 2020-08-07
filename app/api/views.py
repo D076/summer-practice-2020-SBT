@@ -228,6 +228,26 @@ def userDelete(token):
     if isinstance(token, str):
         is_exist = token_manager.deleteToken(token)
 
+
+    # Clean up db UserRoleInCollection
+    user_role_in_collection = 'notNone'
+    while user_role_in_collection is not None:
+        user_role_in_collection = UserRoleInCollection \
+                                .query \
+                                .filter_by(user_id=user_id) \
+                                .first()
+        if user_role_in_collection is None:
+            break
+        db.session.delete(user_role_in_collection)
+        db.session.commit()
+    
+    # Clean up db Post
+    post = 'notNone'
+    while post is not None:
+        post = Post.query.filter_by(user_id=user_id).first()
+        db.session.delete(post)
+        db.session.commit()
+
     return "Complete", 200
 
 
@@ -834,5 +854,104 @@ def setCollectionOwner():
     return '', 200
 
 
-# Delete post owner
-# Close public  collection
+# If correct -> Need to add to API
+# if post owner delete post -> clean up db Post
+@module.route('/permissions/sync/ifPostDelete/', methods=['POST'])
+def if_post_delete(post_id):
+    '''
+    in
+    {
+        "token": "f57ebe597a3741b688269209fa29b053",
+        "post_id": 228
+    }
+    out
+    200:
+        description: "OK"
+    403:
+        description: 'Not have enough permissions'
+    404:
+        description: "Incorrect token/post_id"
+    '''
+    if not request.json or \
+            not 'token' in request.json or \
+            not 'post_id' in request.json:
+        abort(400, 'Missed required arguments')
+    
+    user_id = token_manager.getUserIdByToken(token)
+    if user_id is None:
+        abort(404, 'Non-existing token')
+    token_manager.updateToken(token)
+
+    post = Post.query.filter_by(post_id=post_id).first()
+    if post is None:
+        abort(404, 'Non-existing post')
+
+    if post.user_id != user_id:
+        abort(403, 'Not have enough permissions')
+    
+    db.session.delete(post)
+    db.session.commit()
+
+    return '', 200
+
+
+# If correct -> Need to add to API
+# if admin delete collection -> clean up db PublicCollection and UserRoleInCollection
+@module.route('/permissions/sync/ifCollectionDelete/', methods=['POST'])
+def if_collection_delete(collection_id):
+    '''
+    in
+    {
+        "token": "f57ebe597a3741b688269209fa29b053",
+        "collection_id": 228
+    }
+    out
+    200:
+        description: "OK"
+    403:
+        description: 'Not have enough permissions'
+    404:
+        description: "Incorrect post_id"
+    '''
+    if not request.json or \
+            not 'token' in request.json or \
+            not 'collection_id' in request.json:
+        abort(400, 'Missed required arguments')
+    
+    user_id = token_manager.getUserIdByToken(token)
+    if user_id is None:
+        abort(404, 'Non-existing token')
+    token_manager.updateToken(token)
+
+    user_collections_role = json.loads(getUserRole(user_id)[0].get_data())
+    is_admin = False
+
+    for current_collection_user_role in user_collections_role:
+        if current_collection_user_role['collection_id'] == collection_id and \
+                current_collection_user_role['role_id'] == 10:
+            is_admin = True
+    if not is_admin:
+        abort(403, 'Not have enough permissions')
+
+    existing_public_collection = PublicCollection \
+                                .query \
+                                .filter_by(collection_id=collection_id) \
+                                .first()
+
+    if existing_public_collection:
+        db.session.delete(existing_public_collection)
+        db.session.commit()
+    
+    # Clean up db UserRoleInCollection
+    user_role_in_collection = 'notNone'
+    while user_role_in_collection is not None:
+        user_role_in_collection = UserRoleInCollection \
+                                .query \
+                                .filter_by(collection_id=collection_id) \
+                                .first()
+        if user_role_in_collection is None:
+            break
+        db.session.delete(user_role_in_collection)
+        db.session.commit()
+
+    return '', 200
