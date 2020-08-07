@@ -58,31 +58,31 @@ class Permission(db.Model):
 class RolesPermissions(db.Model):
     # Primary key
     id = db.Column(db.BigInteger, 
-        db.Sequence('link_seq', start=0, increment=1), 
+        db.Sequence('roles_permissions_id_seq', start=0, increment=1), 
         primary_key=True)
 
     # Foreign keys
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
-    perm_id = db.Column(db.Integer, db.ForeignKey('permission.id'), nullable=False)
+    role_id = db.Column(db.BigInteger, db.ForeignKey('role.id'), nullable=False)
+    perm_id = db.Column(db.BigInteger, db.ForeignKey('permission.id'), nullable=False)
 
     def __repr__(self):
-        return '<Link(id={0}, role_id={1}. perm_id={2})>' \
-                .format(self.id, self.role_id, self.perm_id)        
+        return '<RolesPermissions(role_id={0}. perm_id={1})>' \
+                .format(self.role_id, self.perm_id)        
 
 
 # UserRoleInCollection database table
 class UserRoleInCollection(db.Model):
     # Primary key
     id = db.Column(db.BigInteger, 
-        db.Sequence('user_role_in_collection_seq', start=0, increment=1), 
+        db.Sequence('user_role_in_collection_id_seq', start=0, increment=1), 
         primary_key=True)
 
     # Collection ID
     collection_id = db.Column(db.BigInteger, nullable=False)
 
     # Foreign keys
-    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    role_id = db.Column(db.BigInteger, db.ForeignKey('role.id'), nullable=False)
+    user_id = db.Column(db.BigInteger, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return '<UserRoleInCollection(id={0}, collection_id={1}, role_id={2}, user_id={3})>' \
@@ -91,25 +91,20 @@ class UserRoleInCollection(db.Model):
 
 # Post database table
 class Post(db.Model):
-    # Primary key
-    id = db.Column(db.BigInteger, 
-        db.Sequence('post_seq', start=0, increment=1), 
-        primary_key=True)
-
     # Post ID
-    post_id = db.Column(db.BigInteger, nullable=False)
+    post_id = db.Column(db.BigInteger, primary_key=True, nullable=False)
 
     # Foreign keys
     user_id = db.Column(db.BigInteger, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return '<Post(id={0}, post_id={1}, user_id={2})>' \
-                .format(self.id, self.post_id, self.user_id)
+        return '<Post(post_id={0}, user_id={1})>' \
+                .format(self.post_id, self.user_id)
 
 
 # PublicCollection database table
 class PublicCollection(db.Model):
-    collection_id = db.Column(db.BigInteger, primary_key=True, unique=True, nullable=False)
+    collection_id = db.Column(db.BigInteger, primary_key=True, nullable=False)
 
     def __repr__(self):
         return '<PublicCollection(collection_id={0})>' \
