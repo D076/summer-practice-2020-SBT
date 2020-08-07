@@ -857,7 +857,7 @@ def setCollectionOwner():
 # If correct -> Need to add to API
 # if post owner delete post -> clean up db Post
 @module.route('/permissions/sync/ifPostDelete/', methods=['POST'])
-def if_post_delete(post_id):
+def if_post_delete():
     '''
     in
     {
@@ -898,7 +898,7 @@ def if_post_delete(post_id):
 # If correct -> Need to add to API
 # if admin delete collection -> clean up db PublicCollection and UserRoleInCollection
 @module.route('/permissions/sync/ifCollectionDelete/', methods=['POST'])
-def if_collection_delete(collection_id):
+def if_collection_delete():
     '''
     in
     {
