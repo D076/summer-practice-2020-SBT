@@ -31,8 +31,10 @@ paths:
               schema:
                 type: "string"
               example: "f57ebe597a3741b688269209fa29b053"
+        400:
+          description: "Missed required arguments"
         401:
-          description: "Incorrect login/pass"
+          description: "Login or password is incorrect"
           content: {}
 
   /validate/{token}/:
@@ -70,6 +72,8 @@ paths:
       responses:
         200:
           description: "OK"
+        400:
+          description: "Bad request"
         404:
           description: "Non-existing token"
 
@@ -90,9 +94,12 @@ paths:
                   type: "string"
                 password:
                   type: "string"
+                name:
+                  type: "string"
             example:
               login: "a1pha1337@gmail.com"
               password: "rhokef3"
+              name: "a1pha1337"
       responses:
         200:
           description: "OK"
@@ -102,8 +109,10 @@ paths:
                 type: "string"
               example: "f57ebe597a3741b688269209fa29b053"
         400:
-          description: "Incorrect login/pass"
+          description: "Missed required arguments"
           content: {}
+        409:
+          description: "Login already exists"
 
   /user/delete/{token}/:
     delete:
@@ -128,7 +137,7 @@ paths:
     get:
       tags:
       - "User Info"
-      summary: "Get user info"
+      summary: "Get user info by token"
       description: ""
       parameters:
       - name: "token"
@@ -163,7 +172,7 @@ paths:
     get:
       tags:
       - "User Info"
-      summary: "Get user public info"
+      summary: "Get user info by login"
       description: ""
       parameters:
       - name: "login"
@@ -227,6 +236,10 @@ paths:
       responses:
         200:
           description: "OK"
+        400:
+          description: "Missed required arguments"
+        401:
+          description: "Password is incorrect"
         404:
           description: "Non-existing token"
 
@@ -265,11 +278,8 @@ paths:
                   role_id: 40
                 - collection_id: 322
                   role_id: 30
-
-        403:
-          description: "No permissions"
         404:
-          description: "Incorrect ID"
+          description: "Non-existing user ID"
 
   /permissions/userRole/:
     post:
@@ -299,9 +309,11 @@ paths:
         200:
           description: "OK"
         400:
-          description: "Access error"
+          description: "Missed required arguments"
         404:
-          description: "Non-existing token"
+          description: "Non-existing token, Non-existing user ID, User already has role in collection"
+        409:
+          description: "User already has role in collection"
 
   /permissions/editUserRole/:
     put:
@@ -331,9 +343,11 @@ paths:
         200:
           description: "OK"
         400:
-          description: "Access error"
+          description: "Missed required arguments"
+        403:
+          description: "Not have enough permissions"
         404:
-          description: "Non-existing token"
+          description: "Non-existing token, Unknown role, User doesn't belong to this collection"
 
   /permissions/role/{role_id}/:
     get:
@@ -354,25 +368,19 @@ paths:
           content:
             application/json:
               schema:
-                type: "object"
-                properties:
-                  read:
-                    type: "boolean"
-                    description: "Просмотр коллекции (Читатель role_id = 40)"
-                  rate:
-                    type: "boolean"
-                    description: "Возможность оценивать посты (Читатель role_id = 40). Без этого права нельзя оценивать посты, даже если они публичные"
-                  write:
-                    type: "boolean"
-                    description: "Загружать пост в коллекцию (Пользователь role_id = 30)"
-                  edit_other_user_permissions:
-                    type: "boolean"
-                    description: "Редактирование прав других пользователей, кроме полей edit_other_user_permissions, delete_collection (Админ role_id = 0)"
-                  delete_collection:
-                    type: "boolean"
-                    description: "Удаление всей коллекции (Админ role_id = 0)"
+                type: "array"
+                items:
+                  type: "string"
+                  description: "String array contains permissions"
+              example:
+                - "read"
+                - "rate"
+                - "write"
+                - "delete_post"
+                - "edit_other_users_permissions"
+                - "delete_collection"
         404:
-          description: "Incorrect role ID"
+          description: "Unknown role"
 
   /permissions/setPostOwner/:
     post:
@@ -400,7 +408,9 @@ paths:
         200:
           description: "OK"
         404:
-          description: "Incorrect user_id/post_id"
+          description: "Incorrect user_id"
+        409:
+          description: "Current post already has owner"
   
   /permissions/deletePostOwner/:
     post:
@@ -452,13 +462,13 @@ paths:
                 type: "integer"
               example: "4"
         404:
-          description: "Incorrect post_id"
-  
-  /permissions/removePublicCollection/:
+          description: "Non-existing post"
+          
+  /permissions/userRole/setCollectionOwner/:
     post:
       tags:
         - "Permissions"
-      summary: "Remove public collection by collection ID"
+      summary: "Set collection owner"
       description: ""
       requestBody:
         required: true
@@ -478,10 +488,11 @@ paths:
         200:
           description: "OK"
         400:
-          description: "Collection already private"
-        403:
-          description: "No permissions"
-
+          description: "Missed required arguments"
+        404:
+          description: "Non-existing token"
+        409:
+          description: "Collection already public"
   
   /permissions/setPublicCollection/:
     post:
@@ -507,9 +518,43 @@ paths:
         200:
           description: "OK"
         400:
-          description: "Collection already public"
+          description: "Missed required arguments"
         403:
-          description: "No permissions"
+          description: "Not have enough permissions"
+        404:
+          description: "Non-existing token"
+        409:
+          description: "Collection already public"
+          
+  /permissions/removePublicCollection/:
+    post:
+      tags:
+        - "Permissions"
+      summary: "Remove public collection by collection ID"
+      description: ""
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                token:
+                  type: "integer"
+                collection_id:
+                  type: "integer"
+            example:
+              token: "3fd43fre324543dsf4353dsf"
+              collection_id: 3
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Missed required arguments"
+        403:
+          description: "Not have enough permissions"
+        409:
+          description: "Collection already private"
 
   /permissions/getPublicCollection/:
     post:
@@ -547,8 +592,8 @@ paths:
               example:
                 - 9
                 - 15
-        404:
-          description: "Not OK"
+        400:
+          description: "Bad request"
 
   /permissions/getPublicCollection/all/:
     get:
