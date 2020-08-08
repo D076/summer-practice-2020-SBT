@@ -38,13 +38,13 @@ def generateToken():
     return uuid4().hex
 
 
-@module.route('/', methods=['GET'])
+@module.route('/index', methods=['GET'])
 def index():
     return 'Hello'
 
 
 # COMPLETE
-@module.route('/auth/', methods=['POST'])
+@module.route('/auth', methods=['POST'])
 def auth():
     '''
     in 
@@ -124,7 +124,7 @@ def validate(token):
 
 
 # COMPLETE
-@module.route('/user/', methods=['POST'])
+@module.route('/user', methods=['POST'])
 def userRegister():
     '''
     in
