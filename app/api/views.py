@@ -80,7 +80,7 @@ def auth():
 
 
 # COMPLETE
-@module.route('/logout/<string:token>/', methods=['GET'])
+@module.route('/logout/<string:token>', methods=['GET'])
 def logout(token):
     '''
     in
@@ -103,7 +103,7 @@ def logout(token):
 
 
 # COMPLETE
-@module.route('/validate/<token>/', methods=['GET'])
+@module.route('/validate/<token>', methods=['GET'])
 def validate(token):
     '''
     in
@@ -187,7 +187,7 @@ def userRegister():
     return token, 200
 
 
-@module.route('/user/delete/<token>/', methods=['DELETE'])
+@module.route('/user/delete/<token>', methods=['DELETE'])
 def userDelete(token):
     '''
     in
@@ -252,7 +252,7 @@ def userDelete(token):
 
 
 # COMPLETE
-@module.route('/user/info/<token>/', methods=['GET'])
+@module.route('/user/info/<token>', methods=['GET'])
 def getUserInfoByToken(token):
     '''
     in
@@ -291,7 +291,7 @@ def getUserInfoByToken(token):
 
 
 # COMPLETE
-@module.route('/user/info/public/<login>/', methods=['GET'])
+@module.route('/user/info/public/<login>', methods=['GET'])
 def getUserInfoByLogin(login):
     '''
     in
@@ -319,7 +319,7 @@ def getUserInfoByLogin(login):
 
 
 # COMPLETE
-@module.route('/user/info/', methods=['PUT'])
+@module.route('/user/info', methods=['PUT'])
 def editUserInfo():
     '''
     in
@@ -376,7 +376,7 @@ def editUserInfo():
 
 
 # COMPLETE
-@module.route('/permissions/userRole/', methods=['POST'])
+@module.route('/permissions/userRole', methods=['POST'])
 def setUserRole():
     '''
     in
@@ -448,7 +448,7 @@ def setUserRole():
 
 # COMPLETE
 # FIX SWAGGER API
-@module.route('/permissions/userRole/<int:user_id>/', methods=['GET'])
+@module.route('/permissions/userRole/<int:user_id>', methods=['GET'])
 def getUserRole(user_id):
     '''
     in
@@ -484,7 +484,7 @@ def getUserRole(user_id):
 
 
 # COMPLETE
-@module.route('/permissions/editUserRole/', methods=['PUT'])
+@module.route('/permissions/editUserRole', methods=['PUT'])
 def editUserRole():
     '''
     in
@@ -572,7 +572,7 @@ def editUserRole():
 
 
 # COMPLETE
-@module.route('/permissions/role/<int:role_id>/', methods=['GET'])
+@module.route('/permissions/role/<int:role_id>', methods=['GET'])
 def getPermissionsByRole(role_id):
     '''
     in
@@ -598,7 +598,7 @@ def getPermissionsByRole(role_id):
 
 
 # COMPLETE
-@module.route('/permissions/setPostOwner/', methods=['POST'])
+@module.route('/permissions/setPostOwner', methods=['POST'])
 def setPostOwner():
     '''
     in
@@ -621,7 +621,7 @@ def setPostOwner():
     user_id = request.json['user_id']
     post_id = request.json['post_id']
 
-    user = User.query.filter_by(user_id=user_id).first()
+    user = User.query.filter_by(id=user_id).first()
     if user is None:
         abort(404, 'Incorrect user_id')
 
@@ -639,7 +639,7 @@ def setPostOwner():
 
 
 # COMPLETE
-@module.route('/permissions/getPostOwner/<int:post_id>/', methods=['GET'])
+@module.route('/permissions/getPostOwner/<int:post_id>', methods=['GET'])
 def getPostOwner(post_id):
     '''
     in
@@ -659,7 +659,7 @@ def getPostOwner(post_id):
     return owner, 200
 
 
-@module.route('/permissions/removePublicCollection/<int:collection_id>/', methods=['POST'])
+@module.route('/permissions/removePublicCollection/<int:collection_id>', methods=['POST'])
 def removePublicCollection(collection_id):
     '''
     in
@@ -714,7 +714,7 @@ def removePublicCollection(collection_id):
 
 
 # COMPLETE
-@module.route('/permissions/setPublicCollection/', methods=['POST'])
+@module.route('/permissions/setPublicCollection', methods=['POST'])
 def setPublicCollection():
     '''
     in
@@ -775,7 +775,7 @@ def setPublicCollection():
 
 
 # COMPLETE
-@module.route('/permissions/getPublicCollection/', methods=['POST'])
+@module.route('/permissions/getPublicCollection', methods=['POST'])
 def getPublicCollection():
     '''
     in
@@ -799,7 +799,7 @@ def getPublicCollection():
 
 
 # COMPLETE
-@module.route('/permissions/getPublicCollection/all/', methods=['GET'])
+@module.route('/permissions/getPublicCollection/all', methods=['GET'])
 def getPublicCollectionAll():
     collections = [public_collection.collection_id for public_collection in PublicCollection.query]
     
@@ -807,7 +807,7 @@ def getPublicCollectionAll():
 
 
 # COMPLETE
-@module.route('/permissions/userRole/setCollectionOwner/', methods=['POST'])
+@module.route('/permissions/userRole/setCollectionOwner', methods=['POST'])
 def setCollectionOwner():
     '''
     In:
@@ -856,8 +856,8 @@ def setCollectionOwner():
 
 # If correct -> Need to add to API
 # if post owner delete post -> clean up db Post
-@module.route('/permissions/sync/ifPostDelete/', methods=['POST'])
-def if_post_delete():
+@module.route('/permissions/sync/ifPostDelete', methods=['POST'])
+def ifPostDelete():
     '''
     in
     {
@@ -876,6 +876,9 @@ def if_post_delete():
             not 'token' in request.json or \
             not 'post_id' in request.json:
         abort(400, 'Missed required arguments')
+
+    token = request.json['token']
+    post_id = request.json['post_id']
     
     user_id = token_manager.getUserIdByToken(token)
     if user_id is None:
@@ -897,8 +900,8 @@ def if_post_delete():
 
 # If correct -> Need to add to API
 # if admin delete collection -> clean up db PublicCollection and UserRoleInCollection
-@module.route('/permissions/sync/ifCollectionDelete/', methods=['POST'])
-def if_collection_delete():
+@module.route('/permissions/sync/ifCollectionDelete', methods=['POST'])
+def ifCollectionDelete():
     '''
     in
     {
@@ -917,6 +920,9 @@ def if_collection_delete():
             not 'token' in request.json or \
             not 'collection_id' in request.json:
         abort(400, 'Missed required arguments')
+
+    token = request.json['token']
+    collection_id = request.json['post_id']
     
     user_id = token_manager.getUserIdByToken(token)
     if user_id is None:
