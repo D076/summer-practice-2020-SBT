@@ -14,17 +14,17 @@ class Test(unittest.TestCase):
         pass
 
     def test_0_index(self):
-        response = self.app.get('/', follow_redirects=True)
+        response = self.app.get('/index', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
     def test_1_registration(self):
         info = {'login': 'test@mail.ru', 'password': 'test12345', 'name': 'test'}
-        response = self.app.post('/user/', data=json.dumps(info), headers={'Content-Type': 'application/json'})
+        response = self.app.post('/user', data=json.dumps(info), headers={'Content-Type': 'application/json'})
         self.assertEqual(response.status_code, 200)
 
     def test_2_authentication(self):
         info = {'login':'test@mail.ru', 'password':'test12345'}
-        response = self.app.post('/auth/', data=json.dumps(info), headers={'Content-Type': 'application/json'})
+        response = self.app.post('/auth', data=json.dumps(info), headers={'Content-Type': 'application/json'})
 
         # после ' забрать 32 символа
         temp_token = str(response.data)
