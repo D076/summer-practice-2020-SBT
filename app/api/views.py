@@ -789,7 +789,7 @@ def getPublicCollection():
     if not request.json:
         abort(400)
 
-    request_collections = json.loads(request.json)
+    request_collections = request.json
 
     # Filter collections
     filtered_collections = [public_collection.collection_id for public_collection in PublicCollection.query \
