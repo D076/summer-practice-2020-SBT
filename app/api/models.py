@@ -78,7 +78,7 @@ class UserRoleInCollection(db.Model):
         primary_key=True)
 
     # Collection ID
-    collection_id = db.Column(db.BigInteger, nullable=False)
+    collection_id = db.Column(db.String(32), nullable=False)
 
     # Foreign keys
     role_id = db.Column(db.BigInteger, db.ForeignKey('role.id'), nullable=False)
@@ -104,7 +104,7 @@ class Post(db.Model):
 
 # PublicCollection database table
 class PublicCollection(db.Model):
-    collection_id = db.Column(db.BigInteger, primary_key=True, nullable=False)
+    collection_id = db.Column(db.String(32), primary_key=True, nullable=False)
 
     def __repr__(self):
         return '<PublicCollection(collection_id={0})>' \
