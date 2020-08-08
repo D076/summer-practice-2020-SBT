@@ -13,6 +13,10 @@
 
 Use the paсkage manager [pip](https://pip.pypa.io/en/stable/) and [virtualenv](https://virtualenv.pypa.io/en/latest/) for building.
 
+Edit application.cfg:
+Step 1: Fills DATABASE_URL with your database login and password
+Step 2 (Optionally): Fills gateway host and port
+
 #### Windows
 ```bash
 git clone https://github.com/D076/summer-practice-2020-SBT/
@@ -20,12 +24,10 @@ cd summer-practice-2020-SBT
 python -m venv venv
 venv\Scripts\activate.bat
 pip install -r requirements.txt
-set APP_SETTINGS=config.DevelopmentConfig
-set DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/DBNAME
 python manage.py db init
 python manage.py db migrate
 python manage.py db upgrade
-python manage.py runserver
+python manage.py runserver [-h HOST] [-p PORT]
 ```
 
 #### Linux and macOS
@@ -35,10 +37,10 @@ cd summer-practice-2020-SBT
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
-export APP_SETTINGS=config.DevelopmentConfig
-export DATABASE_URL=postgresql://USERNAME:PASSWORD@localhost/DBNAME
 python3 manage.py db init
 python3 manage.py db migrate
 python3 manage.py db upgrade
-python3 manage.py runserver
+python3 manage.py runserver [-h HOST] [-p PORT]
 ```
+
+For generating roles and permissions run roles_permissions.sql script in your database.
