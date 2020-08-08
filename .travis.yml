@@ -4,8 +4,6 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install coverage
-env:
-  - APP_SETTINGS=config.DevelopmentConfig DATABASE_URL=sqlite:///test.db
 script:
   - python manage.py db init
   - python manage.py db migrate
