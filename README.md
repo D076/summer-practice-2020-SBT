@@ -14,8 +14,8 @@
 Use the paсkage manager [pip](https://pip.pypa.io/en/stable/) and [virtualenv](https://virtualenv.pypa.io/en/latest/) for building.
 
 Edit **application.cfg**:
-+ Step 1: Fills DATABASE_URL with your database login and password (postgresql://user:password@host/database)
-+ Step 2 (Optionally): Fills gateway host and port
++  Step 1: Fills DATABASE_URL with your database login and password (postgresql://user:password@host/database)
++  Step 2 (Optionally): Fills gateway host and port
 
 #### Windows
 ```bash
