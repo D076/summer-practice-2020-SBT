@@ -1,0 +1,86 @@
+[
+    {
+        "path": "/auth",
+        "api_version": "v1"
+    },
+    {
+        "path": "/logout/{token}",
+        "api_version": "v1"
+    },
+    {
+        "path": "/validate/{token}",
+        "api_version": "v1"
+    },
+    {
+        "path": "/user",
+        "api_version": "v1"
+    },
+    {
+        "path": "/user/delete/{token}",
+        "api_version": "v1"
+    },
+    {
+        "path": "/user/info/{token}",
+        "api_version": "v1"
+    },
+    {
+        "path": "/user/info/public/{login}",
+        "api_version": "v1"
+    },
+    {
+        "path": "/user/info",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/userRole",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/userRole/{user_id}",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/editUserRole",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/role/{role_id}",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/setPostOwner",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/getPostOwner/{post_id}",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/removePublicCollection/{collection_id}",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/setPublicCollection",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/getPublicCollection",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/getPublicCollection/all",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/userRole/setCollectionOwner",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/sync/ifPostDelete",
+        "api_version": "v1"
+    },
+    {
+        "path": "/permissions/sync/ifCollectionDelete",
+        "api_version": "v1"
+    }
+]
