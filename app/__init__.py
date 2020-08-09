@@ -10,6 +10,8 @@ from app.gatewayconnector import GatewayConnector
 token_manager = TokenManager()
 gateway_connector = None
 
+addr_white_list = list()
+
 def create_app():
     app = Flask(__name__)
 
@@ -81,6 +83,8 @@ def create_app():
 
             gateway_connector.start()
             print('3) Thread started')
+
+            addr_white_list.append(gateway_service_ip)
         except ConnectionError as ce:
             print(ce)
         except RuntimeError as re:
