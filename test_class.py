@@ -30,8 +30,8 @@ class Test(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_3_validation(self):
+        print(self.token)
         response = self.app.get(f'/validate/{self.token}', follow_redirects=True)
-
         self.assertEqual(response.status_code, 200)
     
     def test_4_logout(self):
