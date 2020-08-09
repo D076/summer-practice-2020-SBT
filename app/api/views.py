@@ -966,6 +966,6 @@ def ifCollectionDelete():
 # white list
 @module.before_request
 def limitRemoteAddr():
-    if not addr_white_list is None:
+    if addr_white_list:
         if not request.remote_addr in addr_white_list:
             abort(403)
