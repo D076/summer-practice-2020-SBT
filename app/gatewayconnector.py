@@ -6,13 +6,13 @@ from time import sleep
 
 class GatewayConnector(Thread):
     def __init__(
-        self, 
-        gateway_ip, 
+        self,
+        gateway_ip,
         gateway_port,
         service_ip,
-        service_port, 
-        service_name, 
-        service_version, 
+        service_port,
+        service_name,
+        service_version,
         service_apis
         ):
 
