@@ -35,7 +35,7 @@ class Role(db.Model):
 
     def __repr__(self):
         return '<Permission(id={0}, name={1})>' \
-                .format(self.id, self.name)  
+                .format(self.id, self.name)
 
 
 # Permission database table
@@ -51,14 +51,14 @@ class Permission(db.Model):
 
     def __repr__(self):
         return '<Permission(id={0}, name={1})>' \
-                .format(self.id, self.name) 
+                .format(self.id, self.name)
 
 
 # Link database table
 class RolesPermissions(db.Model):
     # Primary key
-    id = db.Column(db.BigInteger, 
-        db.Sequence('roles_permissions_id_seq', start=0, increment=1), 
+    id = db.Column(db.BigInteger,
+        db.Sequence('roles_permissions_id_seq', start=0, increment=1),
         primary_key=True)
 
     # Foreign keys
@@ -67,14 +67,14 @@ class RolesPermissions(db.Model):
 
     def __repr__(self):
         return '<RolesPermissions(role_id={0}. perm_id={1})>' \
-                .format(self.role_id, self.perm_id)        
+                .format(self.role_id, self.perm_id)
 
 
 # UserRoleInCollection database table
 class UserRoleInCollection(db.Model):
     # Primary key
-    id = db.Column(db.BigInteger, 
-        db.Sequence('user_role_in_collection_id_seq', start=0, increment=1), 
+    id = db.Column(db.BigInteger,
+        db.Sequence('user_role_in_collection_id_seq', start=0, increment=1),
         primary_key=True)
 
     # Collection ID

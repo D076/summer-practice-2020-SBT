@@ -63,12 +63,12 @@ def create_app():
 
         # Initializing gateway connection
         gateway_connector = GatewayConnector(
-            gateway_service_ip, 
-            gateway_service_port, 
+            gateway_service_ip,
+            gateway_service_port,
             service_ip,
-            service_port, 
-            'Auth service', 
-            '0.1.1alpha', 
+            service_port,
+            'Auth service',
+            '0.1.1alpha',
             apis)
 
         print('#' * 50)
@@ -94,15 +94,8 @@ def create_app():
 
         token_manager.start()
 
-    if app.debug == True:
-        try:
-            from flask_debugtoolbar import DebugToolbarExtension
-            toolbar = DebugToolbarExtension(app)
-        except:
-            pass
-
     import app.api.views as api
 
     app.register_blueprint(api.module)
-    
+
     return app

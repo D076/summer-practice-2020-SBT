@@ -6,13 +6,13 @@ from time import sleep
 
 class GatewayConnector(Thread):
     def __init__(
-        self, 
-        gateway_ip, 
+        self,
+        gateway_ip,
         gateway_port,
         service_ip,
-        service_port, 
-        service_name, 
-        service_version, 
+        service_port,
+        service_name,
+        service_version,
         service_apis
         ):
 
@@ -61,7 +61,7 @@ class GatewayConnector(Thread):
                 )
         except:
             raise ConnectionError('No connection to gateway')
-        
+
         if response.status_code == 200:
             response_data = response.json()
 
