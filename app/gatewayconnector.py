@@ -61,7 +61,7 @@ class GatewayConnector(Thread):
                 )
         except:
             raise ConnectionError('No connection to gateway')
-        
+
         if response.status_code == 200:
             response_data = response.json()
 

@@ -1,13 +1,12 @@
 import bcrypt
 import json
-from uuid import uuid4 
+from uuid import uuid4
 from app.database import db
 from sqlalchemy.sql import func
 from app import token_manager, addr_white_list
 from datetime import datetime
 from flask import (
     Blueprint,
-    render_template,
     request,
     flash,
     abort,
@@ -47,7 +46,7 @@ def index():
 @module.route('/auth', methods=['POST'])
 def auth():
     '''
-    in 
+    in
     {
         "login": "a1pha1337@gmail.com",
         "password": "rhokef3"
@@ -55,6 +54,7 @@ def auth():
     out
     token
     '''
+
     if not request.json or \
         not 'login' in request.json or \
         not 'password' in request.json:
@@ -69,7 +69,7 @@ def auth():
     temp_user = User.query.filter_by(login=login).first()
     if temp_user is None or \
         not bcrypt.checkpw(password.encode('utf8'), temp_user.password.encode('utf8')):
-        
+
         abort(401, 'Login or password is incorrect')
 
     token = generateToken()
@@ -170,7 +170,7 @@ def userRegister():
 
     last_user_id += 1
 
-    # Hashing and salting password    
+    # Hashing and salting password
     hashed_password = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
 
     # Create new user
@@ -430,11 +430,11 @@ def setUserRole():
 
     # Check if user_id_self are enough rights for
     # set current role_id to user_id_target
-    # false -> abort(403, 'Not have enough permissions')        
+    # false -> abort(403, 'Not have enough permissions')    
     if role_in_collection_self.role_id < role_id:
         target_user_role_in_collection = UserRoleInCollection(
-            collection_id=collection_id, 
-            role_id=role_id, 
+            collection_id=collection_id,
+            role_id=role_id,
             user_id=user_id_target
         )
 
@@ -766,7 +766,7 @@ def setPublicCollection():
     # Create new public collection
     new_public_collection = PublicCollection(collection_id=collection_id)
 
-    # Add new public collection into 
+    # Add new public collection into
     db.session.add(new_public_collection)
     db.session.commit()
 

@@ -66,7 +66,7 @@ class Test(unittest.TestCase):
 
     def test_4_user_info_by_login(self):
         # User info by login test
-        response_user_info = self.app.get(f'/user/info/public/test@mail.ru', follow_redirects=True)
+        response_user_info = self.app.get('/user/info/public/test@mail.ru', follow_redirects=True)
         self.assertEqual(response_user_info.status_code, 200)
 
         user_info = json.loads(response_user_info.data.decode('utf8'))

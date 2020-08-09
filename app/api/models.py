@@ -35,7 +35,7 @@ class Role(db.Model):
 
     def __repr__(self):
         return '<Permission(id={0}, name={1})>' \
-                .format(self.id, self.name)  
+                .format(self.id, self.name)
 
 
 # Permission database table
@@ -73,7 +73,7 @@ class RolesPermissions(db.Model):
 # UserRoleInCollection database table
 class UserRoleInCollection(db.Model):
     # Primary key
-    id = db.Column(db.BigInteger, 
+    id = db.Column(db.BigInteger,
         db.Sequence('user_role_in_collection_id_seq', start=0, increment=1),
         primary_key=True)
 
