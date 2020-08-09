@@ -3,7 +3,7 @@ import json
 from uuid import uuid4 
 from app.database import db
 from sqlalchemy.sql import func
-from app import token_manager
+from app import token_manager, addr_white_list
 from datetime import datetime
 from flask import (
     Blueprint,
@@ -961,6 +961,11 @@ def ifCollectionDelete():
 
     return '', 200
 
+
+# Reject all requests that not in
+# white list
 @module.before_request
 def limitRemoteAddr():
-    pass
+    if addr_white_list is None:
+        if not request.remote_addr in addr_white_list:
+            abort(403)
