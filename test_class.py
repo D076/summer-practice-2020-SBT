@@ -12,16 +12,16 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_index(self):
+    def test_0_index(self):
         response = self.app.get('/index', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
-    def test_registration(self):
+    def test_1_registration(self):
         info = {'login': 'test@mail.ru', 'password': 'test12345', 'name': 'test'}
         response = self.app.post('/user', data=json.dumps(info), headers={'Content-Type': 'application/json'})
         self.assertEqual(response.status_code, 200)
 
-    def test_auth_valid_logout(self):
+    def test_2_auth_valid_logout(self):
         info = {'login':'test@mail.ru', 'password':'test12345'}
 
         # Auth test
