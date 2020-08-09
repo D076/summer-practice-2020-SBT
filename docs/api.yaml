@@ -1,9 +1,9 @@
 openapi: 3.0.2
 info:
   title: "Swagger Auth, validate and user permission"
-  version: 1.0.7
+  version: 1.0.8
 paths:
-  /auth/:
+  /auth:
     post:
       tags: 
         - "Auth and Valid"
@@ -37,7 +37,7 @@ paths:
           description: "Login or password is incorrect"
           content: {}
 
-  /validate/{token}/:
+  /validate/{token}:
     get:
       tags:
         - "Auth and Valid"
@@ -56,7 +56,7 @@ paths:
         404:
           description: "Non-existing token"
 
-  /logout/{token}/:
+  /logout/{token}:
     get:
       tags:
         - "Auth and Valid"
@@ -77,7 +77,7 @@ paths:
         404:
           description: "Non-existing token"
 
-  /user/:
+  /user:
     post:
       tags:
         - "User Info"
@@ -114,7 +114,7 @@ paths:
         409:
           description: "Login already exists"
 
-  /user/delete/{token}/:
+  /user/delete/{token}:
     delete:
       tags:
         - "User Info"
@@ -133,7 +133,7 @@ paths:
         404:
           description: "Non-existing token"
 
-  /user/info/{token}/:
+  /user/info/{token}:
     get:
       tags:
       - "User Info"
@@ -168,7 +168,7 @@ paths:
         404:
           description: "Non-existing token"
 
-  /user/info/public/{login}/:
+  /user/info/public/{login}:
     get:
       tags:
       - "User Info"
@@ -203,7 +203,7 @@ paths:
         404:
           description: "Non-existing login"
 
-  /user/info/:
+  /user/info:
     put:
       tags:
       - "User Info"
@@ -243,7 +243,7 @@ paths:
         404:
           description: "Non-existing token"
 
-  /permissions/userRole/{user_id}/:
+  /permissions/userRole/{user_id}:
     get:
       tags:
         - "Permissions"
@@ -281,7 +281,7 @@ paths:
         404:
           description: "Non-existing user ID"
 
-  /permissions/userRole/:
+  /permissions/userRole:
     post:
       tags:
         - "Permissions"
@@ -315,7 +315,7 @@ paths:
         409:
           description: "User already has role in collection"
 
-  /permissions/editUserRole/:
+  /permissions/editUserRole:
     put:
       tags:
         - "Permissions"
@@ -349,7 +349,7 @@ paths:
         404:
           description: "Non-existing token, Unknown role, User doesn't belong to this collection"
 
-  /permissions/role/{role_id}/:
+  /permissions/role/{role_id}:
     get:
       tags:
         - "Permissions"
@@ -382,7 +382,7 @@ paths:
         404:
           description: "Unknown role"
 
-  /permissions/setPostOwner/:
+  /permissions/setPostOwner:
     post:
       tags:
         - "Permissions"
@@ -412,7 +412,7 @@ paths:
         409:
           description: "Current post already has owner"
   
-  /permissions/deletePostOwner/:
+  /permissions/deletePostOwner:
     post:
       tags:
         - "Permissions"
@@ -426,7 +426,7 @@ paths:
               type: "object"
               properties:
                 token:
-                  type: "integer"
+                  type: "string"
                   description: "Токен"
                 post_id:
                   type: "integer"
@@ -440,7 +440,7 @@ paths:
         404:
           description: "Incorrect token/post_id"
   
-  /permissions/getPostOwner/{post_id}/:
+  /permissions/getPostOwner/{post_id}:
     get:
       tags:
         - "Permissions"
@@ -464,7 +464,7 @@ paths:
         404:
           description: "Non-existing post"
           
-  /permissions/userRole/setCollectionOwner/:
+  /permissions/userRole/setCollectionOwner:
     post:
       tags:
         - "Permissions"
@@ -478,7 +478,7 @@ paths:
               type: "object"
               properties:
                 token:
-                  type: "integer"
+                  type: "string"
                 collection_id:
                   type: "integer"
             example:
@@ -494,7 +494,7 @@ paths:
         409:
           description: "Collection already public"
   
-  /permissions/setPublicCollection/:
+  /permissions/setPublicCollection:
     post:
       tags:
         - "Permissions"
@@ -508,7 +508,7 @@ paths:
               type: "object"
               properties:
                 token:
-                  type: "integer"
+                  type: "string"
                 collection_id:
                   type: "integer"
             example:
@@ -526,7 +526,7 @@ paths:
         409:
           description: "Collection already public"
           
-  /permissions/removePublicCollection/:
+  /permissions/removePublicCollection:
     post:
       tags:
         - "Permissions"
@@ -540,7 +540,7 @@ paths:
               type: "object"
               properties:
                 token:
-                  type: "integer"
+                  type: "string"
                 collection_id:
                   type: "integer"
             example:
@@ -556,7 +556,7 @@ paths:
         409:
           description: "Collection already private"
 
-  /permissions/getPublicCollection/:
+  /permissions/getPublicCollection:
     post:
       tags:
         - "Permissions"
@@ -595,7 +595,7 @@ paths:
         400:
           description: "Bad request"
 
-  /permissions/getPublicCollection/all/:
+  /permissions/getPublicCollection/all:
     get:
       tags:
         - "Permissions"
@@ -619,3 +619,59 @@ paths:
                   - 8
         404:
           description: "Not OK"
+  
+  /permissions/sync/ifPostDelete:
+    post:
+      tags:
+        - "Permissions"
+      summary: "Sync db if post was deleted"
+      description: "If post owner delete post -> clean up db"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                token:
+                  type: "string"
+                post_id:
+                  type: "integer"
+            example:
+              token: "3fd43fre324543dsf4353dsf"
+              post_id: 3
+      responses:
+        200:
+          description: "OK"
+        403:
+          description: 'Not have enough permissions'
+        404:
+          description: "Incorrect token/post_id"
+          
+  /permissions/sync/ifCollectionDelete:
+    post:
+      tags:
+        - "Permissions"
+      summary: "Sync db if collection was deleted"
+      description: "If admin delete collection -> clean up db"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                token:
+                  type: "string"
+                collection_id:
+                  type: "integer"
+            example:
+              token: "3fd43fre324543dsf4353dsf"
+              collection_id: 3
+      responses:
+        200:
+          description: "OK"
+        403:
+          description: 'Not have enough permissions'
+        404:
+          description: "Incorrect token/collection_id"
