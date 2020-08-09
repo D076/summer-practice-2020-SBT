@@ -203,13 +203,8 @@ def userDelete(token):
     if user_id is None:
         abort(404, 'Non-existing token')
 
-    # yes -> Remove login from db. Decrement userId. return 200
-    user = User.query.filter_by(id=user_id).first()
-    db.session.delete(user)
-    db.session.commit()
-
     # Temporarily. In the future, transfer initialization and remove code below
-    global last_user_id
+    # global last_user_id
 
     # Initialize last_user_id
     # if last_user_id is None:
@@ -245,8 +240,15 @@ def userDelete(token):
     post = 'notNone'
     while post is not None:
         post = Post.query.filter_by(user_id=user_id).first()
+        if post is None:
+            break
         db.session.delete(post)
         db.session.commit()
+
+    # Remove login from db. Decrement userId. return 200
+    user = User.query.filter_by(id=user_id).first()
+    db.session.delete(user)
+    db.session.commit()
 
     return "Complete", 200
 
