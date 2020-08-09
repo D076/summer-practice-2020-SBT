@@ -654,9 +654,8 @@ def getPostOwner(post_id):
     if post is None:
         abort(404, 'Non-existing post')
 
-    owner = post.user_id
 
-    return owner, 200
+    return str(post.user_id), 200
 
 
 @module.route('/permissions/removePublicCollection/<int:collection_id>', methods=['POST'])
@@ -961,3 +960,7 @@ def ifCollectionDelete():
         db.session.commit()
 
     return '', 200
+
+@module.before_request
+def limitRemoteAddr():
+    pass
