@@ -9,6 +9,19 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/d076/summer-practice-2020-SBT)](https://github.com/D076/summer-practice-2020-SBT/graphs/contributors)
 [![Discord](https://img.shields.io/discord/315390629997838349?color=Blue&label=Discord)](https://discord.gg/ks5pT6U)
 
+## About
+
+For the purpose of convenient distribution of photos, supplemented, if necessary, with information, and receiving prompt and convenient feedback in the form of a rating, it was decided to develop a service.
+The developed system allows you to upload photos, combine them into collections, as well as rate them and share them with friends. The system was divided into microservices, each of which was commissioned by one of the four teams participating in this practice.
+Development was carried out in teams of three to four people. Our team carried out the design and development of a microservice for user data and access control.
+
+#### List of microservices
+
++ [API Gateway and Service Discovery](https://github.com/lenivoe/summer-2020-SBT-team1)
++ [Microservice for content and metadata management](https://github.com/ASurtaev/SummerSberPractice)
++ [Collections and rating microservice](https://github.com/BorZzzenko/SummerPractice_SBT2020)
++ [Auth/Validation and user permissions microservice](https://github.com/D076/summer-practice-2020-SBT)
+
 ## Installation
 
 Use the paсkage manager [pip](https://pip.pypa.io/en/stable/) and [virtualenv](https://virtualenv.pypa.io/en/latest/) for building.
