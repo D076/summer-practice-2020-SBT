@@ -11,8 +11,17 @@
 
 ## About
 
-For the purpose of convenient distribution of photos, supplemented, if necessary, with information, and receiving prompt and convenient feedback in the form of a rating, it was decided to develop a service.
-The developed system allows you to upload photos, combine them into collections, as well as rate them and share them with friends. The system was divided into microservices, each of which was commissioned by one of the four teams participating in this practice.
+This repository is part of the Summer internship at SberTech, a subsidiary of Sberbank's IT company. 
+Internship was focused on the design and development of a system implemented using a microservice architecture.
+
+Was necessary to implement a platform that would allow performing the following actions:
++ Combine photos into collections
++ Share your collections with other users
++ Maintain a rating within the collection
++ Add tags to photos
++ Write annotations to photos
+
+Was decided to create a system consisting of a set of microservices in the amount of four parts.
 Development was carried out in teams of three to four people. Our team carried out the design and development of a microservice for user data and access control.
 
 #### List of microservices
