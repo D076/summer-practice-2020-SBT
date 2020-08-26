@@ -11,25 +11,25 @@
 
 ## About
 
-This repository is part of the Summer internship at SberTech, a subsidiary of Sberbank's IT company. 
-Internship was focused on the design and development of a system implemented using a microservice architecture.
+This repository is a part of the summer internship at SberTech, a subsidiary of Sberbank's IT company. 
+Internship was focused on design and development of a system implemented using a microservice architecture.
 
-Was necessary to implement a platform that would allow performing the following actions:
+It was necessary to implement a platform that would allow performing the following actions:
 +  Combine photos into collections
 +  Share your collections with other users
-+  Maintain a rating within the collection
++  Maintain a rating within each collection
 +  Add tags to photos
 +  Write annotations to photos
 
-Was decided to create a system consisting of a set of microservices in the amount of four parts.
-Development was carried out in teams of three to four people. Our team carried out the design and development of a microservice for user data and access control.
+It was decided to create a system consisting of a set of microservices in the amount of four parts.
+Development was carried out in teams of three to four people. Our team worked on design and development of a microservice for user data and access control.
 
 #### List of microservices
 
 +  [API Gateway and Service Discovery](https://github.com/lenivoe/summer-2020-SBT-team1)
++  [Auth/Validation and user permissions microservice](https://github.com/D076/summer-practice-2020-SBT)
 +  [Microservice for content and metadata management](https://github.com/ASurtaev/SummerSberPractice)
 +  [Collections and rating microservice](https://github.com/BorZzzenko/SummerPractice_SBT2020)
-+  [Auth/Validation and user permissions microservice](https://github.com/D076/summer-practice-2020-SBT)
 
 ## Installation
 
